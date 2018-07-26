@@ -12,18 +12,18 @@
   
 </title>
 
-<meta name="description" content="关于top chunk的问题笔记覆盖TOP chunksize小于0x1000后，使top chunk脱落下来成为unsorted chunk的问题。如将top chunk size覆盖为0xfa1,此时申请0x1000可以使top chunk变为unsorted chunk，不断申请0x90的chunk，最后会产生异常情况。">
+<meta name="description" content="关于top chunk的问题笔记覆盖TOP chunksize小于0x1000后，使top chunk脱落下来成为unsorted chunk的问题。如将top chunk size覆盖为0xfa1,此时申请0x1000可以使top chunk变为unsorted chunk，不断申请0x90的chunk，最后会产生异常情况。 补充：因为top chunk 小于0x90后不会放入unsorted">
 <meta name="keywords" content="CTF">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CTF中的一点小疑惑">
 <meta property="og:url" content="http://yoursite.com/2018/07/25/CTF中的一点小疑惑/index.html">
 <meta property="og:site_name" content="pwndog&#39;s blog">
-<meta property="og:description" content="关于top chunk的问题笔记覆盖TOP chunksize小于0x1000后，使top chunk脱落下来成为unsorted chunk的问题。如将top chunk size覆盖为0xfa1,此时申请0x1000可以使top chunk变为unsorted chunk，不断申请0x90的chunk，最后会产生异常情况。">
+<meta property="og:description" content="关于top chunk的问题笔记覆盖TOP chunksize小于0x1000后，使top chunk脱落下来成为unsorted chunk的问题。如将top chunk size覆盖为0xfa1,此时申请0x1000可以使top chunk变为unsorted chunk，不断申请0x90的chunk，最后会产生异常情况。 补充：因为top chunk 小于0x90后不会放入unsorted">
 <meta property="og:locale" content="CN">
-<meta property="og:updated_time" content="2018-07-25T14:05:47.203Z">
+<meta property="og:updated_time" content="2018-07-26T05:58:00.902Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CTF中的一点小疑惑">
-<meta name="twitter:description" content="关于top chunk的问题笔记覆盖TOP chunksize小于0x1000后，使top chunk脱落下来成为unsorted chunk的问题。如将top chunk size覆盖为0xfa1,此时申请0x1000可以使top chunk变为unsorted chunk，不断申请0x90的chunk，最后会产生异常情况。">
+<meta name="twitter:description" content="关于top chunk的问题笔记覆盖TOP chunksize小于0x1000后，使top chunk脱落下来成为unsorted chunk的问题。如将top chunk size覆盖为0xfa1,此时申请0x1000可以使top chunk变为unsorted chunk，不断申请0x90的chunk，最后会产生异常情况。 补充：因为top chunk 小于0x90后不会放入unsorted">
 
 
   <link rel="alternative" href="/atom.xml" title="pwndog&#39;s blog" type="application/atom+xml">
@@ -84,22 +84,22 @@
           
             
               <li class="category-list-container">
-                <a href="javascript:;">Category</a>
+                <a href="javascript:;">分类</a>
                 <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/glibc源码阅读/">glibc源码阅读</a><span class="category-list-count">1</span></li></ul>
               </li>
             
           
             
               <li class="tag-list-container">
-                <a href="javascript:;">Tag</a>
+                <a href="javascript:;">标签</a>
                 <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/">CTF</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GLIBC/">GLIBC</a><span class="tag-list-count">1</span></li></ul>
               </li>
             
           
             
               <li class="archive-list-container">
-                <a href="javascript:;">Archive</a>
-                <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018</a><span class="archive-list-count">3</span></li></ul>
+                <a href="javascript:;">归档</a>
+                <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018</a><span class="archive-list-count">2</span></li></ul>
               </li>
             
           
@@ -175,12 +175,13 @@
   </div>
   <div class="article-entry">
     <h3 id="关于top-chunk的问题笔记"><a href="#关于top-chunk的问题笔记" class="headerlink" title="关于top chunk的问题笔记"></a>关于top chunk的问题笔记</h3><p>覆盖TOP chunksize小于0x1000后，使top chunk脱落下来成为unsorted chunk的问题。<br>如将top chunk size覆盖为0xfa1,此时申请0x1000可以使top chunk变为unsorted chunk，不断申请0x90的chunk，最后会产生异常情况。</p>
+<h3 id="补充："><a href="#补充：" class="headerlink" title="补充："></a>补充：</h3><p>因为top chunk 小于0x90后不会放入unsorted bin，会放入fast bin 链表。。</p>
 
   </div>
   <footer class="article-footer">
     
   <div class="cc">
-    <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.C" target="_blank" title="Attribution-ShareAlike">
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.C" target="_blank" title="署名-相同方式共享">
       <img src="/images/cc/cc.png">
       
           <img src="/images/cc/by.png">
@@ -188,7 +189,7 @@
           <img src="/images/cc/sa.png">
       
       <span>
-        This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
+        本作品采用知识共享 署名-相同方式共享 4.0 国际许可协议进行许可。
       </span>
     </a>
   </div>
