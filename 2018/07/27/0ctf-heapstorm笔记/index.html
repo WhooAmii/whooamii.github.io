@@ -12,13 +12,13 @@
   
 </title>
 
-<meta name="description" content="前言最近找到了0CTF2018的原题，对旧题进行了重新的学习，记录一下在学习过程中遇到的问题和新的理解。在做题中参照了sakura大神看雪上的writeup，https://bbs.pediy.com/thread-225973.htm 程序流程初始化程序申请了0x1337000空间保存堆管理结构。同时调用mallopt 禁用了fastbin。在0x1337000+800处开始填入随机数，r1,r">
+<meta name="description" content="前言最近找到了0CTF2018的原题，对旧题进行了重新的学习，记录一下在学习过程中遇到的问题和新的理解。在做题中参照了sakura大神看雪上的writeup，https://bbs.pediy.com/thread-225973.htm">
 <meta name="keywords" content="CTF">
 <meta property="og:type" content="article">
 <meta property="og:title" content="0ctf heapstorm笔记">
 <meta property="og:url" content="http://yoursite.com/2018/07/27/0ctf-heapstorm笔记/index.html">
 <meta property="og:site_name" content="pwndog&#39;s blog">
-<meta property="og:description" content="前言最近找到了0CTF2018的原题，对旧题进行了重新的学习，记录一下在学习过程中遇到的问题和新的理解。在做题中参照了sakura大神看雪上的writeup，https://bbs.pediy.com/thread-225973.htm 程序流程初始化程序申请了0x1337000空间保存堆管理结构。同时调用mallopt 禁用了fastbin。在0x1337000+800处开始填入随机数，r1,r">
+<meta property="og:description" content="前言最近找到了0CTF2018的原题，对旧题进行了重新的学习，记录一下在学习过程中遇到的问题和新的理解。在做题中参照了sakura大神看雪上的writeup，https://bbs.pediy.com/thread-225973.htm">
 <meta property="og:locale" content="CN">
 <meta property="og:image" content="http://yoursite.com/2018/07/27/0ctf-heapstorm笔记/1.png">
 <meta property="og:image" content="http://yoursite.com/2018/07/27/0ctf-heapstorm笔记/2.png">
@@ -27,10 +27,10 @@
 <meta property="og:image" content="http://yoursite.com/2018/07/27/0ctf-heapstorm笔记/5.png">
 <meta property="og:image" content="http://yoursite.com/2018/07/27/0ctf-heapstorm笔记/6.png">
 <meta property="og:image" content="http://yoursite.com/2018/07/27/0ctf-heapstorm笔记/7.png">
-<meta property="og:updated_time" content="2018-07-27T07:10:12.625Z">
+<meta property="og:updated_time" content="2018-07-27T07:11:51.485Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="0ctf heapstorm笔记">
-<meta name="twitter:description" content="前言最近找到了0CTF2018的原题，对旧题进行了重新的学习，记录一下在学习过程中遇到的问题和新的理解。在做题中参照了sakura大神看雪上的writeup，https://bbs.pediy.com/thread-225973.htm 程序流程初始化程序申请了0x1337000空间保存堆管理结构。同时调用mallopt 禁用了fastbin。在0x1337000+800处开始填入随机数，r1,r">
+<meta name="twitter:description" content="前言最近找到了0CTF2018的原题，对旧题进行了重新的学习，记录一下在学习过程中遇到的问题和新的理解。在做题中参照了sakura大神看雪上的writeup，https://bbs.pediy.com/thread-225973.htm">
 <meta name="twitter:image" content="http://yoursite.com/2018/07/27/0ctf-heapstorm笔记/1.png">
 
 
@@ -92,21 +92,21 @@
           
             
               <li class="category-list-container">
-                <a href="javascript:;">分类</a>
+                <a href="javascript:;">Category</a>
                 <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/glibc源码阅读/">glibc源码阅读</a><span class="category-list-count">1</span></li></ul>
               </li>
             
           
             
               <li class="tag-list-container">
-                <a href="javascript:;">标签</a>
+                <a href="javascript:;">Tag</a>
                 <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/">CTF</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GLIBC/">GLIBC</a><span class="tag-list-count">1</span></li></ul>
               </li>
             
           
             
               <li class="archive-list-container">
-                <a href="javascript:;">归档</a>
+                <a href="javascript:;">Archive</a>
                 <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018</a><span class="archive-list-count">3</span></li></ul>
               </li>
             
@@ -182,7 +182,7 @@
 
   </div>
   <div class="article-entry">
-    <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近找到了0CTF2018的原题，对旧题进行了重新的学习，记录一下在学习过程中遇到的问题和新的理解。<br>在做题中参照了sakura大神看雪上的writeup，<a href="https://bbs.pediy.com/thread-225973.htm" target="_blank" rel="noopener">https://bbs.pediy.com/thread-225973.htm</a></p>
+    <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近找到了0CTF2018的原题，对旧题进行了重新的学习，记录一下在学习过程中遇到的问题和新的理解。<br>在做题中参照了sakura大神看雪上的writeup，<a href="https://bbs.pediy.com/thread-225973.htm" target="_blank" rel="noopener">https://bbs.pediy.com/thread-225973.htm</a><br><a id="more"></a></p>
 <h3 id="程序流程"><a href="#程序流程" class="headerlink" title="程序流程"></a>程序流程</h3><h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><p>程序申请了0x1337000空间保存堆管理结构。同时调用mallopt 禁用了fastbin。<br><img src="/2018/07/27/0ctf-heapstorm笔记/1.png" alt="初始化过程"><br>在0x1337000+800处开始填入随机数，r1,r2,r3,r3,r1,r2…….<br>r1用来同堆的地址异或保存在0x13370800+0x20+0x16<em>i。<br>r2用来同堆的大小异或保存在0x13370800+0x28+0x16</em>i。<br>要求r3处同后面r3异或等于0x13377331时才能够进行堆块查看操作。<br><img src="/2018/07/27/0ctf-heapstorm笔记/2.png" alt="初始化过程"></p>
 <h4 id="程序菜单"><a href="#程序菜单" class="headerlink" title="程序菜单"></a>程序菜单</h4><p><img src="/2018/07/27/0ctf-heapstorm笔记/3.png" alt="菜单"><br>常规的4项功能，alloc，update，delete，view</p>
 <p><img src="/2018/07/27/0ctf-heapstorm笔记/4.png" alt="菜单"><br>alloc调用calloc函数可申请12-4096大小的堆块</p>
@@ -199,7 +199,7 @@
   <footer class="article-footer">
     
   <div class="cc">
-    <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.C" target="_blank" title="署名-相同方式共享">
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.C" target="_blank" title="Attribution-ShareAlike">
       <img src="/images/cc/cc.png">
       
           <img src="/images/cc/by.png">
@@ -207,7 +207,7 @@
           <img src="/images/cc/sa.png">
       
       <span>
-        本作品采用知识共享 署名-相同方式共享 4.0 国际许可协议进行许可。
+        This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
       </span>
     </a>
   </div>
