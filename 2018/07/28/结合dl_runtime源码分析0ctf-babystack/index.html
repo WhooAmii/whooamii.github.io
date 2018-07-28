@@ -25,7 +25,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/07/28/结合dl_runtime源码分析0ctf-babystack/2.png">
 <meta property="og:image" content="http://yoursite.com/2018/07/28/结合dl_runtime源码分析0ctf-babystack/5.png">
 <meta property="og:image" content="http://yoursite.com/2018/07/28/结合dl_runtime源码分析0ctf-babystack/6.png">
-<meta property="og:updated_time" content="2018-07-28T14:45:20.678Z">
+<meta property="og:updated_time" content="2018-07-28T14:47:30.891Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="结合dl_runtime源码分析0ctf babystack">
 <meta name="twitter:description" content="延迟载入linux导入函数的载入有别于windows，windows在内存装载后，起始代码执行前，由装载器通过导入表将所有函数地址写入IAT中。linux为了效率考虑，对所有导入函数采取延迟载入的方式。当进程第一次调用导入函数时，通过调用dl_runtime函数对函数进行寻址后保存在got表中并调用它。 plt表和got表got表类似windows下的IAT表，保存导入函数的内存地址。plt是延迟">
@@ -90,21 +90,21 @@
           
             
               <li class="category-list-container">
-                <a href="javascript:;">分类</a>
+                <a href="javascript:;">Category</a>
                 <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/glibc源码阅读/">glibc源码阅读</a><span class="category-list-count">1</span></li></ul>
               </li>
             
           
             
               <li class="tag-list-container">
-                <a href="javascript:;">标签</a>
+                <a href="javascript:;">Tag</a>
                 <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF-GLIBC/">-CTF -GLIBC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/">CTF</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GLIBC/">GLIBC</a><span class="tag-list-count">1</span></li></ul>
               </li>
             
           
             
               <li class="archive-list-container">
-                <a href="javascript:;">归档</a>
+                <a href="javascript:;">Archive</a>
                 <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018</a><span class="archive-list-count">4</span></li></ul>
               </li>
             
@@ -181,7 +181,7 @@
   </div>
   <div class="article-entry">
     <h3 id="延迟载入"><a href="#延迟载入" class="headerlink" title="延迟载入"></a>延迟载入</h3><p>linux导入函数的载入有别于windows，windows在内存装载后，起始代码执行前，由装载器通过导入表将所有函数地址写入IAT中。<br>linux为了效率考虑，对所有导入函数采取延迟载入的方式。<br>当进程第一次调用导入函数时，通过调用dl_runtime函数对函数进行寻址后保存在got表中并调用它。</p>
-<h4 id="plt表和got表"><a href="#plt表和got表" class="headerlink" title="plt表和got表"></a>plt表和got表</h4><p>got表类似windows下的IAT表，保存导入函数的内存地址。<br>plt是延迟载入的核心。每条表项对应一个函数。每条表项由三条指令组成 如alarm函数1.jmp [got@alarm]2.push offset 3.jmp plt[0]<br><img src="/2018/07/28/结合dl_runtime源码分析0ctf-babystack/1.png" alt="plt表项"><br>若第一次调用alarm，got表保存的为plt表项中第二条指令，即进入解析流程，解析后got表会保存函数真正地址，之后的每次调用不需要进行再次解析。<br><img src="/2018/07/28/结合dl_runtime源码分析0ctf-babystack/3.png" alt="plt 0"><br>plt[0] push了got[1]，调用了got[2]，plt表函数表项从plt[1]开始，got表函数表项从got[2]开始。<br>plt[0]为解析函数入口代码<br>got[0]为dynamic地址<br>got[1]为模块ID<br>got[2]为_dl_runtime_resolve函数的地址<br>plt[0]作用即以模块ID为参数调用_dl_runtime_resolve进入解析过程</p>
+<h4 id="plt表和got表"><a href="#plt表和got表" class="headerlink" title="plt表和got表"></a>plt表和got表</h4><p>got表类似windows下的IAT表，保存导入函数的内存地址。<br>plt是延迟载入的核心。每条表项对应一个函数。每条表项由三条指令组成 如alarm函数1.jmp [got@alarm]2.push offset 3.jmp plt[0]<br><img src="/2018/07/28/结合dl_runtime源码分析0ctf-babystack/1.png" alt="plt表项"><br>若第一次调用alarm，got表保存的为plt表项中第二条指令，即进入解析流程，解析后got表会保存函数真正地址，之后的每次调用不需要进行再次解析。<br><img src="/2018/07/28/结合dl_runtime源码分析0ctf-babystack/3.png" alt="plt 0"><br>plt[0] push了got[1]，调用了got[2]，plt表函数表项从plt[1]开始，got表函数表项从got[2]开始。<br>plt[0]为解析函数入口代码<br>got[0]为dynamic地址<br>got[1]为模块ID<br>got[2]为_dl_runtime_resolve函数的地址<br>plt[0]作用即以模块ID为参数调用_dl_runtime_resolve进入解析过程<br><a id="more"></a></p>
 <h4 id="解析过程"><a href="#解析过程" class="headerlink" title="解析过程"></a>解析过程</h4><p>解析函数的入口为push 一个参数，跳转至plt[0]，plt[0]不用来解析某一函数，只用来保存解析函数入口，每个程序的plt[0]一样。<br><img src="/2018/07/28/结合dl_runtime源码分析0ctf-babystack/2.png" alt="elf节区偏移"></p>
 <p>_dl_runtime_resolve函数通过plt代码中第二条指令，push offset对不同函数进行解析。</p>
 <p>_dl_runtime_resolve函数首先通过模块ID参数得到dynamic段地址。<br>代码节选，宏定义过多<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">const</span> <span class="title">ElfW</span><span class="params">(Sym)</span> *<span class="keyword">const</span> symtab</span>= (<span class="keyword">const</span> <span class="keyword">void</span> *) D_PTR (l, l_info[DT_SYMTAB]);</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span> *strtab = (<span class="keyword">const</span> <span class="keyword">char</span> *) D_PTR (l, l_info[DT_STRTAB]);</span><br><span class="line"><span class="keyword">const</span> PLTREL *<span class="keyword">const</span> reloc= (<span class="keyword">const</span> <span class="keyword">void</span> *) (D_PTR (l, l_info[DT_JMPREL]) + reloc_offset);</span><br><span class="line"><span class="function"><span class="keyword">const</span> <span class="title">ElfW</span><span class="params">(Sym)</span> *refsym </span>= &amp;symtab[ELFW(R_SYM) (reloc-&gt;r_info)];</span><br><span class="line"><span class="function"><span class="keyword">const</span> <span class="title">ElfW</span><span class="params">(Sym)</span> *defsym </span>= refsym;</span><br><span class="line">result = _dl_lookup_symbol_x (strtab + refsym-&gt;st_name, l,&amp;defsym, l-&gt;l_scope, version,ELF_RTYPE_CLASS_PLT, flags, <span class="literal">NULL</span>);</span><br><span class="line">value = DL_FIXUP_MAKE_VALUE (l, l-&gt;l_addr + refsym-&gt;st_value);</span><br><span class="line">value = elf_ifunc_invoke (DL_FIXUP_VALUE_ADDR (value));</span><br></pre></td></tr></table></figure></p>
@@ -201,7 +201,7 @@
   <footer class="article-footer">
     
   <div class="cc">
-    <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.C" target="_blank" title="署名-相同方式共享">
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.C" target="_blank" title="Attribution-ShareAlike">
       <img src="/images/cc/cc.png">
       
           <img src="/images/cc/by.png">
@@ -209,7 +209,7 @@
           <img src="/images/cc/sa.png">
       
       <span>
-        本作品采用知识共享 署名-相同方式共享 4.0 国际许可协议进行许可。
+        This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
       </span>
     </a>
   </div>
