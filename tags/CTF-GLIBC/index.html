@@ -8,7 +8,7 @@
 
 <title>
   
-    标签: -CTF -GLIBC
+    Tag: -CTF -GLIBC
   
 </title>
 
@@ -79,21 +79,21 @@
           
             
               <li class="category-list-container">
-                <a href="javascript:;">分类</a>
+                <a href="javascript:;">Category</a>
                 <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/glibc源码阅读/">glibc源码阅读</a><span class="category-list-count">1</span></li></ul>
               </li>
             
           
             
               <li class="tag-list-container">
-                <a href="javascript:;">标签</a>
+                <a href="javascript:;">Tag</a>
                 <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF-GLIBC/">-CTF -GLIBC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/">CTF</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GLIBC/">GLIBC</a><span class="tag-list-count">1</span></li></ul>
               </li>
             
           
             
               <li class="archive-list-container">
-                <a href="javascript:;">归档</a>
+                <a href="javascript:;">Archive</a>
                 <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018</a><span class="archive-list-count">4</span></li></ul>
               </li>
             
@@ -183,7 +183,7 @@
 <h4 id="plt表和got表"><a href="#plt表和got表" class="headerlink" title="plt表和got表"></a>plt表和got表</h4><p>got表类似windows下的IAT表，保存导入函数的内存地址。<br>plt是延迟载入的核心。每条表项对应一个函数。每条表项由三条指令组成 如alarm函数1.jmp [got@alarm]2.push offset 3.jmp plt[0]<br><img src="/2018/07/28/结合dl_runtime源码分析0ctf-babystack/1.png" alt="plt表项"><br>若第一次调用alarm，got表保存的为plt表项中第二条指令，即进入解析流程，解析后got表会保存函数真正地址，之后的每次调用不需要进行再次解析。<br><img src="/2018/07/28/结合dl_runtime源码分析0ctf-babystack/3.png" alt="plt 0"><br>plt[0] push了got[1]，调用了got[2]，plt表函数表项从plt[1]开始，got表函数表项从got[2]开始。<br>plt[0]为解析函数入口代码<br>got[0]为dynamic地址<br>got[1]为模块ID<br>got[2]为_dl_runtime_resolve函数的地址<br>plt[0]作用即以模块ID为参数调用_dl_runtime_resolve进入解析过程<br></p>
           <p>
             <a href="/2018/07/28/结合dl_runtime源码分析0ctf-babystack/">
-              阅读全文
+              Read More
             </a>
           </p>
         
