@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<title>
+  
+    windows下堆结构调试笔记
+  
+</title>
+
+<meta name="description" content="前言最近调试windows下堆的cve的时候发现对windows下的堆管理理解不够，对javascript堆分配和利用基础不够，由于windows下没有源码可以看，只能通过网上的博客和调试器自己学习。windows堆管理在不断更新，博客内容会有所偏差，接下来的笔记是windows10上的堆结构。">
+<meta name="keywords" content="堆,windows">
+<meta property="og:type" content="article">
+<meta property="og:title" content="windows下堆结构调试笔记">
+<meta property="og:url" content="http://yoursite.com/2018/08/08/windows下堆结构调试笔记/index.html">
+<meta property="og:site_name" content="pwndog&#39;s blog">
+<meta property="og:description" content="前言最近调试windows下堆的cve的时候发现对windows下的堆管理理解不够，对javascript堆分配和利用基础不够，由于windows下没有源码可以看，只能通过网上的博客和调试器自己学习。windows堆管理在不断更新，博客内容会有所偏差，接下来的笔记是windows10上的堆结构。">
+<meta property="og:locale" content="CN">
+<meta property="og:image" content="http://yoursite.com/2018/08/08/windows下堆结构调试笔记/1.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/08/windows下堆结构调试笔记/2.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/08/windows下堆结构调试笔记/3.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/08/windows下堆结构调试笔记/4.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/08/windows下堆结构调试笔记/5.png">
+<meta property="og:updated_time" content="2018-08-08T08:08:07.273Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="windows下堆结构调试笔记">
+<meta name="twitter:description" content="前言最近调试windows下堆的cve的时候发现对windows下的堆管理理解不够，对javascript堆分配和利用基础不够，由于windows下没有源码可以看，只能通过网上的博客和调试器自己学习。windows堆管理在不断更新，博客内容会有所偏差，接下来的笔记是windows10上的堆结构。">
+<meta name="twitter:image" content="http://yoursite.com/2018/08/08/windows下堆结构调试笔记/1.png">
+
+
+  <link rel="alternative" href="/atom.xml" title="pwndog&#39;s blog" type="application/atom+xml">
+
+
+
+  <link rel="icon" href="/favicon.png">
+
+
+<link rel="stylesheet" href="/perfect-scrollbar/css/perfect-scrollbar.min.css">
+<link rel="stylesheet" href="/styles/main.css">
+
+
+
+
+
+
+</head>
+<body
+  
+    class="monochrome"
+  
+  >
+  <div class="mobile-header">
+  <button class="sidebar-toggle" type="button">
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+  </button>
+  <a class="title" href="/">pwndog&#39;s blog</a>
+</div>
+
+  <div class="main-container">
+    <div class="sidebar">
+  <div class="header">
+    <h1 class="title"><a href="/">pwndog&#39;s blog</a></h1>
+    
+    <div class="info">
+      <div class="content">
+        
+        
+          <div class="author">zzm</div>
+        
+      </div>
+      
+        <div class="avatar">
+          
+            <a href="/about"><img src="https://cn.gravatar.com/avatar/35fef74d731255cd569c2c2b0b9e87e4?s=200"></a>
+          
+        </div>
+      
+    </div>
+  </div>
+  <div class="body">
+    
+      
+        <ul class="nav">
+          
+            
+              <li class="category-list-container">
+                <a href="javascript:;">Category</a>
+                <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/glibc源码阅读/">glibc源码阅读</a><span class="category-list-count">1</span></li></ul>
+              </li>
+            
+          
+            
+              <li class="tag-list-container">
+                <a href="javascript:;">Tag</a>
+                <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/">CTF</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GLIBC/">GLIBC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/windows/">windows</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/堆/">堆</a><span class="tag-list-count">1</span></li></ul>
+              </li>
+            
+          
+            
+              <li class="archive-list-container">
+                <a href="javascript:;">Archive</a>
+                <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018</a><span class="archive-list-count">7</span></li></ul>
+              </li>
+            
+          
+        </ul>
+      
+        <ul class="nav">
+          
+            
+              <li>
+                <a href="/" title="Homepage">Homepage</a>
+              </li>
+            
+          
+            
+              <li>
+                <a href="/archives" title="By Year">By Year</a>
+              </li>
+            
+          
+        </ul>
+      
+        <ul class="nav">
+          
+            
+              <li>
+                <a href="https://github.com/denjones/hexo-theme-chan" title="Chan" target="_blank" rel="noopener">Chan</a>
+              </li>
+            
+          
+            
+              <li>
+                <a href="https://github.com/denjones" title="Github" target="_blank" rel="noopener">Github</a>
+              </li>
+            
+          
+            
+              <li>
+                <a href="/atom.xml" title="RSS">RSS</a>
+              </li>
+            
+          
+        </ul>
+      
+    
+  </div>
+</div>
+
+    <div class="main-content">
+      
+        <div style="max-width: 1000px">
+      
+          <article id="post-windows下堆结构调试笔记" class="article article-type-post">
+  
+    <h1 class="article-header">
+      windows下堆结构调试笔记
+    </h1>
+  
+  
+
+  <div class="article-info">
+    <span class="article-date">
+  2018-08-08
+</span>
+
+    
+
+    
+	<span class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/windows/">windows</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/堆/">堆</a></li></ul>
+	</span>
+
+
+  </div>
+  <div class="article-entry">
+    <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近调试windows下堆的cve的时候发现对windows下的堆管理理解不够，对javascript堆分配和利用基础不够，由于windows下没有源码可以看，只能通过网上的博客和调试器自己学习。windows堆管理在不断更新，博客内容会有所偏差，接下来的笔记是windows10上的堆结构。<br><a id="more"></a></p>
+<h3 id="堆函数"><a href="#堆函数" class="headerlink" title="堆函数"></a>堆函数</h3><h4 id="HeapCreate"><a href="#HeapCreate" class="headerlink" title="HeapCreate"></a>HeapCreate</h4><p>这个函数创建一个只有调用进程才能访问的私有堆。进程从虚拟地址空间里保留出一个连续的块并且为这个块特定的初始部分分配物理空间。</p>
+<p>HANDLE HeapCreate(DWORD flOptions , DWORD dwInitialSize , DWORD dwMaxmumSize);</p>
+<p>参数：</p>
+<p>flOptions：堆的可选属性。这些标记影响以后对这个堆的函数操作，函数有：HeapAlloc , HeapFree , HeapReAlloc , HeapSize .</p>
+<p>下面给_出在此可以指定的标记：</p>
+<p>HEAP_NO_SERIALIAZE：指定当函数从堆里分配和释放空间时不互斥（不使用互斥锁）。当不指定该标记时默认为使用互斥。序列化允许多个线程操作同一个堆而不会错误。这个标记是可忽略的。</p>
+<p>HEAP_SHARED_READONLY：这个标记指定这个堆只能由创建它的进程进行写操作，对其他进程是只读的。如果调用者不是可靠的，调用将会失败，错误代码ERROR_ACCESS_DENIDE 。</p>
+<p>注解：为了使用标记为HEAP_SHARED_READONLY的堆，运行在kernel mode（核心状态）是必须的。</p>
+<p>dwInitialSize：堆的初始大小，单位为Bytes。这个值决定了分配给堆的初始物理空间大小。这个值将向上舍入知道下个page boundary（页界）。若需得到主机的页大小，使用GetSystemInfo 函数。</p>
+<p>dwMaxmumSize：如果该参数是一个非零的值，它指定了这个堆的最大大小，单位为Bytes。该函数会向上舍入该值直到下个页界，然后为这个堆在进程的虚拟地址里保留舍入后大小的块。如果函数 HeapAlloc 和 HeapReAlloc 要求分配的空间超过参数 dwInitialSize 指定的大小，系统会分配额外的空间给该堆直到这个堆的最大大小。If dwMaximumSize is nonzero, the heap cannot grow and an absolute limitation arises where all allocations are fulfilled within the specified heap unless there is not enough free space. （如果该参数非零，除非没有足够的空间，这个堆总可以增长到该大小）。如果该参数为零，那么该堆大小的唯一限制是可用的内存空间。分配大小超过 0x0018000 Bytes的空间总会失败，因为获得这么大的空间需要系统调用 VirtualAlloc 函数。需要使用大空间的应用应该把该参数设置为零。</p>
+<p>返回值：</p>
+<p>成功：一个指向新创建的堆的指针。</p>
+<p>失败：NULL</p>
+<p>调用函数 GetLastError 获得更多的错误信息。</p>
+<p>附注：</p>
+<p>这个函数在调用进程里创建一个私有堆，进程可调用 HeapAlloc 函数分配内存空间。这些页在进程的虚拟空间内创建了一个块，在那里堆可以增长。</p>
+<p>如果 HeapAlloc 函数请求的空间超过了现有的页大小，如果物理空间足够的话，额外的空间将会从已保留的空间里附加。</p>
+<p>只有创建私有堆的进程可以访问私有堆。</p>
+<p>如果一个DLL（动态链接库）创建了一个私有堆，那么这么私有堆是在调用该DLL的进程的地址空间内，且仅该进程可访问。</p>
+<p>系统会使用私有堆的一部分空间去储存堆的结构信息，所以，不是所有的堆内空间对进程来说是可用的。例如：HeapAlloc函数从一个最大大小为 64KB 的堆里申请 64KB 的空间，由于系统占用的一部分空间，这个请求通常会失败。</p>
+<h4 id="HeapAlloc"><a href="#HeapAlloc" class="headerlink" title="HeapAlloc"></a>HeapAlloc</h4><p>LPVOID HeapAlloc(<br>HANDLE hHeap,<br>DWORD dwFlags,<br>SIZE_T dwBytes,<br>);</p>
+<p>hHeap<br>要分配堆的句柄，可以通过HeapCreate()函数或GetProcessHeap()函数获得。</p>
+<p>dwFlags<br>堆分配时的可选参数，其值可以为以下的一种或多种：<br>HEAP_GENERATE_EXCEPTIONS<br>如果分配错误将会抛出异常，而不是返回NULL。异常值可能是STATUS_NO_MEMORY, 表示获得的内存容量不足，或是STATUS_ACCESS_VIOLATION,表示存取不合法。<br>HEAP_NO_SERIALIZE<br>不使用连续存取。<br>HEAP_ZERO_MEMORY<br>将分配的内存全部清零。</p>
+<p>dwBytes<br>要分配堆的字节数。</p>
+<h4 id="HeapFree"><a href="#HeapFree" class="headerlink" title="HeapFree"></a>HeapFree</h4><p>BOOL HeapFree(<br>HANDLE hHeap,<br>DWORD dwFlags,<br>LPVOID lpMem<br>); </p>
+<h3 id="Heap-Entry"><a href="#Heap-Entry" class="headerlink" title="Heap Entry"></a>Heap Entry</h3><p>Heap Entry类似于linux下的chunk。<br>Heap Entry前八个字节保存结构信息，类似chunk头，但是windows为了安全性，对前八个字节进行了加密，加密方式为与HEAP结构（ps：后续后说，先理解为arena）0x50偏移处八个字节异或。可以有效防止堆溢出。<br>由于被加密，windbg显示混乱<br><img src="/2018/08/08/windows下堆结构调试笔记/1.png" alt=""><br>于是通过x32dbg进行的调试过程（菜鸡就这个用的熟）<br><img src="/2018/08/08/windows下堆结构调试笔记/2.png" alt=""><br>先把解密密钥提取出来为56 8B 12 F9 5B 64 00 00。<br>下面进行一次alloc堆的分配观察Heap Entry结构。<br><img src="/2018/08/08/windows下堆结构调试笔记/3.png" alt=""><br>char <em> p = (char </em>)HeapAlloc(hHeap, HEAP_NO_SERIALIZE, 8000);<br>提取头部信息，异或解密得到eb 03 07 ef 90 00 00 18<br>分配的大小为8000字节，得到头部信息大小为0x3eb，大小以8字节为单位，所以真实大小应该为0x3eb<em>8=8024字节。大小包含头部信息及最后16位的填充。<br><img src="/2018/08/08/windows下堆结构调试笔记/4.png" alt=""><br>分配出来的堆块地址为0x019C0480<br><img src="/2018/08/08/windows下堆结构调试笔记/5.png" alt=""><br>相邻下一堆块地址为分配出来的堆块地址为0x019C023d8<br>验证发现0x019C023d8-0x019C0480=8024.<br>此时确定前两字节为size<br>通过查询第三字节为flag<br>flag标志位<br>0×01 该块处于占用状态<br>0×02 该块存在额外描述<br>0×04 使用固定模式填充堆块<br>0×08 虚拟分配<br>0×10 该段最后一个堆块<br>此处分配的flag为07，表示该块处于占用状态，该块存在额外描述，使用固定模式填充堆块<br>下一处空闲的堆块flag为0x4,使用固定模式填充堆块<br>第四字节暂未知晓含义<br>提取相邻堆块解密头部为81 01 04 84 eb 03<br>第5-6字节为pre_size，上一堆块的大小。验证，分配堆块的pre_size=0x90，0x90</em>8=0x480。0x019C0480-0x480=HeapCreate返回地基址。<br>第7字节暂未知晓含义，一般为0<br>第8字节为UnusedBytes，未用到的字节，如分配出来的堆块头部及最后的16字节填充未使用故，第八字节为0x18.<br>相比较linux的堆漏洞利用，windows要多出一步信息泄露，下面是UAF的一个演示通过堆的读和写得到加密密钥<br>int main()<br>{<br>    HANDLE hHeap = HeapCreate(HEAP_NO_SERIALIZE, 10000, 40000);</p>
+<pre><code>char * p = (char *)HeapAlloc(hHeap, HEAP_NO_SERIALIZE, 8000);
+bool bRetVal = HeapFree(hHeap, HEAP_NO_SERIALIZE, p);
+
+HeapAlloc(hHeap, HEAP_NO_SERIALIZE, 528);
+void * pp = HeapAlloc(hHeap, HEAP_NO_SERIALIZE, 528);
+DWORD z = *(((DWORD *)p) + 0x112)^ 0xE20404E2;
+DWORD z1 = *(((DWORD *)p) + 0x113)^ 0x45;
+
+return 0;
+</code></pre><p>}</p>
+<h3 id="HEAP-结构"><a href="#HEAP-结构" class="headerlink" title="HEAP 结构"></a>HEAP 结构</h3><p>ntdll!_HEAP<br>   +0x000 Segment          : _HEAP_SEGMENT<br>   +0x000 Entry            : _HEAP_ENTRY<br>   +0x008 SegmentSignature : 0xffeeffee<br>   +0x00c SegmentFlags     : 0<br>   +0x010 SegmentListEntry : _LIST_ENTRY [ 0x15600a4 - 0x15600a4 ]<br>   +0x018 Heap             : 0x01560000 _HEAP<br>   +0x01c BaseAddress      : 0x01560000 Void<br>   +0x020 NumberOfPages    : 0xa<br>   +0x024 FirstEntry       : 0x01560480 _HEAP_ENTRY<br>   +0x028 LastValidEntry   : 0x0156a000 _HEAP_ENTRY<br>   +0x02c NumberOfUnCommittedPages : 7<br>   +0x030 NumberOfUnCommittedRanges : 1<br>   +0x034 SegmentAllocatorBackTraceIndex : 0<br>   +0x036 Reserved         : 0<br>   +0x038 UCRSegmentList   : _LIST_ENTRY [ 0x1562ff0 - 0x1562ff0 ]<br>   +0x040 Flags            : 0x40001061<br>   +0x044 ForceFlags       : 0x40000061<br>   +0x048 CompatibilityFlags : 0<br>   +0x04c EncodeFlagMask   : 0x100000<br>   +0x050 Encoding         : _HEAP_ENTRY<br>   +0x058 Interceptor      : 0<br>   +0x05c VirtualMemoryThreshold : 0xfe00<br>   +0x060 Signature        : 0xeeffeeff<br>   +0x064 SegmentReserve   : 0x100000<br>   +0x068 SegmentCommit    : 0x2000<br>   +0x06c DeCommitFreeBlockThreshold : 0x200<br>   +0x070 DeCommitTotalFreeThreshold : 0x2000<br>   +0x074 TotalFreeSize    : 0x56c<br>   +0x078 MaximumAllocationSize : 0x7ffdefff<br>   +0x07c ProcessHeapsListIndex : 2<br>   +0x07e HeaderValidateLength : 0x248<br>   +0x080 HeaderValidateCopy : (null)<br>   +0x084 NextAvailableTagIndex : 0<br>   +0x086 MaximumTagIndex  : 0<br>   +0x088 TagEntries       : (null)<br>   +0x08c UCRList          : _LIST_ENTRY [ 0x1562fe8 - 0x1562fe8 ]<br>   +0x094 AlignRound       : 0x17<br>   +0x098 AlignMask        : 0xfffffff8<br>   +0x09c VirtualAllocdBlocks : _LIST_ENTRY [ 0x156009c - 0x156009c ]<br>   +0x0a4 SegmentList      : _LIST_ENTRY [ 0x1560010 - 0x1560010 ]<br>   +0x0ac AllocatorBackTraceIndex : 0<br>   +0x0b0 NonDedicatedListLength : 0<br>   +0x0b4 BlocksIndex      : 0x01560248 Void<br>   +0x0b8 UCRIndex         : (null)<br>   +0x0bc PseudoTagEntries : (null)<br>   +0x0c0 FreeLists        : _LIST_ENTRY [ 0x1560488 - 0x1560488 ]<br>   +0x0c8 LockVariable     : (null)<br>   +0x0cc CommitRoutine    : 0x64f930c2     long  +64f930c2<br>   +0x0d0 StackTraceInitVar : _RTL_RUN_ONCE<br>   +0x0d4 FrontEndHeap     : (null)<br>   +0x0d8 FrontHeapLockCount : 0<br>   +0x0da FrontEndHeapType : 0 ‘’<br>   +0x0db RequestedFrontEndHeapType : 0 ‘’<br>   +0x0dc FrontEndHeapUsageData : (null)<br>   +0x0e0 FrontEndHeapMaximumIndex : 0<br>   +0x0e2 FrontEndHeapStatusBitmap : [257]  “”<br>   +0x1e4 Counters         : _HEAP_COUNTERS<br>   +0x240 TuningParameters : _HEAP_TUNING_PARAMETERS<br>待续。。。。</p>
+
+  </div>
+  <footer class="article-footer">
+    
+  <div class="cc">
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.C" target="_blank" title="Attribution-ShareAlike">
+      <img src="/images/cc/cc.png">
+      
+          <img src="/images/cc/by.png">
+        
+          <img src="/images/cc/sa.png">
+      
+      <span>
+        This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
+      </span>
+    </a>
+  </div>
+
+
+    
+
+  </footer>
+</article>
+
+
+
+
+
+
+
+          <div class="main-footer">
+  
+    © 2018 pwndog&#39;s blog - Powered by <a href="http://hexo.io" target="_blank">Hexo</a> - Theme <a href="https://github.com/denjones/hexo-theme-chan" target="_blank">Chan</a>
+  
+</div>
+
+      
+        </div>
+      
+    </div>
+  </div>
+  <script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+  <link rel="stylesheet" href="/PhotoSwipe/photoswipe.css">
+  <link rel="stylesheet" href="/PhotoSwipe/default-skin/default-skin.css">
+
+  <!-- Root element of PhotoSwipe. Must have class pswp. -->
+  <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+             It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+      <!-- Container that holds slides.
+                PhotoSwipe keeps only 3 of them in the DOM to save memory.
+                Don't modify these 3 pswp__item elements, data is added later on. -->
+      <div class="pswp__container">
+        <div class="pswp__item"></div>
+        <div class="pswp__item"></div>
+        <div class="pswp__item"></div>
+      </div>
+
+      <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+      <div class="pswp__ui pswp__ui--hidden">
+
+        <div class="pswp__top-bar">
+
+          <!--  Controls are self-explanatory. Order can be changed. -->
+
+          <div class="pswp__counter"></div>
+
+          <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+          <button class="pswp__button pswp__button--share" title="Share"></button>
+
+          <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+          <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+          <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+          <!-- element will get class pswp__preloader--active when preloader is running -->
+          <div class="pswp__preloader">
+            <div class="pswp__preloader__icn">
+              <div class="pswp__preloader__cut">
+                <div class="pswp__preloader__donut"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+          <div class="pswp__share-tooltip"></div>
+        </div>
+
+        <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+
+        <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
+
+        <div class="pswp__caption">
+          <div class="pswp__caption__center"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/PhotoSwipe/photoswipe.js"></script>
+  <script src="/PhotoSwipe/photoswipe-ui-default.js"></script>
+
+
+<script src="/perfect-scrollbar/js/min/perfect-scrollbar.min.js"></script>
+<script src="/scripts/main.js"></script>
+
+</body>
+</html>
