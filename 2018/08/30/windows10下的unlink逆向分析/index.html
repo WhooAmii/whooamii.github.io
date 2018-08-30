@@ -8,20 +8,30 @@
 
 <title>
   
-    pwndog&#39;s blog
+    windows10下的unlink逆向分析
   
 </title>
 
-<meta name="description" content="qq1015138407">
-<meta property="og:type" content="website">
-<meta property="og:title" content="pwndog&#39;s blog">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="前言实验尝试做windows下的unlink攻击。windows下有safeunlink保护。和glibc一样若free x发生了unlink要求x-&amp;gt;fd-&amp;gt;bk=x=x-&amp;gt;bk-&amp;gt;fd于是想进行一次类似于linux unlink的攻击。中间产生了异常事件。于是对windows的free函数进行了逆向分析 unlink实验#include &quot;stdafx.h&quot; #incl">
+<meta name="keywords" content="堆,windows">
+<meta property="og:type" content="article">
+<meta property="og:title" content="windows10下的unlink逆向分析">
+<meta property="og:url" content="http://yoursite.com/2018/08/30/windows10下的unlink逆向分析/index.html">
 <meta property="og:site_name" content="pwndog&#39;s blog">
-<meta property="og:description" content="qq1015138407">
+<meta property="og:description" content="前言实验尝试做windows下的unlink攻击。windows下有safeunlink保护。和glibc一样若free x发生了unlink要求x-&amp;gt;fd-&amp;gt;bk=x=x-&amp;gt;bk-&amp;gt;fd于是想进行一次类似于linux unlink的攻击。中间产生了异常事件。于是对windows的free函数进行了逆向分析 unlink实验#include &quot;stdafx.h&quot; #incl">
 <meta property="og:locale" content="CN">
+<meta property="og:image" content="http://yoursite.com/2018/08/30/windows10下的unlink逆向分析/1.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/30/windows10下的unlink逆向分析/2.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/30/windows10下的unlink逆向分析/3.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/30/windows10下的unlink逆向分析/4.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/30/windows10下的unlink逆向分析/5.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/30/windows10下的unlink逆向分析/7.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/30/windows10下的unlink逆向分析/8.png">
+<meta property="og:updated_time" content="2018-08-30T15:51:46.199Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="pwndog&#39;s blog">
-<meta name="twitter:description" content="qq1015138407">
+<meta name="twitter:title" content="windows10下的unlink逆向分析">
+<meta name="twitter:description" content="前言实验尝试做windows下的unlink攻击。windows下有safeunlink保护。和glibc一样若free x发生了unlink要求x-&amp;gt;fd-&amp;gt;bk=x=x-&amp;gt;bk-&amp;gt;fd于是想进行一次类似于linux unlink的攻击。中间产生了异常事件。于是对windows的free函数进行了逆向分析 unlink实验#include &quot;stdafx.h&quot; #incl">
+<meta name="twitter:image" content="http://yoursite.com/2018/08/30/windows10下的unlink逆向分析/1.png">
 
 
   <link rel="alternative" href="/atom.xml" title="pwndog&#39;s blog" type="application/atom+xml">
@@ -155,39 +165,30 @@
       
         <div style="max-width: 1000px">
       
-          
-
+          <article id="post-windows10下的unlink逆向分析" class="article article-type-post">
+  
+    <h1 class="article-header">
+      windows10下的unlink逆向分析
+    </h1>
   
   
-    <div class="post-list">
-  
 
-    <div class="post-list-item article">
-      <h3 class="article-header">
-        <a href="/2018/08/30/windows10下的unlink逆向分析/" >
-  windows10下的unlink逆向分析
-</a>
-
-      </h3>
-      
-
-      <div class="article-info">
-        <a href="/2018/08/30/windows10下的unlink逆向分析/"><span class="article-date">
+  <div class="article-info">
+    <span class="article-date">
   2018-08-30
 </span>
-</a>
-        
 
-        
+    
+
+    
 	<span class="article-tag tagcloud">
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/windows/">windows</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/堆/">堆</a></li></ul>
 	</span>
 
 
-      </div>
-      <div class="article-entry">
-        
-          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>实验尝试做windows下的unlink攻击。windows下有safeunlink保护。和glibc一样若free x发生了unlink要求x-&gt;fd-&gt;bk=x=x-&gt;bk-&gt;fd<br>于是想进行一次类似于linux unlink的攻击。中间产生了异常事件。于是对windows的free函数进行了逆向分析</p>
+  </div>
+  <div class="article-entry">
+    <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>实验尝试做windows下的unlink攻击。windows下有safeunlink保护。和glibc一样若free x发生了unlink要求x-&gt;fd-&gt;bk=x=x-&gt;bk-&gt;fd<br>于是想进行一次类似于linux unlink的攻击。中间产生了异常事件。于是对windows的free函数进行了逆向分析</p>
 <h3 id="unlink实验"><a href="#unlink实验" class="headerlink" title="unlink实验"></a>unlink实验</h3><pre><code class="C"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"stdafx.h"</span></span>
 <span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;Windows.h&gt;</span></span>
 <span class="keyword">void</span> *pp;
@@ -233,415 +234,31 @@
 <h4 id="失败原因"><a href="#失败原因" class="headerlink" title="失败原因"></a>失败原因</h4><p>经过一段根据free堆块大小的判断及合并后大小的计算后来到失败处。<br>其实攻击失败原因很简单。unlink后会再次对相邻堆块进行完整性校验。这里我们的fd指针被修改成我们程序中内存一部分。并不能完成完成性校验。会调用raiseexcition.校验过程和上方一致故不贴出。此步正是unlink内存写入最后一个校验（可惜可惜，如果堆块未启动加密的话伪造heap_entry为0x0000000即可通过校验）。<br><img src="/2018/08/30/windows10下的unlink逆向分析/8.png" alt=""></p>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>经过unlink后会进行flag更新，链表更新。将堆块内容填充。最后加密heap_entry等步骤。这里就不继续跟踪了，最后的流程不长。<br>经过分析可以得知只有在堆块未加密情况下，且能伪造heap_entry为0x0000000才能进行利用。感叹windows的严谨和glibc的粗糙。。。。</p>
 
-        
-      </div>
-    </div>
-
-  
-    </div>
-  
-
-  
-  
-    <div class="post-list">
-  
-
-    <div class="post-list-item article">
-      <h3 class="article-header">
-        <a href="/2018/08/27/网鼎杯第三场pesp题解/" >
-  网鼎杯第三场pesp题解
-</a>
-
-      </h3>
-      
-
-      <div class="article-info">
-        <a href="/2018/08/27/网鼎杯第三场pesp题解/"><span class="article-date">
-  2018-08-27
-</span>
-</a>
-        
-
-        
-	<span class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
-	</span>
-
-
-      </div>
-      <div class="article-entry">
-        
-          <h3 id="题目保护"><a href="#题目保护" class="headerlink" title="题目保护"></a>题目保护</h3><p><img src="/2018/08/27/网鼎杯第三场pesp题解/1.png" alt=""><br>未开启PIE<br></p>
-          <p>
-            <a href="/2018/08/27/网鼎杯第三场pesp题解/">
-              Read More
-            </a>
-          </p>
-        
-      </div>
-    </div>
-
-  
-    </div>
-  
-
-  
-  
-    <div class="post-list">
-  
-
-    <div class="post-list-item article">
-      <h3 class="article-header">
-        <a href="/2018/08/23/一个有趣的PWN-铁三云贵第三题/" >
-  一个有趣的PWN 铁三云贵第三题
-</a>
-
-      </h3>
-      
-
-      <div class="article-info">
-        <a href="/2018/08/23/一个有趣的PWN-铁三云贵第三题/"><span class="article-date">
-  2018-08-23
-</span>
-</a>
-        
-
-        
-	<span class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
-	</span>
-
-
-      </div>
-      <div class="article-entry">
-        
-          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>五月份参加的铁三区域赛。当时自己还是一个pwn超级小白。连栈溢出都不会做。这道是里面分值最高的pwn题困扰了我很久，现在做出来很有意思。<br></p>
-          <p>
-            <a href="/2018/08/23/一个有趣的PWN-铁三云贵第三题/">
-              Read More
-            </a>
-          </p>
-        
-      </div>
-    </div>
-
-  
-    </div>
-  
-
-  
-  
-    <div class="post-list">
-  
-
-    <div class="post-list-item article">
-      <h3 class="article-header">
-        <a href="/2018/08/22/2018-网鼎杯预选赛第二场-hvm/" >
-  2018 网鼎杯预选赛第二场 hvm
-</a>
-
-      </h3>
-      
-
-      <div class="article-info">
-        <a href="/2018/08/22/2018-网鼎杯预选赛第二场-hvm/"><span class="article-date">
-  2018-08-22
-</span>
-</a>
-        
-
-        
-	<span class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
-	</span>
-
-
-      </div>
-      <div class="article-entry">
-        
-          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>同学参赛给的题，侥幸做出来两道hvm和easpfmt。<br>hvm是一道虚拟机题。正好我上学期期末设计做的是一款虚拟机软件。。虽然没开发完全还是懂一些。<br></p>
-          <p>
-            <a href="/2018/08/22/2018-网鼎杯预选赛第二场-hvm/">
-              Read More
-            </a>
-          </p>
-        
-      </div>
-    </div>
-
-  
-    </div>
-  
-
-  
-  
-    <div class="post-list">
-  
-
-    <div class="post-list-item article">
-      <h3 class="article-header">
-        <a href="/2018/08/21/网鼎杯2018第一场预选赛-GUESS-题解/" >
-  网鼎杯2018第一场预选赛 GUESS 题解
-</a>
-
-      </h3>
-      
-
-      <div class="article-info">
-        <a href="/2018/08/21/网鼎杯2018第一场预选赛-GUESS-题解/"><span class="article-date">
-  2018-08-21
-</span>
-</a>
-        
-
-        
-	<span class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
-	</span>
-
-
-      </div>
-      <div class="article-entry">
-        
-          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>2018网鼎杯第一场预选赛GUESS 题解<br></p>
-          <p>
-            <a href="/2018/08/21/网鼎杯2018第一场预选赛-GUESS-题解/">
-              Read More
-            </a>
-          </p>
-        
-      </div>
-    </div>
-
-  
-    </div>
-  
-
-  
-  
-    <div class="post-list">
-  
-
-    <div class="post-list-item article">
-      <h3 class="article-header">
-        <a href="/2018/08/20/网鼎杯第一场预选-babyheap/" >
-  网鼎杯第一场预选 babyheap
-</a>
-
-      </h3>
-      
-
-      <div class="article-info">
-        <a href="/2018/08/20/网鼎杯第一场预选-babyheap/"><span class="article-date">
-  2018-08-20
-</span>
-</a>
-        
-
-        
-	<span class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
-	</span>
-
-
-      </div>
-      <div class="article-entry">
-        
-          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>参加第一场，侥幸做出两道pwn和签到就进了前50。。貌似自己是前五十做题数量最少的。。时间不够就做出两道babyheap及GUESS。分数全靠babyheap来的。。<br><img src="/2018/08/20/网鼎杯第一场预选-babyheap/1.jpg" alt=""><br></p>
-          <p>
-            <a href="/2018/08/20/网鼎杯第一场预选-babyheap/">
-              Read More
-            </a>
-          </p>
-        
-      </div>
-    </div>
-
-  
-    </div>
-  
-
-  
-  
-    <div class="post-list">
-  
-
-    <div class="post-list-item article">
-      <h3 class="article-header">
-        <a href="/2018/08/18/n1ctf2018-vote解题/" >
-  n1ctf2018 vote解题
-</a>
-
-      </h3>
-      
-
-      <div class="article-info">
-        <a href="/2018/08/18/n1ctf2018-vote解题/"><span class="article-date">
-  2018-08-18
-</span>
-</a>
-        
-
-        
-	<span class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
-	</span>
-
-
-      </div>
-      <div class="article-entry">
-        
-          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>旧题重做，最近更新的有点慢。做的是n1ctf2018中的vote题目。<br></p>
-          <p>
-            <a href="/2018/08/18/n1ctf2018-vote解题/">
-              Read More
-            </a>
-          </p>
-        
-      </div>
-    </div>
-
-  
-    </div>
-  
-
-  
-  
-    <div class="post-list">
-  
-
-    <div class="post-list-item article">
-      <h3 class="article-header">
-        <a href="/2018/08/08/windows下堆结构调试笔记/" >
-  windows下堆结构调试笔记
-</a>
-
-      </h3>
-      
-
-      <div class="article-info">
-        <a href="/2018/08/08/windows下堆结构调试笔记/"><span class="article-date">
-  2018-08-08
-</span>
-</a>
-        
-
-        
-	<span class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/windows/">windows</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/堆/">堆</a></li></ul>
-	</span>
-
-
-      </div>
-      <div class="article-entry">
-        
-          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近调试windows下堆的cve的时候发现对windows下的堆管理理解不够，对javascript堆分配和利用基础不够，由于windows下没有源码可以看，只能通过网上的博客和调试器自己学习。windows堆管理在不断更新，博客内容会有所偏差，接下来的笔记是windows10上的堆结构。<br></p>
-          <p>
-            <a href="/2018/08/08/windows下堆结构调试笔记/">
-              Read More
-            </a>
-          </p>
-        
-      </div>
-    </div>
-
-  
-    </div>
-  
-
-  
-  
-    <div class="post-list">
-  
-
-    <div class="post-list-item article">
-      <h3 class="article-header">
-        <a href="/2018/08/07/tjctf记录/" >
-  tjctf记录
-</a>
-
-      </h3>
-      
-
-      <div class="article-info">
-        <a href="/2018/08/07/tjctf记录/"><span class="article-date">
-  2018-08-07
-</span>
-</a>
-        
-
-        
-	<span class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
-	</span>
-
-
-      </div>
-      <div class="article-entry">
-        
-          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>看着ctftime上的时间表参加了tjctf的比赛。pwn，re题目非常简单，在今天结束最高到了第二名.(pwn,re做完了，misc太菜)。虽然题目非常简单，类似于国内ISCC，还是简单的做个记录<br><img src="/2018/08/07/tjctf记录/1.png" alt="第一天排名"><br></p>
-          <p>
-            <a href="/2018/08/07/tjctf记录/">
-              Read More
-            </a>
-          </p>
-        
-      </div>
-    </div>
-
-  
-    </div>
-  
-
-  
-  
-    <div class="post-list">
-  
-
-    <div class="post-list-item article">
-      <h3 class="article-header">
-        <a href="/2018/07/29/一次Null-by-one的利用过程/" >
-  一次Null-by-one的利用过程
-</a>
-
-      </h3>
-      
-
-      <div class="article-info">
-        <a href="/2018/07/29/一次Null-by-one的利用过程/"><span class="article-date">
-  2018-07-29
-</span>
-</a>
-        
-
-        
-	<span class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
-	</span>
-
-
-      </div>
-      <div class="article-entry">
-        
-          <p>学校比赛的压轴题。<br></p>
-          <p>
-            <a href="/2018/07/29/一次Null-by-one的利用过程/">
-              Read More
-            </a>
-          </p>
-        
-      </div>
-    </div>
-
-  
-    </div>
-  
-
-
-
-  <div class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next</a>
   </div>
+  <footer class="article-footer">
+    
+  <div class="cc">
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.C" target="_blank" title="Attribution-ShareAlike">
+      <img src="/images/cc/cc.png">
+      
+          <img src="/images/cc/by.png">
+        
+          <img src="/images/cc/sa.png">
+      
+      <span>
+        This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
+      </span>
+    </a>
+  </div>
+
+
+    
+
+  </footer>
+</article>
+
+
+
 
 
 
