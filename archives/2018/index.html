@@ -8,7 +8,7 @@
 
 <title>
   
-    Archive: 2018
+    归档: 2018
   
 </title>
 
@@ -88,21 +88,21 @@
           
             
               <li class="category-list-container">
-                <a href="javascript:;">Category</a>
+                <a href="javascript:;">分类</a>
                 <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/glibc源码阅读/">glibc源码阅读</a><span class="category-list-count">1</span></li></ul>
               </li>
             
           
             
               <li class="tag-list-container">
-                <a href="javascript:;">Tag</a>
+                <a href="javascript:;">标签</a>
                 <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/">CTF</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GLIBC/">GLIBC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/windows/">windows</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/堆/">堆</a><span class="tag-list-count">2</span></li></ul>
               </li>
             
           
             
               <li class="archive-list-container">
-                <a href="javascript:;">Archive</a>
+                <a href="javascript:;">归档</a>
                 <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018</a><span class="archive-list-count">14</span></li></ul>
               </li>
             
@@ -195,52 +195,12 @@
       </div>
       <div class="article-entry">
         
-          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>实验尝试做windows下的unlink攻击。windows下有safeunlink保护。和glibc一样若free x发生了unlink要求x-&gt;fd-&gt;bk=x=x-&gt;bk-&gt;fd<br>于是想进行一次类似于linux unlink的攻击。中间产生了异常事件。于是对windows的free函数进行了逆向分析</p>
-<h3 id="unlink实验"><a href="#unlink实验" class="headerlink" title="unlink实验"></a>unlink实验</h3><pre><code class="C"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"stdafx.h"</span></span>
-<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;Windows.h&gt;</span></span>
-<span class="keyword">void</span> *pp;
-<span class="function"><span class="keyword">void</span> <span class="title">try1</span><span class="params">()</span> </span>{
-    HANDLE hHeap = HeapCreate(HEAP_GROWABLE, <span class="number">1024</span>, <span class="number">10000</span>);
-
-
-    DWORD zz = <span class="number">1</span>;
-
-    <span class="keyword">char</span> *p = (<span class="keyword">char</span> *)HeapAlloc(hHeap, HEAP_NO_SERIALIZE, <span class="number">8000</span>);
-    <span class="keyword">bool</span> bRetVal = HeapFree(hHeap, HEAP_NO_SERIALIZE, p);
-    HeapAlloc(hHeap, HEAP_NO_SERIALIZE, <span class="number">528</span>);
-    <span class="keyword">void</span> * ppp = HeapAlloc(hHeap, HEAP_NO_SERIALIZE, <span class="number">528</span>);
-     DWORD z = *(((DWORD *)p) + <span class="number">0x112</span>) ^ <span class="number">0xDF0404DF</span>;
-    DWORD z1 = *(((DWORD *)p) + <span class="number">0x113</span>) ^ <span class="number">0x45</span>;
-    pp=HeapAlloc(hHeap, HEAP_NO_SERIALIZE, <span class="number">528</span>);
-    <span class="built_in">printf</span>(<span class="string">"%x"</span>, pp);
-    HeapAlloc(hHeap, HEAP_NO_SERIALIZE, <span class="number">528</span>);
-    HeapFree(hHeap, HEAP_NO_SERIALIZE, pp);
-    *(((DWORD *)p) + <span class="number">0x112</span>) = <span class="number">0x41040045</span> ^ z;
-    *(((DWORD *)p) + <span class="number">0x113</span>) = <span class="number">0x45</span> ^ z1;
-    *(((DWORD *)p) + <span class="number">0x114</span>) = DWORD(&amp;pp <span class="number">-0x1</span>);
-    *(((DWORD *)p) + <span class="number">0x115</span>) = DWORD(&amp;pp);
-    HeapFree(hHeap, HEAP_NO_SERIALIZE, ppp);
-}
-<span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>
-<span class="function"></span>{
-
-    try1();
-
-    <span class="built_in">printf</span>(<span class="string">"%x"</span>, pp);
-    <span class="keyword">return</span> <span class="number">0</span>;
-}
-</code></pre>
-<p><img src="/2018/08/30/windows10下的unlink逆向分析/1.png" alt=""><br>在实验过程中heapfree会调用一次raiseexception函数。若为调试器运行则上面的unlink会攻击成功。若无调试器则不会成功。<br>得出结论这样的unlink攻击不可利用。<br>于是对windows下rtlfreeheap进行了逆向分析。<br>经过ida分析得出真正的free过程在rtlpfreeheap函数中。但是此函数被保护不能直接f5。</p>
-<h3 id="rtlpfreeheap分析"><a href="#rtlpfreeheap分析" class="headerlink" title="rtlpfreeheap分析"></a>rtlpfreeheap分析</h3><h4 id="1-解密heap-entry"><a href="#1-解密heap-entry" class="headerlink" title="1.解密heap_entry"></a>1.解密heap_entry</h4><p>这个函数就是windows下的堆free函数。<br>单步跟踪到此函数对我们free heap的第一个内存操作。<br><img src="/2018/08/30/windows10下的unlink逆向分析/2.png" alt=""><br>edi寄存器保存的为我们heap结构的地址。<br>对heap偏移0x4c与0进行比较。<br>+0x04c EncodeFlagMask 。即判断此堆块是否进行过加密操作。若flag不为0.则进行下面的解密操作。从偏移0x50处取出Encoding密钥异或解密heap_entry头部。<br>未加密直接跳转至解密后流程。</p>
-<h4 id="2-heap-entry检验"><a href="#2-heap-entry检验" class="headerlink" title="2.heap_entry检验"></a>2.heap_entry检验</h4><p>mov al,byte ptr ds:[ebx+2]<br>xor al,byte ptr ds:[ebx+1]<br>xor al,byte ptr ds:[ebx]<br>cmp byte ptr ds:[ebx+3],al<br>heap_entry偏移0，1，2相互异或操作，与偏移3进行对比。可得出偏移3为防止heap_entry被修改的cookie值。<br>防止off-by-one单字节修改heap_entry.</p>
-<h4 id="3-判断上一相邻堆块"><a href="#3-判断上一相邻堆块" class="headerlink" title="3.判断上一相邻堆块"></a>3.判断上一相邻堆块</h4><p>通过自己pre_size找到上一堆块位置，计算过程：自己的地址-pre_size&lt;&lt;3<br><img src="/2018/08/30/windows10下的unlink逆向分析/3.png" alt=""><br>判断前一堆块是否为自己。即自己是否为堆中第一个堆块。<br>若为自己直接转至第五步</p>
-<h4 id="4-判断上一堆块是否free"><a href="#4-判断上一堆块是否free" class="headerlink" title="4.判断上一堆块是否free"></a>4.判断上一堆块是否free</h4><p><img src="/2018/08/30/windows10下的unlink逆向分析/4.png" alt=""><br>判断过程：encodeflag&gt;&gt;14 and encode密钥  xor<br>若heap_entry未被加密 encodeflag&gt;&gt;14=0，0 and 密钥=0。0 xor flag不变。<br>若heap_entry被加密 encodeflag&gt;&gt;14=1，1 and 密钥=一位密钥。一位密钥 xor flag。flag最低位被解密。<br>通过test flag最低一位和1进行判断堆块是否free。<br>free则unlink。否则转第三步</p>
-<h4 id="5-判断下一相邻堆块"><a href="#5-判断下一相邻堆块" class="headerlink" title="5.判断下一相邻堆块"></a>5.判断下一相邻堆块</h4><p><img src="/2018/08/30/windows10下的unlink逆向分析/5.png" alt=""><br>通过自己size找到下一堆块位置，计算过程：自己的地址+size*8.<br>解密heap_entry。进行堆块有效性校验（ps：对于上一相邻堆块不进行解密和校验。应该是防止堆溢出）<br>虽然校验过程与第一步代码不同，但根据单步调试。校验的实际效果是一样的.<br>heap_entry偏移0，1，2相互异或操作，与偏移3进行对比。</p>
-<h4 id="6-判断下一堆块是否free"><a href="#6-判断下一堆块是否free" class="headerlink" title="6.判断下一堆块是否free"></a>6.判断下一堆块是否free</h4><p>判断过程同第四步一致。但是若可以进行unlink还要再次对堆块进行校验（unlink前都会进行校验。不论前后）</p>
-<h3 id="unlink过程"><a href="#unlink过程" class="headerlink" title="unlink过程"></a>unlink过程</h3><h4 id="safe-unlink"><a href="#safe-unlink" class="headerlink" title="safe unlink"></a>safe unlink</h4><p><img src="/2018/08/30/windows10下的unlink逆向分析/7.png" alt=""><br>safe unlink的代码同linux下的保护如出一辙。<br>要求x-&gt;fd-&gt;bk=x=x-&gt;bk-&gt;fd</p>
-<h4 id="失败原因"><a href="#失败原因" class="headerlink" title="失败原因"></a>失败原因</h4><p>经过一段根据free堆块大小的判断及合并后大小的计算后来到失败处。<br>其实攻击失败原因很简单。unlink后会再次对相邻堆块进行完整性校验。这里我们的fd指针被修改成我们程序中内存一部分。并不能完成完成性校验。会调用raiseexcition.校验过程和上方一致故不贴出。此步正是unlink内存写入最后一个校验（可惜可惜，如果堆块未启动加密的话伪造heap_entry为0x0000000即可通过校验）。<br><img src="/2018/08/30/windows10下的unlink逆向分析/8.png" alt=""></p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>经过unlink后会进行flag更新，链表更新。将堆块内容填充。最后加密heap_entry等步骤。这里就不继续跟踪了，最后的流程不长。<br>经过分析可以得知只有在堆块未加密情况下，且能伪造heap_entry为0x0000000才能进行利用。感叹windows的严谨和glibc的粗糙。。。。</p>
-
+          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>实验尝试做windows下的unlink攻击。windows下有safeunlink保护。和glibc一样若free x发生了unlink要求x-&gt;fd-&gt;bk=x=x-&gt;bk-&gt;fd<br>于是想进行一次类似于linux unlink的攻击。中间产生了异常事件。于是对windows的free函数进行了逆向分析<br></p>
+          <p>
+            <a href="/2018/08/30/windows10下的unlink逆向分析/">
+              阅读全文
+            </a>
+          </p>
         
       </div>
     </div>
@@ -280,7 +240,7 @@
           <h3 id="题目保护"><a href="#题目保护" class="headerlink" title="题目保护"></a>题目保护</h3><p><img src="/2018/08/27/网鼎杯第三场pesp题解/1.png" alt=""><br>未开启PIE<br></p>
           <p>
             <a href="/2018/08/27/网鼎杯第三场pesp题解/">
-              Read More
+              阅读全文
             </a>
           </p>
         
@@ -322,7 +282,7 @@
           <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>五月份参加的铁三区域赛。当时自己还是一个pwn超级小白。连栈溢出都不会做。这道是里面分值最高的pwn题困扰了我很久，现在做出来很有意思。<br></p>
           <p>
             <a href="/2018/08/23/一个有趣的PWN-铁三云贵第三题/">
-              Read More
+              阅读全文
             </a>
           </p>
         
@@ -364,7 +324,7 @@
           <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>同学参赛给的题，侥幸做出来两道hvm和easpfmt。<br>hvm是一道虚拟机题。正好我上学期期末设计做的是一款虚拟机软件。。虽然没开发完全还是懂一些。<br></p>
           <p>
             <a href="/2018/08/22/2018-网鼎杯预选赛第二场-hvm/">
-              Read More
+              阅读全文
             </a>
           </p>
         
@@ -406,7 +366,7 @@
           <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>2018网鼎杯第一场预选赛GUESS 题解<br></p>
           <p>
             <a href="/2018/08/21/网鼎杯2018第一场预选赛-GUESS-题解/">
-              Read More
+              阅读全文
             </a>
           </p>
         
@@ -448,7 +408,7 @@
           <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>参加第一场，侥幸做出两道pwn和签到就进了前50。。貌似自己是前五十做题数量最少的。。时间不够就做出两道babyheap及GUESS。分数全靠babyheap来的。。<br><img src="/2018/08/20/网鼎杯第一场预选-babyheap/1.jpg" alt=""><br></p>
           <p>
             <a href="/2018/08/20/网鼎杯第一场预选-babyheap/">
-              Read More
+              阅读全文
             </a>
           </p>
         
@@ -490,7 +450,7 @@
           <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>旧题重做，最近更新的有点慢。做的是n1ctf2018中的vote题目。<br></p>
           <p>
             <a href="/2018/08/18/n1ctf2018-vote解题/">
-              Read More
+              阅读全文
             </a>
           </p>
         
@@ -532,7 +492,7 @@
           <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近调试windows下堆的cve的时候发现对windows下的堆管理理解不够，对javascript堆分配和利用基础不够，由于windows下没有源码可以看，只能通过网上的博客和调试器自己学习。windows堆管理在不断更新，博客内容会有所偏差，接下来的笔记是windows10上的堆结构。<br></p>
           <p>
             <a href="/2018/08/08/windows下堆结构调试笔记/">
-              Read More
+              阅读全文
             </a>
           </p>
         
@@ -574,7 +534,7 @@
           <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>看着ctftime上的时间表参加了tjctf的比赛。pwn，re题目非常简单，在今天结束最高到了第二名.(pwn,re做完了，misc太菜)。虽然题目非常简单，类似于国内ISCC，还是简单的做个记录<br><img src="/2018/08/07/tjctf记录/1.png" alt="第一天排名"><br></p>
           <p>
             <a href="/2018/08/07/tjctf记录/">
-              Read More
+              阅读全文
             </a>
           </p>
         
@@ -616,7 +576,7 @@
           <p>学校比赛的压轴题。<br></p>
           <p>
             <a href="/2018/07/29/一次Null-by-one的利用过程/">
-              Read More
+              阅读全文
             </a>
           </p>
         
@@ -628,7 +588,7 @@
 
 
   <div class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/archives/2018/page/2/">2</a><a class="extend next" rel="next" href="/archives/2018/page/2/">Next</a>
+    <span class="page-number current">1</span><a class="page-number" href="/archives/2018/page/2/">2</a><a class="extend next" rel="next" href="/archives/2018/page/2/">下一页</a>
   </div>
 
 
