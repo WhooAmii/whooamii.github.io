@@ -25,9 +25,10 @@
 <meta property="og:image" content="http://yoursite.com/2018/08/30/windows10下的unlink逆向分析/3.png">
 <meta property="og:image" content="http://yoursite.com/2018/08/30/windows10下的unlink逆向分析/4.png">
 <meta property="og:image" content="http://yoursite.com/2018/08/30/windows10下的unlink逆向分析/5.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/30/windows10下的unlink逆向分析/6.png">
 <meta property="og:image" content="http://yoursite.com/2018/08/30/windows10下的unlink逆向分析/7.png">
 <meta property="og:image" content="http://yoursite.com/2018/08/30/windows10下的unlink逆向分析/8.png">
-<meta property="og:updated_time" content="2018-08-30T15:54:24.719Z">
+<meta property="og:updated_time" content="2018-08-30T15:58:43.226Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="windows10下的unlink逆向分析">
 <meta name="twitter:description" content="前言实验尝试做windows下的unlink攻击。windows下有safeunlink保护。和glibc一样若free x发生了unlink要求x-&amp;gt;fd-&amp;gt;bk=x=x-&amp;gt;bk-&amp;gt;fd于是想进行一次类似于linux unlink的攻击。中间产生了异常事件。于是对windows的free函数进行了逆向分析">
@@ -98,21 +99,21 @@
           
             
               <li class="category-list-container">
-                <a href="javascript:;">分类</a>
+                <a href="javascript:;">Category</a>
                 <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/glibc源码阅读/">glibc源码阅读</a><span class="category-list-count">1</span></li></ul>
               </li>
             
           
             
               <li class="tag-list-container">
-                <a href="javascript:;">标签</a>
+                <a href="javascript:;">Tag</a>
                 <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/">CTF</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GLIBC/">GLIBC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/windows/">windows</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/堆/">堆</a><span class="tag-list-count">2</span></li></ul>
               </li>
             
           
             
               <li class="archive-list-container">
-                <a href="javascript:;">归档</a>
+                <a href="javascript:;">Archive</a>
                 <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018</a><span class="archive-list-count">14</span></li></ul>
               </li>
             
@@ -229,7 +230,7 @@
 <h4 id="3-判断上一相邻堆块"><a href="#3-判断上一相邻堆块" class="headerlink" title="3.判断上一相邻堆块"></a>3.判断上一相邻堆块</h4><p>通过自己pre_size找到上一堆块位置，计算过程：自己的地址-pre_size&lt;&lt;3<br><img src="/2018/08/30/windows10下的unlink逆向分析/3.png" alt=""><br>判断前一堆块是否为自己。即自己是否为堆中第一个堆块。<br>若为自己直接转至第五步</p>
 <h4 id="4-判断上一堆块是否free"><a href="#4-判断上一堆块是否free" class="headerlink" title="4.判断上一堆块是否free"></a>4.判断上一堆块是否free</h4><p><img src="/2018/08/30/windows10下的unlink逆向分析/4.png" alt=""><br>判断过程：encodeflag&gt;&gt;14 and encode密钥  xor<br>若heap_entry未被加密 encodeflag&gt;&gt;14=0，0 and 密钥=0。0 xor flag不变。<br>若heap_entry被加密 encodeflag&gt;&gt;14=1，1 and 密钥=一位密钥。一位密钥 xor flag。flag最低位被解密。<br>通过test flag最低一位和1进行判断堆块是否free。<br>free则unlink。否则转第三步</p>
 <h4 id="5-判断下一相邻堆块"><a href="#5-判断下一相邻堆块" class="headerlink" title="5.判断下一相邻堆块"></a>5.判断下一相邻堆块</h4><p><img src="/2018/08/30/windows10下的unlink逆向分析/5.png" alt=""><br>通过自己size找到下一堆块位置，计算过程：自己的地址+size*8.<br>解密heap_entry。进行堆块有效性校验（ps：对于上一相邻堆块不进行解密和校验。应该是防止堆溢出）<br>虽然校验过程与第一步代码不同，但根据单步调试。校验的实际效果是一样的.<br>heap_entry偏移0，1，2相互异或操作，与偏移3进行对比。</p>
-<h4 id="6-判断下一堆块是否free"><a href="#6-判断下一堆块是否free" class="headerlink" title="6.判断下一堆块是否free"></a>6.判断下一堆块是否free</h4><p>判断过程同第四步一致。但是若可以进行unlink还要再次对堆块进行校验（unlink前都会进行校验。不论前后）</p>
+<h4 id="6-判断下一堆块是否free"><a href="#6-判断下一堆块是否free" class="headerlink" title="6.判断下一堆块是否free"></a>6.判断下一堆块是否free</h4><p><img src="/2018/08/30/windows10下的unlink逆向分析/6.png" alt=""><br>判断过程同第四步一致。但是若可以进行unlink还要再次对堆块进行校验（unlink前都会进行校验。不论前后）</p>
 <h3 id="unlink过程"><a href="#unlink过程" class="headerlink" title="unlink过程"></a>unlink过程</h3><h4 id="safe-unlink"><a href="#safe-unlink" class="headerlink" title="safe unlink"></a>safe unlink</h4><p><img src="/2018/08/30/windows10下的unlink逆向分析/7.png" alt=""><br>safe unlink的代码同linux下的保护如出一辙。<br>要求x-&gt;fd-&gt;bk=x=x-&gt;bk-&gt;fd</p>
 <h4 id="失败原因"><a href="#失败原因" class="headerlink" title="失败原因"></a>失败原因</h4><p>经过一段根据free堆块大小的判断及合并后大小的计算后来到失败处。<br>其实攻击失败原因很简单。unlink后会再次对相邻堆块进行完整性校验。这里我们的fd指针被修改成我们程序中内存一部分。并不能完成完成性校验。会调用raiseexcition.校验过程和上方一致故不贴出。此步正是unlink内存写入最后一个校验（可惜可惜，如果堆块未启动加密的话伪造heap_entry为0x0000000即可通过校验）。<br><img src="/2018/08/30/windows10下的unlink逆向分析/8.png" alt=""></p>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>经过unlink后会进行flag更新，链表更新。将堆块内容填充。最后加密heap_entry等步骤。这里就不继续跟踪了，最后的流程不长。<br>经过分析可以得知只有在堆块未加密情况下，且能伪造heap_entry为0x0000000才能进行利用。感叹windows的严谨和glibc的粗糙。。。。</p>
@@ -238,7 +239,7 @@
   <footer class="article-footer">
     
   <div class="cc">
-    <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.C" target="_blank" title="署名-相同方式共享">
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.C" target="_blank" title="Attribution-ShareAlike">
       <img src="/images/cc/cc.png">
       
           <img src="/images/cc/by.png">
@@ -246,7 +247,7 @@
           <img src="/images/cc/sa.png">
       
       <span>
-        本作品采用知识共享 署名-相同方式共享 4.0 国际许可协议进行许可。
+        This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
       </span>
     </a>
   </div>
