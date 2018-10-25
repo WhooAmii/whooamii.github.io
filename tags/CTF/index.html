@@ -8,7 +8,7 @@
 
 <title>
   
-    标签: CTF
+    Tag: CTF
   
 </title>
 
@@ -88,22 +88,22 @@
           
             
               <li class="category-list-container">
-                <a href="javascript:;">分类</a>
+                <a href="javascript:;">Category</a>
                 <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/glibc源码阅读/">glibc源码阅读</a><span class="category-list-count">1</span></li></ul>
               </li>
             
           
             
               <li class="tag-list-container">
-                <a href="javascript:;">标签</a>
-                <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/">CTF</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GLIBC/">GLIBC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/windows/">windows</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/堆/">堆</a><span class="tag-list-count">3</span></li></ul>
+                <a href="javascript:;">Tag</a>
+                <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/">CTF</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GLIBC/">GLIBC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/windows/">windows</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/堆/">堆</a><span class="tag-list-count">3</span></li></ul>
               </li>
             
           
             
               <li class="archive-list-container">
-                <a href="javascript:;">归档</a>
-                <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018</a><span class="archive-list-count">15</span></li></ul>
+                <a href="javascript:;">Archive</a>
+                <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018</a><span class="archive-list-count">16</span></li></ul>
               </li>
             
           
@@ -165,6 +165,54 @@
 
     <div class="post-list-item article">
       <h3 class="article-header">
+        <a href="/2018/10/25/第一届护网杯线下决赛awd之shell多解/" >
+  第一届护网杯线下决赛awd之shell多解
+</a>
+
+      </h3>
+      
+
+      <div class="article-info">
+        <a href="/2018/10/25/第一届护网杯线下决赛awd之shell多解/"><span class="article-date">
+  2018-10-25
+</span>
+</a>
+        
+
+        
+	<span class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
+	</span>
+
+
+      </div>
+      <div class="article-entry">
+        
+          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>好久不打比赛，顺便来北京实习就参加了护网杯。排名虽然有所提高但还是被各种大表哥吊打。（和企业参赛简直痛苦）这里带来决赛中awd比赛pwn题shell的两种漏洞利用方式。</p>
+<h3 id="程序保护"><a href="#程序保护" class="headerlink" title="程序保护"></a>程序保护</h3><p>保护全开<br><img src="/2018/10/25/第一届护网杯线下决赛awd之shell多解/1.png" alt=""></p>
+<h3 id="程序分析"><a href="#程序分析" class="headerlink" title="程序分析"></a>程序分析</h3><p>程序模拟了一个受限shell命令行的功能。<br>一共有8个shell功能，根据漏洞利用方式可以分为两类。<br><img src="/2018/10/25/第一届护网杯线下决赛awd之shell多解/2.png" alt=""><br>第一类:ls,pwd,passwd,login,exit<br>其中passwd和login是假的利用方式。<br><img src="/2018/10/25/第一届护网杯线下决赛awd之shell多解/3.png" alt=""><br>就是密码通过打开random文件进行随机化。若账号密码正确则执行错误的system调用233333333333。加条知识点就是当连续open文件1024次上后，使文件描述符数组满了后，无法再次打开文件，即读取到的密码为空。这样就可以绕过密码实现登录（当然在这里登录没用）<br>第二类：recv，send，decode，encode。<br>实现通过堆的漏洞利用。</p>
+<h3 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h3><h4 id="命令注入"><a href="#命令注入" class="headerlink" title="命令注入"></a>命令注入</h4><p><img src="/2018/10/25/第一届护网杯线下决赛awd之shell多解/4.png" alt=""><br>ls和pwd可以组合实现任意命令执行。大佬们看见这一行指令就开始疯狂刷分了。可怜我等菜鸟没经验编自动化脚本调格式都要半天。。。<br>payload为|cat&lt;../flag即可直接获取flag这里不多解释这种方式</p>
+<h4 id="堆利用"><a href="#堆利用" class="headerlink" title="堆利用"></a>堆利用</h4><p>这种题在这个比赛肯定还有别的做法。。。（上面的做法太敷衍）于是开始考虑有无别的利用途径<br><img src="/2018/10/25/第一届护网杯线下决赛awd之shell多解/6.png" alt=""><br>send功能：若指针处有值，则free掉他.之后malloc一个任意大小的堆块填充至指针。并可进行堆块的填充。<br><img src="/2018/10/25/第一届护网杯线下决赛awd之shell多解/5.png" alt=""><br>recv功能：若指针处有值，则free掉他。之后malloc一个任意大小的堆块填充至指针。并将send功能指针指向的chunk内容通过strlen和memcpy拷贝到recv功能指针指向堆块。（明显存在堆溢出漏洞，且是大小不限的堆溢出漏洞）<br><img src="/2018/10/25/第一届护网杯线下决赛awd之shell多解/7.png" alt=""><br>encode功能：将send指针堆块内容加密。可通过此功能绕过strlen的0字节溢出限制。<br><img src="/2018/10/25/第一届护网杯线下决赛awd之shell多解/8.png" alt=""><br>decode功能：将recv指针堆块内容解密。只有此处存在一个put可以进行信息泄露。</p>
+<p>程序一共可维持两个任意大小的堆块。malloc和free是绑定的，free掉原堆块再malloc新堆块。decode和encode用来配合使用绕过strlen限制和泄露信息。</p>
+<h5 id="信息泄露"><a href="#信息泄露" class="headerlink" title="信息泄露"></a>信息泄露</h5><p>awd比赛自带libc，首先泄露libc的基址。<br>先分配两个堆块，此时指针<br>malloc(0xa0)//send 指针<br>malloc(0x60)//recv 指针<br>执行一次send功能。free掉send指针再分配回来。可以得到unsorted bin的地址。再执行encode功能。通过recv功能接受send堆块的内容后通过decode泄露libc地址。<br>脚本流程如下：<br>send(0xa0,’a’)<br>recv(0x60)<br>send(0xa0,’’)<br>encode(8)<br>recv(0x60)<br>p.writeline(‘decode’)<br>p.readuntil(‘:’)<br>p.writeline(‘8’)<br>p.readuntil(‘\n’)<br>libc=u64(chr(0)+p.readuntil(‘\n’)[:-1]+chr(0)*2)-0x398B00<br>success(hex(libc))</p>
+<h5 id="漏洞实现"><a href="#漏洞实现" class="headerlink" title="漏洞实现"></a>漏洞实现</h5><p>现在我们有了libc地址，需要考虑向哪里写入one_gadget实现利用。<br>利用方式通过常见的malloc_hook加realloc_hook实现<br>初始状态：<br>chunk a //send<br>chunk b //recv<br>我们可以通过写入a覆盖b的信息。<br>首先send功能malloc一个更大值<br>状态1：<br>chunk a//空（free掉）<br>chunk b//recv<br>chunk c//send<br>之后使用recv功能占位a并通过memcpy实现溢出。<br>状态2：<br>chunk a// recv<br>chunk b//空（free掉) size 0x71<br>chunk c//send<br>将chunk c memcpy到chunk a。实现对b的溢出.将b的fd指针指向malloc_hook-0x23.中间通过encode和decode功能辅助<br>之后通过send和recv功能各malloc一个0x60的堆即可完成利用。这里有新的难点。此时不知为何free c因和topchunk合并调用malloc_consolidate产生异常。<br><img src="/2018/10/25/第一届护网杯线下决赛awd之shell多解/9.png" alt=""><br>于是通过覆盖a的同时覆盖到c。伪造一个chunk与top chunk相连。<br>这时通过send和recv功能各申请一个0x60的堆块即可写入malloc_hook.这里one_gadget环境不对，通过realloc_hook微调这里不再叙述，参考上一篇文章。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>积分赛排名还好，awd日常被暴打。。和腾讯在一个分组简直是一个噩梦。膜。。如有不对请指正</p>
+
+        
+      </div>
+    </div>
+
+  
+    </div>
+  
+
+  
+  
+    <div class="post-list">
+  
+
+    <div class="post-list-item article">
+      <h3 class="article-header">
         <a href="/2018/09/11/堆溢出的六种利用手法/" >
   堆溢出的六种利用手法
 </a>
@@ -191,7 +239,7 @@
           <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>忙恶心的工程实训，还耽误校招，只能说学校zz。<br>上次参加网鼎杯线下赛因为利用手法单一，libc版本太老无法本地调试且，one_gadget失效被打爆。<br>痛定思痛，回顾学习以下堆利用能够使用的常见方法。使用程序为0ctf2017的babyheap程序，libc为2.24版本。<br></p>
           <p>
             <a href="/2018/09/11/堆溢出的六种利用手法/">
-              阅读全文
+              Read More
             </a>
           </p>
         
@@ -235,7 +283,7 @@
           <h3 id="题目保护"><a href="#题目保护" class="headerlink" title="题目保护"></a>题目保护</h3><p><img src="/2018/08/27/网鼎杯第三场pesp题解/1.png" alt=""><br>未开启PIE<br></p>
           <p>
             <a href="/2018/08/27/网鼎杯第三场pesp题解/">
-              阅读全文
+              Read More
             </a>
           </p>
         
@@ -279,7 +327,7 @@
           <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>五月份参加的铁三区域赛。当时自己还是一个pwn超级小白。连栈溢出都不会做。这道是里面分值最高的pwn题困扰了我很久，现在做出来很有意思。<br></p>
           <p>
             <a href="/2018/08/23/一个有趣的PWN-铁三云贵第三题/">
-              阅读全文
+              Read More
             </a>
           </p>
         
@@ -323,7 +371,7 @@
           <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>同学参赛给的题，侥幸做出来两道hvm和easpfmt。<br>hvm是一道虚拟机题。正好我上学期期末设计做的是一款虚拟机软件。。虽然没开发完全还是懂一些。<br></p>
           <p>
             <a href="/2018/08/22/2018-网鼎杯预选赛第二场-hvm/">
-              阅读全文
+              Read More
             </a>
           </p>
         
@@ -367,7 +415,7 @@
           <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>2018网鼎杯第一场预选赛GUESS 题解<br></p>
           <p>
             <a href="/2018/08/21/网鼎杯2018第一场预选赛-GUESS-题解/">
-              阅读全文
+              Read More
             </a>
           </p>
         
@@ -411,7 +459,7 @@
           <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>参加第一场，侥幸做出两道pwn和签到就进了前50。。貌似自己是前五十做题数量最少的。。时间不够就做出两道babyheap及GUESS。分数全靠babyheap来的。。<br><img src="/2018/08/20/网鼎杯第一场预选-babyheap/1.jpg" alt=""><br></p>
           <p>
             <a href="/2018/08/20/网鼎杯第一场预选-babyheap/">
-              阅读全文
+              Read More
             </a>
           </p>
         
@@ -455,7 +503,7 @@
           <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>旧题重做，最近更新的有点慢。做的是n1ctf2018中的vote题目。<br></p>
           <p>
             <a href="/2018/08/18/n1ctf2018-vote解题/">
-              阅读全文
+              Read More
             </a>
           </p>
         
@@ -499,7 +547,7 @@
           <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>看着ctftime上的时间表参加了tjctf的比赛。pwn，re题目非常简单，在今天结束最高到了第二名.(pwn,re做完了，misc太菜)。虽然题目非常简单，类似于国内ISCC，还是简单的做个记录<br><img src="/2018/08/07/tjctf记录/1.png" alt="第一天排名"><br></p>
           <p>
             <a href="/2018/08/07/tjctf记录/">
-              阅读全文
+              Read More
             </a>
           </p>
         
@@ -543,51 +591,7 @@
           <p>学校比赛的压轴题。<br></p>
           <p>
             <a href="/2018/07/29/一次Null-by-one的利用过程/">
-              阅读全文
-            </a>
-          </p>
-        
-      </div>
-    </div>
-
-  
-    </div>
-  
-
-  
-  
-    <div class="post-list">
-  
-
-    <div class="post-list-item article">
-      <h3 class="article-header">
-        <a href="/2018/07/29/从pwnabke.tw第18题看free_hook覆盖/" >
-  从pwnabke.tw第18题看free_hook覆盖
-</a>
-
-      </h3>
-      
-
-      <div class="article-info">
-        <a href="/2018/07/29/从pwnabke.tw第18题看free_hook覆盖/"><span class="article-date">
-  2018-07-29
-</span>
-</a>
-        
-
-        
-	<span class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
-	</span>
-
-
-      </div>
-      <div class="article-entry">
-        
-          <p>pwnabke.tw第18题 secret of my heart<br>开始发布在看雪上，现在搬到自己博客。<br>地址为<a href="https://pwnable.tw/challenge/" target="_blank" rel="noopener">https://pwnable.tw/challenge/</a><br></p>
-          <p>
-            <a href="/2018/07/29/从pwnabke.tw第18题看free_hook覆盖/">
-              阅读全文
+              Read More
             </a>
           </p>
         
@@ -601,7 +605,7 @@
 
 
   <div class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/tags/CTF/page/2/">2</a><a class="extend next" rel="next" href="/tags/CTF/page/2/">下一页</a>
+    <span class="page-number current">1</span><a class="page-number" href="/tags/CTF/page/2/">2</a><a class="extend next" rel="next" href="/tags/CTF/page/2/">Next</a>
   </div>
 
 
