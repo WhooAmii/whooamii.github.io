@@ -9,9 +9,9 @@ download link:ftp://ftp2.dlink.com/SECURITY_ADVISEMENTS/DIR-605L/REVB/
 
 post package
 
-![image](https://github.com/WhooAmii/whooamii.github.io/tree/master/2018/5.png)
+![image](https://raw.githubusercontent.com/WhooAmii/whooamii.github.io/master/2018/5.png)
  
-![image](https://github.com/WhooAmii/whooamii.github.io/tree/master/2018/6.png)
+![image](https://raw.githubusercontent.com/WhooAmii/whooamii.github.io/master/2018/6.png)
 
 Dlink型号DIR-619L最新固件2.06B1上存在不需要验证身份的栈缓冲区溢出漏洞。
 可造成远程任意代码执行。
