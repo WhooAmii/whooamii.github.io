@@ -28,4 +28,11 @@ This vulnerability can be triggered by a normal get packet
 
 ## Harm
 Can be accessed on the public network
+An attacker can make all WF Series devices unusable by sending packets continuously
 ![image](https://github.com/WhooAmii/whooamii.github.io/blob/master/2018/netis/6.png)
+
+![image](https://github.com/WhooAmii/whooamii.github.io/blob/master/2018/netis/7.png)
+
+![image](https://github.com/WhooAmii/whooamii.github.io/blob/master/2018/netis/8.png)
+
+![image](https://github.com/WhooAmii/whooamii.github.io/blob/master/2018/netis/9.png)
