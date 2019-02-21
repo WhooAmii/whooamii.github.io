@@ -33,6 +33,6 @@ An attacker can make all WF Series devices unusable by sending packets continuou
 
 ![image](https://github.com/WhooAmii/whooamii.github.io/blob/master/2018/netis/7.png)
 
-![image](https://github.com/WhooAmii/whooamii.github.io/blob/master/2018/netis/8.png)
-
 ![image](https://github.com/WhooAmii/whooamii.github.io/blob/master/2018/netis/9.png)
+
+![image](https://github.com/WhooAmii/whooamii.github.io/blob/master/2018/netis/8.png)
