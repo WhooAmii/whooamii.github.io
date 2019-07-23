@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -20,15 +20,15 @@
 <meta property="og:site_name" content="pwndog&#39;s blog">
 <meta property="og:description" content="前言2018网鼎杯第一场预选赛GUESS 题解">
 <meta property="og:locale" content="CN">
-<meta property="og:image" content="http://yoursite.com/2018/08/21/网鼎杯2018第一场预选赛-GUESS-题解/1.png">
-<meta property="og:image" content="http://yoursite.com/2018/08/21/网鼎杯2018第一场预选赛-GUESS-题解/2.png">
-<meta property="og:image" content="http://yoursite.com/2018/08/21/网鼎杯2018第一场预选赛-GUESS-题解/3.png">
-<meta property="og:image" content="http://yoursite.com/2018/08/21/网鼎杯2018第一场预选赛-GUESS-题解/4.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/21/网鼎杯2018第一场预选赛-GUESS-题解/网鼎杯2018第一场预选赛-GUESS-题解/1.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/21/网鼎杯2018第一场预选赛-GUESS-题解/网鼎杯2018第一场预选赛-GUESS-题解/2.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/21/网鼎杯2018第一场预选赛-GUESS-题解/网鼎杯2018第一场预选赛-GUESS-题解/3.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/21/网鼎杯2018第一场预选赛-GUESS-题解/网鼎杯2018第一场预选赛-GUESS-题解/4.png">
 <meta property="og:updated_time" content="2018-08-21T14:42:25.319Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="网鼎杯2018第一场预选赛 GUESS 题解">
 <meta name="twitter:description" content="前言2018网鼎杯第一场预选赛GUESS 题解">
-<meta name="twitter:image" content="http://yoursite.com/2018/08/21/网鼎杯2018第一场预选赛-GUESS-题解/1.png">
+<meta name="twitter:image" content="http://yoursite.com/2018/08/21/网鼎杯2018第一场预选赛-GUESS-题解/网鼎杯2018第一场预选赛-GUESS-题解/1.png">
 
 
   <link rel="alternative" href="/atom.xml" title="pwndog&#39;s blog" type="application/atom+xml">
@@ -47,11 +47,7 @@
 
 
 </head>
-<body
-  
-    class="monochrome"
-  
-  >
+<body class="monochrome">
   <div class="mobile-header">
   <button class="sidebar-toggle" type="button">
     <span class="icon-bar"></span>
@@ -95,21 +91,21 @@
           
             
               <li class="category-list-container">
-                <a href="javascript:;">分类</a>
+                <a href="javascript:;">Category</a>
                 <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/glibc源码阅读/">glibc源码阅读</a><span class="category-list-count">1</span></li></ul>
               </li>
             
           
             
               <li class="tag-list-container">
-                <a href="javascript:;">标签</a>
+                <a href="javascript:;">Tag</a>
                 <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/">CTF</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GLIBC/">GLIBC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/windows/">windows</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/堆/">堆</a><span class="tag-list-count">3</span></li></ul>
               </li>
             
           
             
               <li class="archive-list-container">
-                <a href="javascript:;">归档</a>
+                <a href="javascript:;">Archive</a>
                 <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018</a><span class="archive-list-count">16</span></li></ul>
               </li>
             
@@ -186,9 +182,9 @@
   </div>
   <div class="article-entry">
     <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>2018网鼎杯第一场预选赛GUESS 题解<br><a id="more"></a></p>
-<h3 id="程序保护"><a href="#程序保护" class="headerlink" title="程序保护"></a>程序保护</h3><p><img src="/2018/08/21/网鼎杯2018第一场预选赛-GUESS-题解/1.png" alt=""><br>未开启PIE，存在canary</p>
-<h3 id="程序功能"><a href="#程序功能" class="headerlink" title="程序功能"></a>程序功能</h3><p><img src="/2018/08/21/网鼎杯2018第一场预选赛-GUESS-题解/2.png" alt=""><br>程序将flag读取进栈上的缓冲区。通过gets函数要求我们输入flag。通过fork子进程的方式给了我们三次猜测的机会。gets处明显存在栈溢出漏洞。</p>
-<h3 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h3><p>gets处存在缓冲区溢出漏洞。但是由于程序没有任何输出函数可以控制。且fork次数只有三次。暴力破解不可行。于是选择ssp leak的方法。当canary验证错误时会进入___stack_chk_fail函数，这个函数会输出第一个命令行参数。<br><img src="/2018/08/21/网鼎杯2018第一场预选赛-GUESS-题解/3.png" alt=""><br>这个命令行参数的指针保存在栈上，我们可以通过gets函数覆盖它。<br><img src="/2018/08/21/网鼎杯2018第一场预选赛-GUESS-题解/4.png" alt=""><br>思路就很明显了。程序给了我们三次任意内存地址读。只要前两次得到flag的地址就可以。flag保存在栈上。<br>程序同时给了我们libc程序。<br>第一次泄露：通过bss上的stderr指针得到stderr file结构体的地址。<br>第二次泄露：在stderr的地址附近有一处保存有栈的地址且与flag地址接近（本地调试通过IDA的字符匹配找到）<br>第三次：通过第二次泄露的栈地址+与flag间偏移泄露flag。</p>
+<h3 id="程序保护"><a href="#程序保护" class="headerlink" title="程序保护"></a>程序保护</h3><p><img src="网鼎杯2018第一场预选赛-GUESS-题解/1.png" alt><br>未开启PIE，存在canary</p>
+<h3 id="程序功能"><a href="#程序功能" class="headerlink" title="程序功能"></a>程序功能</h3><p><img src="网鼎杯2018第一场预选赛-GUESS-题解/2.png" alt><br>程序将flag读取进栈上的缓冲区。通过gets函数要求我们输入flag。通过fork子进程的方式给了我们三次猜测的机会。gets处明显存在栈溢出漏洞。</p>
+<h3 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h3><p>gets处存在缓冲区溢出漏洞。但是由于程序没有任何输出函数可以控制。且fork次数只有三次。暴力破解不可行。于是选择ssp leak的方法。当canary验证错误时会进入___stack_chk_fail函数，这个函数会输出第一个命令行参数。<br><img src="网鼎杯2018第一场预选赛-GUESS-题解/3.png" alt><br>这个命令行参数的指针保存在栈上，我们可以通过gets函数覆盖它。<br><img src="网鼎杯2018第一场预选赛-GUESS-题解/4.png" alt><br>思路就很明显了。程序给了我们三次任意内存地址读。只要前两次得到flag的地址就可以。flag保存在栈上。<br>程序同时给了我们libc程序。<br>第一次泄露：通过bss上的stderr指针得到stderr file结构体的地址。<br>第二次泄露：在stderr的地址附近有一处保存有栈的地址且与flag地址接近（本地调试通过IDA的字符匹配找到）<br>第三次：通过第二次泄露的栈地址+与flag间偏移泄露flag。</p>
 <h3 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h3><pre><code class="python"><span class="keyword">from</span> pwn <span class="keyword">import</span> *
 p=remote(<span class="string">'106.75.90.160'</span>,<span class="number">9999</span>)
 context(log_level=<span class="string">'debug'</span>)
@@ -216,7 +212,7 @@ p.interactive()
   <footer class="article-footer">
     
   <div class="cc">
-    <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.C" target="_blank" title="署名-相同方式共享">
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.C" target="_blank" title="Attribution-ShareAlike">
       <img src="/images/cc/cc.png">
       
           <img src="/images/cc/by.png">
@@ -224,7 +220,7 @@ p.interactive()
           <img src="/images/cc/sa.png">
       
       <span>
-        本作品采用知识共享 署名-相同方式共享 4.0 国际许可协议进行许可。
+        This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
       </span>
     </a>
   </div>
@@ -243,7 +239,7 @@ p.interactive()
 
           <div class="main-footer">
   
-    © 2018 pwndog&#39;s blog - Powered by <a href="http://hexo.io" target="_blank">Hexo</a> - Theme <a href="https://github.com/denjones/hexo-theme-chan" target="_blank">Chan</a>
+    © 2019 pwndog&#39;s blog - Powered by <a href="http://hexo.io" target="_blank">Hexo</a> - Theme <a href="https://github.com/denjones/hexo-theme-chan" target="_blank">Chan</a>
   
 </div>
 

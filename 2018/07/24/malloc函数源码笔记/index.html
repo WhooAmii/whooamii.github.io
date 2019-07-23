@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -20,14 +20,14 @@
 <meta property="og:site_name" content="pwndog&#39;s blog">
 <meta property="og:description" content="chunk类型分类fastbin在32位linux下当请求的空间小于0x64时使用fastbin分配，即申请出来的chunk size&amp;lt;0x50时使用fastbin分配.在32位linux下当请求的空间小于0x80时使用fastbin分配，即申请出来的chunk size&amp;lt;0x90时使用fastbin分配.">
 <meta property="og:locale" content="CN">
-<meta property="og:image" content="http://yoursite.com/2018/07/24/malloc函数源码笔记/1.png">
-<meta property="og:image" content="http://yoursite.com/2018/07/24/malloc函数源码笔记/2.png">
-<meta property="og:image" content="http://yoursite.com/2018/07/24/malloc函数源码笔记/3.png">
+<meta property="og:image" content="http://yoursite.com/2018/07/24/malloc函数源码笔记/malloc函数源码笔记/1.png">
+<meta property="og:image" content="http://yoursite.com/2018/07/24/malloc函数源码笔记/malloc函数源码笔记/2.png">
+<meta property="og:image" content="http://yoursite.com/2018/07/24/malloc函数源码笔记/malloc函数源码笔记/3.png">
 <meta property="og:updated_time" content="2018-07-25T14:01:39.839Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="malloc函数源码笔记">
 <meta name="twitter:description" content="chunk类型分类fastbin在32位linux下当请求的空间小于0x64时使用fastbin分配，即申请出来的chunk size&amp;lt;0x50时使用fastbin分配.在32位linux下当请求的空间小于0x80时使用fastbin分配，即申请出来的chunk size&amp;lt;0x90时使用fastbin分配.">
-<meta name="twitter:image" content="http://yoursite.com/2018/07/24/malloc函数源码笔记/1.png">
+<meta name="twitter:image" content="http://yoursite.com/2018/07/24/malloc函数源码笔记/malloc函数源码笔记/1.png">
 
 
   <link rel="alternative" href="/atom.xml" title="pwndog&#39;s blog" type="application/atom+xml">
@@ -46,11 +46,7 @@
 
 
 </head>
-<body
-  
-    class="monochrome"
-  
-  >
+<body class="monochrome">
   <div class="mobile-header">
   <button class="sidebar-toggle" type="button">
     <span class="icon-bar"></span>
@@ -94,21 +90,21 @@
           
             
               <li class="category-list-container">
-                <a href="javascript:;">分类</a>
+                <a href="javascript:;">Category</a>
                 <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/glibc源码阅读/">glibc源码阅读</a><span class="category-list-count">1</span></li></ul>
               </li>
             
           
             
               <li class="tag-list-container">
-                <a href="javascript:;">标签</a>
+                <a href="javascript:;">Tag</a>
                 <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/">CTF</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GLIBC/">GLIBC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/windows/">windows</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/堆/">堆</a><span class="tag-list-count">3</span></li></ul>
               </li>
             
           
             
               <li class="archive-list-container">
-                <a href="javascript:;">归档</a>
+                <a href="javascript:;">Archive</a>
                 <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018</a><span class="archive-list-count">16</span></li></ul>
               </li>
             
@@ -192,13 +188,13 @@
 <p>第一行：判断大小是否使用fastbin分配，大小不符合跳转至下一步。</p>
 <p>第三行：得到大小对应的数组索引值</p>
 <p>第六行：此时fb的值为fastbin数组的地址，即main_arena+偏移，pp为fastbin数组的第一项。进行循环判断。</p>
-<p>catomic_compare_and_exchange_val_acq函数声明为atomic_compare_and_exchange_val_rel(mem, newval, oldval)<br>当 newval 和 oldval不相等时，返回oldval.将newval填写到mem地址上。<br><img src="/2018/07/24/malloc函数源码笔记/1.png" alt="未malloc时的main_arena"><br>                  未malloc时的main_arena<br>第6行的do while循环作用为若fastbin数组对应索引地址为空break，若不为空则将victim-&gt;fd覆盖到fastbin数组对应索引地址，即将单链表第一项摘下分配。</p>
+<p>catomic_compare_and_exchange_val_acq函数声明为atomic_compare_and_exchange_val_rel(mem, newval, oldval)<br>当 newval 和 oldval不相等时，返回oldval.将newval填写到mem地址上。<br><img src="malloc函数源码笔记/1.png" alt="未malloc时的main_arena"><br>                  未malloc时的main_arena<br>第6行的do while循环作用为若fastbin数组对应索引地址为空break，若不为空则将victim-&gt;fd覆盖到fastbin数组对应索引地址，即将单链表第一项摘下分配。</p>
 <p>第16行进行fast chunk分配的检测，检测为：摘除的chunk的size要满足用户请求的大小，但是由于是使用idx索引值进行判断，还是有很大机会可以进行fast bin attack.</p>
 <p>如 0x70-0x7f在64位下使用的idx是同一值。检测通过即分配fast chunk 分配结束。</p>
 <h3 id="small-bin"><a href="#small-bin" class="headerlink" title="small bin"></a>small bin</h3><p>若请求大小小于512byte且fastbin未分配成功时，进入small bin分配流程<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">if</span> (in_smallbin_range (nb))</span><br><span class="line">    &#123;</span><br><span class="line">      idx = smallbin_index (nb);</span><br><span class="line">      bin = bin_at (av, idx);</span><br><span class="line">​</span><br><span class="line">      <span class="keyword">if</span> ((victim = last (bin)) != bin)</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="keyword">if</span> (victim == <span class="number">0</span>) <span class="comment">/* initialization check */</span></span><br><span class="line">            malloc_consolidate (av);</span><br><span class="line">          <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">              bck = victim-&gt;bk;</span><br><span class="line">    <span class="keyword">if</span> (__glibc_unlikely (bck-&gt;fd != victim))</span><br><span class="line">                &#123;</span><br><span class="line">                  errstr = <span class="string">"malloc(): smallbin double linked list corrupted"</span>;</span><br><span class="line">                  <span class="keyword">goto</span> errout;</span><br><span class="line">                &#125;</span><br><span class="line">              set_inuse_bit_at_offset (victim, nb);</span><br><span class="line">              bin-&gt;bk = bck;</span><br><span class="line">              bck-&gt;fd = bin;</span><br><span class="line">​</span><br><span class="line">              <span class="keyword">if</span> (av != &amp;main_arena)</span><br><span class="line">                victim-&gt;size |= NON_MAIN_ARENA;</span><br><span class="line">              check_malloced_chunk (av, victim, nb);</span><br><span class="line">              <span class="keyword">void</span> *p = chunk2mem (victim);</span><br><span class="line">              alloc_perturb (p, bytes);</span><br><span class="line">              <span class="keyword">return</span> p;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
 <p>第一行判断请求的大小是否小于512字节</p>
 <p>第六行判断bin-&gt;bk是否等于自己，若等于自己说明链表为空，跳转至下一步。链表初始化后空链表的bk，fd指针都指向main_arena中的smallbin数组位置。由于使用的是bk指针，small chunk的分配是先入后出的模式。</p>
-<p><img src="/2018/07/24/malloc函数源码笔记/2.png" alt="一次malloc后的main_arena"><br>                    一次malloc后的main_arena</p>
+<p><img src="malloc函数源码笔记/2.png" alt="一次malloc后的main_arena"><br>                    一次malloc后的main_arena</p>
 <p>main_arena+0x58为top chunk地址。</p>
 <p>main_arena+0x60为last_reminder chunk地址。</p>
 <p>main_arena+0x68为unsorted bin chunk。</p>
@@ -214,13 +210,13 @@
 <p>unsorted分配的源码比较长，因为涉及到了从unsorted bin链表卸除的部分。</p>
 <p>第一行，unsorted bin遍历，通过判断bk指针是否指向自己来表示是否遍历完毕。</p>
 <p>第四行，对每一个unsorted chunk的size进行判断，大小要大于8字节，小于system_mem字节。</p>
-<p>第18行，请求大小<512byte &&="" unsorted_chunks-="">bk-&gt;bk=unsorted_chunks（链表中之只有一个chunk） &amp;&amp; victim为last_remainder chunk（main_arena+0x60） &amp;&amp;victim的大小要大于请求的大小。若通过转入19行</512byte></p>
+<p>第18行，请求大小<512byte && unsorted_chunks->bk-&gt;bk=unsorted_chunks（链表中之只有一个chunk） &amp;&amp; victim为last_remainder chunk（main_arena+0x60） &amp;&amp;victim的大小要大于请求的大小。若通过转入19行</512byte></p>
 <p>第19行-43行，从victim中分割出一个chunk分配，进行last_remainder chunk的更新，并将更新后的victim加入unsorted bin中。分配结束。</p>
 <p>第46行 进行unsorted bin的拆卸，unsorted_chunks (av)-&gt;bk = victim-&gt;bk;<br>victim-&gt;bk-&gt;fd = unsorted_chunks (av); victim-&gt;bk可控会造成unsorted bin attack，且可以看出unsorted bin同样是先入后出的模式。</p>
 <p>第52行，若存在unsorted chunk大小正好符合请求的大小，拆卸后分配出来。分配结束</p>
 <p>第65行，此时unsorted bin已经不能满足分配要求，开始进行其他链表的插入操作。此行判断unsorted chunk大小是否属于small bin范围。</p>
 <p>第66行-第70行，若大小属于small chunk，将他插入链表首部。（small bin优先分配链表末端chunk）</p>
-<p>当大小属于large bin时，插入链表的位置需要进行判断。<br>large bin链表中每个chunk的大小可以不相等，且按照从大到小的顺序进行双向连接。<br>由于使用fd，bk组成的双向链表中会存在main_arena中的索引伪chunk。使用这样的双链表进行大小的排序会产生问题。<br><img src="/2018/07/24/malloc函数源码笔记/3.png" alt="两个双向链表"></p>
+<p>当大小属于large bin时，插入链表的位置需要进行判断。<br>large bin链表中每个chunk的大小可以不相等，且按照从大到小的顺序进行双向连接。<br>由于使用fd，bk组成的双向链表中会存在main_arena中的索引伪chunk。使用这样的双链表进行大小的排序会产生问题。<br><img src="malloc函数源码笔记/3.png" alt="两个双向链表"></p>
 <p>large chunk增加一对指针fd_nextsize和bk_nextsize,用来组成只由空闲的large chunk的双向链表。</p>
 <p>第78行，判断双向链表是否为空。</p>
 <p>第84行，判断插入的chunk大小是否小于链表中最小的chunk size，若小于，则将他插入到main_arena索引及链表中最小chunk中间，bck为插入chunk的前一个节点，fwd为插入chunk后一个节点。 同时将他插入到使用fd_nextsize和bk_nextsize组成链表的最末端。</p>
@@ -245,7 +241,7 @@
   <footer class="article-footer">
     
   <div class="cc">
-    <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.C" target="_blank" title="署名-相同方式共享">
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.C" target="_blank" title="Attribution-ShareAlike">
       <img src="/images/cc/cc.png">
       
           <img src="/images/cc/by.png">
@@ -253,7 +249,7 @@
           <img src="/images/cc/sa.png">
       
       <span>
-        本作品采用知识共享 署名-相同方式共享 4.0 国际许可协议进行许可。
+        This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
       </span>
     </a>
   </div>
@@ -272,7 +268,7 @@
 
           <div class="main-footer">
   
-    © 2018 pwndog&#39;s blog - Powered by <a href="http://hexo.io" target="_blank">Hexo</a> - Theme <a href="https://github.com/denjones/hexo-theme-chan" target="_blank">Chan</a>
+    © 2019 pwndog&#39;s blog - Powered by <a href="http://hexo.io" target="_blank">Hexo</a> - Theme <a href="https://github.com/denjones/hexo-theme-chan" target="_blank">Chan</a>
   
 </div>
 

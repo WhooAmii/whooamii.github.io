@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -20,20 +20,20 @@
 <meta property="og:site_name" content="pwndog&#39;s blog">
 <meta property="og:description" content="前言旧题重做，最近更新的有点慢。做的是n1ctf2018中的vote题目。">
 <meta property="og:locale" content="CN">
-<meta property="og:image" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/1.png">
-<meta property="og:image" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/2.png">
-<meta property="og:image" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/3.png">
-<meta property="og:image" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/4.png">
-<meta property="og:image" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/5.png">
-<meta property="og:image" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/6.png">
-<meta property="og:image" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/7.png">
-<meta property="og:image" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/8.png">
-<meta property="og:image" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/9.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/n1ctf2018-vote解题/1.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/n1ctf2018-vote解题/2.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/n1ctf2018-vote解题/3.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/n1ctf2018-vote解题/4.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/n1ctf2018-vote解题/5.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/n1ctf2018-vote解题/6.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/n1ctf2018-vote解题/7.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/n1ctf2018-vote解题/8.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/n1ctf2018-vote解题/9.png">
 <meta property="og:updated_time" content="2018-08-21T14:45:04.838Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="n1ctf2018 vote解题">
 <meta name="twitter:description" content="前言旧题重做，最近更新的有点慢。做的是n1ctf2018中的vote题目。">
-<meta name="twitter:image" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/1.png">
+<meta name="twitter:image" content="http://yoursite.com/2018/08/18/n1ctf2018-vote解题/n1ctf2018-vote解题/1.png">
 
 
   <link rel="alternative" href="/atom.xml" title="pwndog&#39;s blog" type="application/atom+xml">
@@ -52,11 +52,7 @@
 
 
 </head>
-<body
-  
-    class="monochrome"
-  
-  >
+<body class="monochrome">
   <div class="mobile-header">
   <button class="sidebar-toggle" type="button">
     <span class="icon-bar"></span>
@@ -100,21 +96,21 @@
           
             
               <li class="category-list-container">
-                <a href="javascript:;">分类</a>
+                <a href="javascript:;">Category</a>
                 <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/glibc源码阅读/">glibc源码阅读</a><span class="category-list-count">1</span></li></ul>
               </li>
             
           
             
               <li class="tag-list-container">
-                <a href="javascript:;">标签</a>
+                <a href="javascript:;">Tag</a>
                 <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/">CTF</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GLIBC/">GLIBC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/windows/">windows</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/堆/">堆</a><span class="tag-list-count">3</span></li></ul>
               </li>
             
           
             
               <li class="archive-list-container">
-                <a href="javascript:;">归档</a>
+                <a href="javascript:;">Archive</a>
                 <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018</a><span class="archive-list-count">16</span></li></ul>
               </li>
             
@@ -191,10 +187,10 @@
   </div>
   <div class="article-entry">
     <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>旧题重做，最近更新的有点慢。做的是n1ctf2018中的vote题目。<br><a id="more"></a></p>
-<h3 id="程序保护"><a href="#程序保护" class="headerlink" title="程序保护"></a>程序保护</h3><p><img src="/2018/08/18/n1ctf2018-vote解题/1.png" alt=""><br>常规保护，开启了nx和canary。</p>
-<h3 id="程序功能"><a href="#程序功能" class="headerlink" title="程序功能"></a>程序功能</h3><p><img src="/2018/08/18/n1ctf2018-vote解题/2.png" alt=""><br>常规菜单题，有五个功能，create，vote，result，canel，show。事实上我只用了create，show和canel。剩下的功能没有用。<br><img src="/2018/08/18/n1ctf2018-vote解题/3.png" alt=""><br>create功能。创建不超过4096大小的堆块。堆块的前16个字节不能写入。前8个字节用来vote，result功能.后八个字节保存当前时间<br><img src="/2018/08/18/n1ctf2018-vote解题/4.png" alt=""><br>show功能。将堆块内容输出。<br><img src="/2018/08/18/n1ctf2018-vote解题/5.png" alt=""><br>vote功能。将堆块第一个dword值+1.将当前时间写入后八个字节。然后将一个数组的对应索引的值+1。<br><img src="/2018/08/18/n1ctf2018-vote解题/6.png" alt=""><br>result功能。将数组中每个索引对应的值输出。<br><img src="/2018/08/18/n1ctf2018-vote解题/7.png" alt=""><br>canel功能。漏洞函数。存在uaf漏洞</p>
+<h3 id="程序保护"><a href="#程序保护" class="headerlink" title="程序保护"></a>程序保护</h3><p><img src="n1ctf2018-vote解题/1.png" alt><br>常规保护，开启了nx和canary。</p>
+<h3 id="程序功能"><a href="#程序功能" class="headerlink" title="程序功能"></a>程序功能</h3><p><img src="n1ctf2018-vote解题/2.png" alt><br>常规菜单题，有五个功能，create，vote，result，canel，show。事实上我只用了create，show和canel。剩下的功能没有用。<br><img src="n1ctf2018-vote解题/3.png" alt><br>create功能。创建不超过4096大小的堆块。堆块的前16个字节不能写入。前8个字节用来vote，result功能.后八个字节保存当前时间<br><img src="n1ctf2018-vote解题/4.png" alt><br>show功能。将堆块内容输出。<br><img src="n1ctf2018-vote解题/5.png" alt><br>vote功能。将堆块第一个dword值+1.将当前时间写入后八个字节。然后将一个数组的对应索引的值+1。<br><img src="n1ctf2018-vote解题/6.png" alt><br>result功能。将数组中每个索引对应的值输出。<br><img src="n1ctf2018-vote解题/7.png" alt><br>canel功能。漏洞函数。存在uaf漏洞</p>
 <h3 id="信息泄露"><a href="#信息泄露" class="headerlink" title="信息泄露"></a>信息泄露</h3><p>由于堆的前16个字节会在创建时被修改。通过uaf漏洞+unsorted chunk泄露出libc地址。题目给了libc程序。所以直接可以求出基址。</p>
-<h3 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h3><p>题目的难点设置在堆的前16个字节不可控.由于程序存在uaf漏洞及堆的大小可控。于是可以使用fastbin attack。难点在于如何修改free后chunk的fd指针。<br><img src="/2018/08/18/n1ctf2018-vote解题/8.png" alt=""><br>先伪造两个uaf指针。通过一个malloc后伪造两个指针一个为0x201，一个为0x71.使上面的伪造堆块包含下面的fast chunk。<br>伪造完成后，free a,free b.<br>再申请一个大小满足0x200的堆块就会将伪造堆块从unsorted bin中拆除下来。就可以修改free后chunk的fd指针。<br>通过将malloc_hook修改为one_gadget。利用成功。<br><img src="/2018/08/18/n1ctf2018-vote解题/9.png" alt=""></p>
+<h3 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h3><p>题目的难点设置在堆的前16个字节不可控.由于程序存在uaf漏洞及堆的大小可控。于是可以使用fastbin attack。难点在于如何修改free后chunk的fd指针。<br><img src="n1ctf2018-vote解题/8.png" alt><br>先伪造两个uaf指针。通过一个malloc后伪造两个指针一个为0x201，一个为0x71.使上面的伪造堆块包含下面的fast chunk。<br>伪造完成后，free a,free b.<br>再申请一个大小满足0x200的堆块就会将伪造堆块从unsorted bin中拆除下来。就可以修改free后chunk的fd指针。<br>通过将malloc_hook修改为one_gadget。利用成功。<br><img src="n1ctf2018-vote解题/9.png" alt></p>
 <h3 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h3><pre><code class="python"><span class="keyword">from</span> pwn <span class="keyword">import</span> *
 p=process([<span class="string">'./vote'</span>],env={<span class="string">'LD_PRELOAD'</span>:<span class="string">'./libc-2.23.so'</span>})
 e=ELF(<span class="string">'./libc-2.23.so'</span>)
@@ -239,7 +235,7 @@ p.interactive()
   <footer class="article-footer">
     
   <div class="cc">
-    <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.C" target="_blank" title="署名-相同方式共享">
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.C" target="_blank" title="Attribution-ShareAlike">
       <img src="/images/cc/cc.png">
       
           <img src="/images/cc/by.png">
@@ -247,7 +243,7 @@ p.interactive()
           <img src="/images/cc/sa.png">
       
       <span>
-        本作品采用知识共享 署名-相同方式共享 4.0 国际许可协议进行许可。
+        This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
       </span>
     </a>
   </div>
@@ -266,7 +262,7 @@ p.interactive()
 
           <div class="main-footer">
   
-    © 2018 pwndog&#39;s blog - Powered by <a href="http://hexo.io" target="_blank">Hexo</a> - Theme <a href="https://github.com/denjones/hexo-theme-chan" target="_blank">Chan</a>
+    © 2019 pwndog&#39;s blog - Powered by <a href="http://hexo.io" target="_blank">Hexo</a> - Theme <a href="https://github.com/denjones/hexo-theme-chan" target="_blank">Chan</a>
   
 </div>
 
