@@ -1,0 +1,24 @@
+POST AHNAP1/HTTP/1.1 
+Host
+Content-Length: 398 
+Origin;
+HNAP_AUTH: 173AA18C4830E61117747F6O22035236 1550199162774
+User-Agent: Mozila/5.0 (V'Aidows NT 10.0; Win64; x64) AppleWebKiiy537.36 (KHTML, like Gecko)
+Chromc/71.0.3578.98 SafarU537.36
+Content-Type: tcxt/xml; charset«UTF-8
+Accept: */*
+X-Requested-V^h; XMLHttpRequest 
+SOAPAction: "http:/^xjrenetworks comWNAPI ^_ogin"
+Refercr: . ifo)Login htrrt
+Accept-Encoding gzip, deflate 
+Accept-Language: zh-CN,zh;q«0.9
+Cookie: HmJvt_39dcd5bd05965dcfa70b1 d2457c6dc»e=1547638075,1550130063,1550197792; 
+Hm_lpvt_39dcd5bd05965dcfa70b1 d2457c6dc»e-1550197795; uid-ZJhXPAcI 
+Connection: close
+<?xml version=M1.0" enccxling="Uf-8l7xsoap:Envek)pe 
+xmlns: xsi-Wp: /Avww.w3 org/2001 /XMLSchema-instance" 
+xmlns: xsd^-http: //www .w3 org/2001 /XMLSchema"
+xmlns: soap-'lttp: //schemas xmlsoap org/soap/envelope^'xsoap: Body><Login
+xmlns^^p /^xjrenetworks comfrINAPI r><Action>k>gin</Action><Username>Admin<AJsername><LoginP 
+Bssword><A_oginPa$sword> ：Captcha></Captcha><A.ogin></soap:Body></soap:EnvHope>
+---------------------------------我是可爱的页面分割线-------------------------------------
